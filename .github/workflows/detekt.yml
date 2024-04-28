@@ -1,6 +1,7 @@
 name: Run detekt
 on:
   pull_request:
+  push:
   workflow_dispatch:
 jobs:
   build:
@@ -22,3 +23,4 @@ jobs:
         if: success() || failure()
         with:
           sarif_file: build/reports/detekt/detekt.sarif
+          category: static-analysis
