@@ -5,6 +5,8 @@ on:
   workflow_dispatch:
 jobs:
   build:
+    permissions:
+      security-events: write
     runs-on: [ubuntu-latest]
     steps:
       - name: Checkout sources
