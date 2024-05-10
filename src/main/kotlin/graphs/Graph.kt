@@ -3,9 +3,9 @@ package graphs
 class Graph<T> {
 	// methods are all private for now
 
-	private var adjacencyList: HashMap<Vertex<T>, HashSet<Vertex<T>>> = HashMap()
+	internal var adjacencyList: HashMap<Vertex<T>, HashSet<Vertex<T>>> = HashMap()
 
-	private fun addVertex(vertex: Vertex<T>) {
+	fun addVertex(vertex: Vertex<T>) {
 		adjacencyList.putIfAbsent(vertex, HashSet())
 	}
 
@@ -43,5 +43,6 @@ class Graph<T> {
 		for (key in adjacencyList.keys) {
 			println("$key is connected to ${adjacencyList[key]}")
 		}
+		adjacencyList.entries
 	}
 }
