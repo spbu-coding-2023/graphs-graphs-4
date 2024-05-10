@@ -1,12 +1,14 @@
 package graphs
 
 class Graph<T> {
-	// methods are all private for now
+	var size: Int = 0
+		private set
 
 	internal var adjacencyList: HashMap<Vertex<T>, HashSet<Vertex<T>>> = HashMap()
 
 	fun addVertex(vertex: Vertex<T>) {
 		adjacencyList.putIfAbsent(vertex, HashSet())
+		size += 1
 	}
 
 	// Undirected graph -> we add both connections.
@@ -35,6 +37,7 @@ class Graph<T> {
 				adjacencyList[element]?.remove(vertex)
 			}
 			adjacencyList.remove(vertex)
+			size -= 1
 		}
 	}
 
