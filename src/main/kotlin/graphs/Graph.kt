@@ -22,6 +22,22 @@ class Graph<T> {
 		return adjacencyList[vertex]
 	}
 
+	private fun removeEdge(vertex1: Vertex<T>, vertex2: Vertex<T>) {
+		adjacencyList[vertex1]?.remove(vertex2)
+		adjacencyList[vertex2]?.remove(vertex1)
+	}
+
+	// скорее всего можно как-то переиспользовать removeEdge
+	// надо избавиться от !!
+	private fun removeVertex(vertex: Vertex<T>) {
+		if (adjacencyList[vertex] != null) {
+			for (element in adjacencyList[vertex]!!) {
+				adjacencyList[element]?.remove(vertex)
+			}
+			adjacencyList.remove(vertex)
+		}
+	}
+
 	// Display the graph; for now for debug purposes mostly
 	private fun printGraph() {
 		for (key in adjacencyList.keys) {
