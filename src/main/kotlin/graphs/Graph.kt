@@ -1,5 +1,7 @@
 package graphs
 
+import algorithms.Traversable
+
 class Graph<T> {
 	var size: Int = 0
 		private set
@@ -39,6 +41,10 @@ class Graph<T> {
 			adjacencyList.remove(vertex)
 			size -= 1
 		}
+	}
+
+	private fun dfs(vertex: Vertex<T>) {
+		Traversable<T>().dfsIter(this, vertex)
 	}
 
 	// Display the graph; for now for debug purposes mostly
