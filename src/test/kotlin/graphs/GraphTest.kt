@@ -41,9 +41,9 @@ class GraphTest {
 			// cool graph I saw in a video
 			graph.addEdge(vertices[0], vertices[1])
 			graph.addEdge(vertices[0], vertices[2])
-			graph.addEdge(vertices[2], vertices[1])
-			graph.addEdge(vertices[1], vertices[4])
+			graph.addEdge(vertices[1], vertices[2])
 			graph.addEdge(vertices[1], vertices[3])
+			graph.addEdge(vertices[1], vertices[4])
 			graph.addEdge(vertices[3], vertices[5])
 			graph.addEdge(vertices[5], vertices[6])
 			graph.addEdge(vertices[5], vertices[7])
@@ -52,9 +52,13 @@ class GraphTest {
 		}
 
 		@Test
-		@DisplayName("Run dfs (iter - preorder)")
+		@DisplayName("Run dfs (connected - undirected graph)")
 		fun dfsIterTest() {
-			graph.dfs(vertices[0])
+			var assertSet : Set<Vertex<Int>> = emptySet()
+			for (element in vertices) {
+				assertSet = assertSet.plus(element)
+			}
+			assertEquals(assertSet, graph.dfs(vertices[0]))
 		}
 	}
 }
