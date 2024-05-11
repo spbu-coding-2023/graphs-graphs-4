@@ -7,7 +7,7 @@ import java.util.*
 class Traversable<T> {
 	// preorder
 	fun dfsIter(graph: Graph<T>, v: Vertex<T>) : Set<Vertex<T>> {
-		val dfsSet : Set<Vertex<T>> = emptySet()
+		var dfsSet : Set<Vertex<T>> = emptySet()
 		val marked : HashMap<Vertex<T>, Boolean> = hashMapOf()
 		for (element in graph.adjacencyList.keys) {
 			marked[element] = false
@@ -17,7 +17,7 @@ class Traversable<T> {
 		while (!stack.isEmpty()) {
 			val vertex = stack.pop()
 			if (marked[vertex] == false) {
-				dfsSet.plus(vertex)
+				dfsSet = dfsSet.plus(vertex)
 				marked[vertex] = true
 				graph.adjacencyList[vertex]?.forEach {
 					if (marked[it] == false) {
