@@ -24,18 +24,18 @@ class Graph<T> {
 		adjacencyList.getOrPut(vertex2) { HashSet() }.add(vertex1)
 	}
 	// Get the vertices adjacent to a given vertex
-	private fun giveNeighbors(vertex: Vertex<T>): Set<Vertex<T>>? {
+	fun giveNeighbors(vertex: Vertex<T>): Set<Vertex<T>>? {
 		return adjacencyList[vertex]
 	}
 
-	private fun removeEdge(vertex1: Vertex<T>, vertex2: Vertex<T>) {
+	fun removeEdge(vertex1: Vertex<T>, vertex2: Vertex<T>) {
 		adjacencyList[vertex1]?.remove(vertex2)
 		adjacencyList[vertex2]?.remove(vertex1)
 	}
 
 	// скорее всего можно как-то переиспользовать removeEdge
 	// надо избавиться от !!
-	private fun removeVertex(vertex: Vertex<T>) {
+	fun removeVertex(vertex: Vertex<T>) {
 		if (adjacencyList[vertex] != null) {
 			for (element in adjacencyList[vertex]!!) {
 				adjacencyList[element]?.remove(vertex)
@@ -45,7 +45,8 @@ class Graph<T> {
 		}
 	}
 
-	fun dfs(vertex: Vertex<T>) {
+
+	internal fun dfs(vertex: Vertex<T>) {
 		Traversable<T>().dfsIter(this, vertex)
 	}
 
