@@ -6,7 +6,8 @@ import java.util.*
 
 class Traversable<T> {
 	// preorder
-	fun dfsIter(graph: Graph<T>, v: Vertex<T>) {
+	fun dfsIter(graph: Graph<T>, v: Vertex<T>) : Set<Vertex<T>> {
+		val dfsSet : Set<Vertex<T>> = emptySet()
 		val marked : HashMap<Vertex<T>, Boolean> = hashMapOf()
 		for (element in graph.adjacencyList.keys) {
 			marked[element] = false
@@ -16,7 +17,7 @@ class Traversable<T> {
 		while (!stack.isEmpty()) {
 			val vertex = stack.pop()
 			if (marked[vertex] == false) {
-				println(vertex.key)
+				dfsSet.plus(vertex)
 				marked[vertex] = true
 				graph.adjacencyList[vertex]?.forEach {
 					if (marked[it] == false) {
@@ -25,5 +26,7 @@ class Traversable<T> {
 				}
 			}
 		}
+
+		return dfsSet
 	}
 }
