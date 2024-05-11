@@ -31,30 +31,30 @@ class GraphTest {
 
 	@Nested
 	inner class TraverseTests{
-		private var verticies : Array<Vertex<Int>> = emptyArray()
+		private var vertices : Array<Vertex<Int>> = emptyArray()
 
 		@BeforeEach
 		fun setup(){
 			for (i in 0..9) {
-				verticies = verticies.plus(graph.addVertex(Vertex(i)))
+				vertices = vertices.plus(graph.addVertex(Vertex(i)))
 			}
 			// cool graph I saw in a video
-			graph.addEdge(verticies[0], verticies[1])
-			graph.addEdge(verticies[0], verticies[2])
-			graph.addEdge(verticies[2], verticies[1])
-			graph.addEdge(verticies[1], verticies[4])
-			graph.addEdge(verticies[1], verticies[3])
-			graph.addEdge(verticies[3], verticies[5])
-			graph.addEdge(verticies[5], verticies[6])
-			graph.addEdge(verticies[5], verticies[7])
-			graph.addEdge(verticies[5], verticies[8])
-			graph.addEdge(verticies[8], verticies[9])
+			graph.addEdge(vertices[0], vertices[1])
+			graph.addEdge(vertices[0], vertices[2])
+			graph.addEdge(vertices[2], vertices[1])
+			graph.addEdge(vertices[1], vertices[4])
+			graph.addEdge(vertices[1], vertices[3])
+			graph.addEdge(vertices[3], vertices[5])
+			graph.addEdge(vertices[5], vertices[6])
+			graph.addEdge(vertices[5], vertices[7])
+			graph.addEdge(vertices[5], vertices[8])
+			graph.addEdge(vertices[8], vertices[9])
 		}
 
 		@Test
 		@DisplayName("Run dfs (iter - preorder)")
 		fun dfsIterTest() {
-			graph.dfs(verticies[0])
+			graph.dfs(vertices[0])
 		}
 	}
 }
