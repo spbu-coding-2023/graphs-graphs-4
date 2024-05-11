@@ -46,8 +46,8 @@ class Graph<T> {
 	}
 
 
-	internal fun dfs(vertex: Vertex<T>) {
-		Traversable<T>().dfsIter(this, vertex)
+	internal fun dfs(vertex: Vertex<T>) : Set<Vertex<T>> {
+		return Traversable<T>().dfsIter(this, vertex)
 	}
 
 	// Display the graph; for now for debug purposes mostly
