@@ -21,20 +21,21 @@ class GraphTest {
 		graph.addVertex(v3)
 
 		val set = graph.adjacencyList
-		val setTest : HashMap<Vertex<Int>, HashSet<Vertex<Int>>> = hashMapOf(
+		val setTest: HashMap<Vertex<Int>, HashSet<Vertex<Int>>> = hashMapOf(
 			v1 to hashSetOf(),
 			v2 to hashSetOf(),
 			v3 to hashSetOf()
 		)
+
 		assertEquals(setTest, set)
 	}
 
 	@Nested
-	inner class TraverseTests{
-		private var vertices : Array<Vertex<Int>> = emptyArray()
+	inner class TraverseTests {
+		private var vertices: Array<Vertex<Int>> = emptyArray()
 
 		@BeforeEach
-		fun setup(){
+		fun setup() {
 			for (i in 0..9) {
 				vertices = vertices.plus(graph.addVertex(Vertex(i)))
 			}
@@ -54,10 +55,12 @@ class GraphTest {
 		@Test
 		@DisplayName("Run dfs (connected - undirected graph)")
 		fun dfsIterTest() {
-			var assertSet : Set<Vertex<Int>> = emptySet()
+			var assertSet: Set<Vertex<Int>> = emptySet()
+
 			for (element in vertices) {
 				assertSet = assertSet.plus(element)
 			}
+
 			assertEquals(assertSet, graph.dfs(vertices[0]))
 		}
 	}
