@@ -8,16 +8,18 @@ class Graph<T> {
 
 	internal var adjacencyList: HashMap<Vertex<T>, HashSet<Vertex<T>>> = HashMap()
 
-	fun addVertex(vertex: Vertex<T>) {
+	// как поступать с узлами с одинаковыми ключами?
+	fun addVertex(vertex: Vertex<T>) : Vertex<T> {
 		adjacencyList.putIfAbsent(vertex, HashSet())
 		size += 1
+		return vertex
 	}
 
 	// Undirected graph -> we add both connections.
 	// comments below are temp
 	// okay so what's going on there? here's example:
 	// https://play.kotlinlang.org/#eyJ2ZXJzaW9uIjoiMS45LjI0IiwicGxhdGZvcm0iOiJqYXZhIiwiYXJncyI6IiIsIm5vbmVNYXJrZXJzIjp0cnVlLCJ0aGVtZSI6ImlkZWEiLCJjb2RlIjoiaW1wb3J0IGtvdGxpbi50ZXN0LipcbmltcG9ydCBqYXZhLnV0aWwuKlxuXG5mdW4gbWFpbihhcmdzOiBBcnJheTxTdHJpbmc+KSB7XG5cbnZhbCBtYXAgPSBtdXRhYmxlTWFwT2Y8U3RyaW5nLCBIYXNoU2V0PEludD4+KClcblxubWFwLmdldE9yUHV0KFwieFwiKSB7IEhhc2hTZXQoKSB9LmFkZCgyKVxubWFwLmdldE9yUHV0KFwieFwiKSB7IEhhc2hTZXQoKSB9LmFkZCg0KVxucHJpbnRsbihtYXApXG5cbn0ifQ==
-	private fun addEdge(vertex1: Vertex<T>, vertex2: Vertex<T>) {
+	fun addEdge(vertex1: Vertex<T>, vertex2: Vertex<T>) {
 		adjacencyList.getOrPut(vertex1) { HashSet() }.add(vertex2)
 		adjacencyList.getOrPut(vertex2) { HashSet() }.add(vertex1)
 	}
@@ -43,7 +45,7 @@ class Graph<T> {
 		}
 	}
 
-	private fun dfs(vertex: Vertex<T>) {
+	fun dfs(vertex: Vertex<T>) {
 		Traversable<T>().dfsIter(this, vertex)
 	}
 
