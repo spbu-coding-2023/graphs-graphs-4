@@ -55,6 +55,5 @@ class Graph<T> {
 		for (key in adjacencyList.keys) {
 			println("$key is connected to ${adjacencyList[key]}")
 		}
-		adjacencyList.entries
 	}
 }
