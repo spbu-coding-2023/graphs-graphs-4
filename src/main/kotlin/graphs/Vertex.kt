@@ -1,7 +1,6 @@
 package graphs
 
-class Vertex<T> (key: T) {
-	val key: T? = null
+class Vertex<T> (val key: T) {
 	// getter / setter etc.
 	// store coordinates here?
 }
