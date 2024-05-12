@@ -1,6 +1,6 @@
 package graphs
 
-import algorithms.Traversable
+import interfaces.Traversable
 
 class Graph<T> {
 	internal var adjacencyList: HashMap<Vertex<T>, HashSet<Vertex<T>>> = HashMap()

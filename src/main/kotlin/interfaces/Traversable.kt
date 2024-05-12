@@ -1,4 +1,4 @@
-package algorithms
+package interfaces
 
 import graphs.Graph
 import graphs.Vertex
