@@ -5,19 +5,19 @@ import graphs.Vertex
 import java.util.Stack
 import kotlin.math.min
 
-fun <K>sccSearch(graph: Graph<K>): List<List<Vertex<K>>> {
+fun <K>sccSearch(graph: Graph<K>): Array<Array<Vertex<K>>> {
     var index = 1
     val stack = Stack<Vertex<K>>()
-    val sccList = listOf(listOf<Vertex<K>>())
+    val sccList = arrayOf(arrayOf<Vertex<K>>())
 
-    fun strongConnect(v: Vertex<K>): List<Vertex<K>> {
+    fun strongConnect(v: Vertex<K>): Array<Vertex<K>> {
         v.sccIndex = index
         v.lowLink = index
         index++
         stack.push(v)
         v.onStack = true
 
-        for (w in graph.giveNeighbors(v) ?: listOf()) {
+        for (w in graph.giveNeighbors(v) ?: emptySet()) {
             if (w.sccIndex == 0) {
                 strongConnect(w)
                 v.lowLink = min(v.lowLink, w.lowLink)
@@ -26,12 +26,12 @@ fun <K>sccSearch(graph: Graph<K>): List<List<Vertex<K>>> {
             }
         }
 
-        val scc = listOf<Vertex<K>>()
+        val scc = arrayOf<Vertex<K>>()
         if (v.lowLink == v.sccIndex) {
             do {
                 val w = stack.pop()
                 w.onStack = false
-                scc.addLast(w)
+                scc.plusElement(w)
             } while (w != v)
         }
         return scc
@@ -41,7 +41,7 @@ fun <K>sccSearch(graph: Graph<K>): List<List<Vertex<K>>> {
         if (vertex.sccIndex == 0) {
             val scc = strongConnect(vertex)
             if (scc.isNotEmpty()) {
-                sccList.addLast(scc)
+                sccList.plusElement(scc)
             }
         }
     }
