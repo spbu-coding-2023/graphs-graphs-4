@@ -1,8 +1,9 @@
 package graphs
 
+import interfaces.GraphIterator
 import interfaces.Traversable
 
-class Graph<T> {
+class Graph<T>: Iterable<Vertex<T>> {
 	internal var adjacencyList: HashMap<Vertex<T>, HashSet<Vertex<T>>> = HashMap()
 
 	// Need to test if add(remove)Vertex updates size
@@ -61,5 +62,9 @@ class Graph<T> {
 		for (key in adjacencyList.keys) {
 			println("$key is connected to ${adjacencyList[key]}")
 		}
+	}
+
+	override fun iterator(): Iterator<Vertex<T>> {
+		return GraphIterator(this)
 	}
 }
