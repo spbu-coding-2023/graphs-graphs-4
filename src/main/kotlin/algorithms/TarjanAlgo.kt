@@ -1,63 +1,50 @@
 package algorithms
 
 import graphs.Graph
-import graphs.TarjanAlgoVertexStats
 import graphs.Vertex
 import java.util.Stack
 import kotlin.math.min
 
-fun <K>sccSearch(graph: Graph<K>): Array<Array<Vertex<K>>> {
+fun <K>sccSearch(graph: Graph<K>): List<List<Vertex<K>>> {
     var index = 1
     val stack = Stack<Vertex<K>>()
-    val result = arrayOf(arrayOf<Vertex<K>>())
-    val sccSearchHelper = HashMap<Vertex<K>, TarjanAlgoVertexStats>()
-    for (vertex in graph) {
-        sccSearchHelper[vertex] = TarjanAlgoVertexStats()
-    }
+    val sccList = listOf(listOf<Vertex<K>>())
 
-    fun strongConnect(vertex: Vertex<K>): Array<Vertex<K>> {
-        val vertexStats = sccSearchHelper[vertex] ?: throw Exception("как лучше обработать ситуацию?")
-        vertexStats.sccIndex = index
-        vertexStats.lowLink = index
-        vertexStats.onStack = true
-        stack.push(vertex)
+    fun strongConnect(v: Vertex<K>): List<Vertex<K>> {
+        v.sccIndex = index
+        v.lowLink = index
         index++
+        stack.push(v)
+        v.onStack = true
 
-        for (neighbor in graph.giveNeighbors(vertex) ?: emptySet()) {
-            val neighborStats = sccSearchHelper[neighbor] ?: throw Exception("как лучше обработать ситуацию?")
-
-            if (sccSearchHelper[neighbor]?.sccIndex == 0) {
-                strongConnect(neighbor)
-                vertexStats.lowLink = min(vertexStats.lowLink, neighborStats.lowLink)
-            } else if (neighborStats.onStack) {
-                vertexStats.lowLink = min(vertexStats.lowLink, neighborStats.sccIndex)
+        for (w in graph.giveNeighbors(v) ?: listOf()) {
+            if (w.sccIndex == 0) {
+                strongConnect(w)
+                v.lowLink = min(v.lowLink, w.lowLink)
+            } else if (w.onStack) {
+                v.lowLink = min(v.lowLink, w.sccIndex)
             }
         }
 
-        val scc = arrayOf<Vertex<K>>()
-        if (vertexStats.lowLink == vertexStats.sccIndex) {
+        val scc = listOf<Vertex<K>>()
+        if (v.lowLink == v.sccIndex) {
             do {
-                val visitedVertex = stack.pop()
-                val visitedVertexStats = sccSearchHelper[visitedVertex] ?: TODO()
-                visitedVertexStats.onStack = false
-                scc.plusElement(visitedVertex)
-            } while (visitedVertex != vertex)
+                val w = stack.pop()
+                w.onStack = false
+                scc.addLast(w)
+            } while (w != v)
         }
-
         return scc
     }
 
     for (vertex in graph.adjacencyList.keys) {
-        val vertexStats = sccSearchHelper[vertex] ?: TODO()
-
-        if (vertexStats.sccIndex == 0) {
+        if (vertex.sccIndex == 0) {
             val scc = strongConnect(vertex)
-
             if (scc.isNotEmpty()) {
-                result.plusElement(scc)
+                sccList.addLast(scc)
             }
         }
     }
 
-    return result
+    return sccList
 }
