@@ -1,10 +1,12 @@
 package graphs
 
 import algorithms.Traversable
+import algorithms.BridgeFinder
 
 class Graph<T> {
 	internal var adjacencyList: HashMap<Vertex<T>, HashSet<Vertex<T>>> = HashMap()
 
+	// может оказаться ненужным потому что у adjacencylist уже есть size
 	// Need to test if add(remove)Vertex updates size
 	var size: Int = 0
 		private set
@@ -61,5 +63,9 @@ class Graph<T> {
 		for (key in adjacencyList.keys) {
 			println("$key is connected to ${adjacencyList[key]}")
 		}
+	}
+
+	fun findBridges() {
+		BridgeFinder<T>().findBridges(this)
 	}
 }
