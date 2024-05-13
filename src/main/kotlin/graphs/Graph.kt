@@ -1,6 +1,5 @@
 package graphs
 
-import interfaces.GraphIterator
 import interfaces.Traversable
 
 class Graph<T>: Iterable<Vertex<T>> {
@@ -65,6 +64,10 @@ class Graph<T>: Iterable<Vertex<T>> {
 	}
 
 	override fun iterator(): Iterator<Vertex<T>> {
-		return GraphIterator(this)
+		return this.adjacencyList.keys.iterator()
+	}
+
+	fun dfsIterator(vertex: Vertex<T>): Iterator<Vertex<T>> {
+		return this.dfs(vertex).iterator()
 	}
 }
