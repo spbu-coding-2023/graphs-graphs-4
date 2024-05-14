@@ -60,13 +60,6 @@ class Graph<T> : Iterable<Vertex<T>> {
 		return Traversable<T>().dfsIter(this, vertex)
 	}
 
-	// Display the graph; for now for debug purposes mostly
-	private fun printGraph() {
-		for (key in adjList.keys) {
-			println("$key is connected to ${adjList[key]}")
-		}
-	}
-
 	override fun iterator(): Iterator<Vertex<T>> {
 		return this.adjList.keys.iterator()
 	}
