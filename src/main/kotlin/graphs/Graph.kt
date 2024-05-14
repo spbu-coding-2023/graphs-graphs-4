@@ -13,15 +13,22 @@ class Graph<T>: Iterable<Vertex<T>> {
 	// need to test?
 	fun addVertex(vertex: Vertex<T>): Vertex<T> {
 		adjacencyList.putIfAbsent(vertex, HashSet())
-
 		return vertex
 	}
 
 	// Undirected graph -> we add both connections.
 	// need to test
 	fun addEdge(vertex1: Vertex<T>, vertex2: Vertex<T>) {
-		adjacencyList.getOrPut(vertex1) { HashSet() }.add(vertex2)
-		adjacencyList.getOrPut(vertex2) { HashSet() }.add(vertex1)
+		if (adjacencyList.containsKey(vertex1) and adjacencyList.containsKey(vertex2)) {
+			adjacencyList.getOrPut(vertex1) { HashSet() }.add(vertex2)
+			adjacencyList.getOrPut(vertex2) { HashSet() }.add(vertex1)
+		} else {
+			if (!adjacencyList.containsKey(vertex1)) {
+				throw IllegalArgumentException("Vertex1 does not exist")
+			} else {
+				throw IllegalArgumentException("Vertex2 does not exist")
+			}
+		}
 	}
 
 	// Get the vertices adjacent to a given vertex
