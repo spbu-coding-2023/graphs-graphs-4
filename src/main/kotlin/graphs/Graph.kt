@@ -1,10 +1,12 @@
 package graphs
 
 import interfaces.Traversable
+import interfaces.BridgeFinder
 
 class Graph<T>: Iterable<Vertex<T>> {
 	internal var adjacencyList: HashMap<Vertex<T>, HashSet<Vertex<T>>> = HashMap()
 
+	// может оказаться ненужным потому что у adjacencylist уже есть size
 	// Need to test if add(remove)Vertex updates size
 	var size: Int = 0
 		private set
@@ -69,5 +71,9 @@ class Graph<T>: Iterable<Vertex<T>> {
 
 	fun dfsIterator(vertex: Vertex<T>): Iterator<Vertex<T>> {
 		return this.dfs(vertex).iterator()
+	}
+
+	fun findBridges() {
+		BridgeFinder<T>().findBridges(this)
 	}
 }
