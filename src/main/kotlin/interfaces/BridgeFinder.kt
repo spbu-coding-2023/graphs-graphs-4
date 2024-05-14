@@ -6,11 +6,12 @@ import kotlin.math.min
 
 class BridgeFinder<T> {
 	var discoveryTime = hashMapOf<Vertex<T>, Int>()
+	var bridges : Set<Pair<Vertex<T>, Vertex<T>>> = emptySet()
 	var parent = hashMapOf<Vertex<T>, Vertex<T>?>()
 	var low = hashMapOf<Vertex<T>, Int>()
 	var timer : Int = 0
 
-	fun findBridges(graph: Graph<T>) {
+	fun findBridges(graph: Graph<T>) : Set<Pair<Vertex<T>, Vertex<T>>> {
 		for (element in graph.adjList.keys) {
 			discoveryTime[element] = -1
 			low[element] = -1
@@ -23,6 +24,8 @@ class BridgeFinder<T> {
 				dfsRecursive(graph, it)
 			}
 		}
+
+		return bridges
 	}
 
 	private fun dfsRecursive(graph: Graph<T>, vertex: Vertex<T>) {
@@ -42,7 +45,7 @@ class BridgeFinder<T> {
 					low[vertex] = min(lowVertex, lowIt)
 
 					if (lowIt > discVertex) {
-						println(Pair(it.key, vertex.key))
+						bridges = bridges.plus(Pair(it, vertex))
 					}
 				} else {
 					if (parent[vertex] != it) {

@@ -74,7 +74,7 @@ class Graph<T>: Iterable<Vertex<T>> {
 		return this.dfs(vertex).iterator()
 	}
 
-	fun findBridges() {
-		BridgeFinder<T>().findBridges(this)
+	fun findBridges() : Set<Pair<Vertex<T>, Vertex<T>>>? {
+		return BridgeFinder<T>().findBridges(this)
 	}
 }
