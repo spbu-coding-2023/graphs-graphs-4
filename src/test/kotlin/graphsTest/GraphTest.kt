@@ -16,7 +16,7 @@ class GraphTest {
 		fun edgeException() {
 			val graphString = Graph<String>()
 			val vertex = Vertex("exists")
-  graphString.adjacencyList[vertex] = hashMapOf()
+			graphString.adjacencyList[vertex] = hashMapOf()
 
 			assertThrows(IllegalArgumentException::class.java) {graphString.addEdge(Vertex("doesn't exist"), Vertex("doesn't exist"))}
 			assertThrows(IllegalArgumentException::class.java) {graphString.addEdge(vertex, Vertex("doesn't exist"))}
