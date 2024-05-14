@@ -1,5 +1,7 @@
-package graphs
+package graphsTest
 
+import graphs.Graph
+import graphs.Vertex
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
