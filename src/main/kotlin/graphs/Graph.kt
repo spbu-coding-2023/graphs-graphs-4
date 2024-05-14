@@ -12,7 +12,8 @@ class Graph<T> : Iterable<Vertex<T>> {
 	// What should we do if vertex with given key already exists?
 	// need to test?
 	// надо переделать чтоб на вход подавать не узел, а ключ сразу
-	fun addVertex(vertex: Vertex<T>): Vertex<T> {
+	fun addVertex(key: T): Vertex<T> {
+		val vertex = Vertex(key)
 		adjList.putIfAbsent(vertex, HashSet())
 		return vertex
 	}

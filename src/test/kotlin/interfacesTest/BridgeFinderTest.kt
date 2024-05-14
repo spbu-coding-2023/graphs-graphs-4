@@ -16,7 +16,7 @@ class BridgeFinderTest {
 	// 1 - 2 - 3
 	fun findBridgesInChain() {
 		for (i in 1..3) {
-			graphInt.addVertex(Vertex(i))
+			graphInt.addVertex(i)
 		}
 
 		val nodes = arrayListOf(graphInt.adjList.keys.toList())
@@ -39,7 +39,7 @@ class BridgeFinderTest {
 	//  4---3
 	fun findNoBridgesInSquareWithDiagonal() {
 		for (i in 1..4) {
-			graphInt.addVertex(Vertex(i))
+			graphInt.addVertex(i)
 		}
 
 		val nodes = arrayListOf(graphInt.adjList.keys.toList())
@@ -64,7 +64,7 @@ class BridgeFinderTest {
 	//        4
 	fun findBridgesWithMultipleComponents() {
 		for (i in 1..6) {
-			graphInt.addVertex(Vertex(i))
+			graphInt.addVertex(i)
 		}
 
 		val nodes = arrayListOf(graphInt.adjList.keys.toList())
@@ -90,7 +90,7 @@ class BridgeFinderTest {
 	//7 - 8 - 9       10
 	fun findBridgesWithNestedCycle() {
 		for (i in 1..10) {
-			graphInt.addVertex(Vertex(i))
+			graphInt.addVertex(i)
 		}
 
 		val nodes = arrayListOf(graphInt.adjList.keys.toList())

@@ -65,14 +65,9 @@ class GraphTest {
 	@Test
 	@DisplayName("Add vertex")
 	fun testAddVertex() {
-		val v1: Vertex<Int> = Vertex(1)
-		val v2: Vertex<Int> = Vertex(2)
-		val v3: Vertex<Int> = Vertex(3)
-
-		graph.addVertex(v1)
-		graph.addVertex(v2)
-		graph.addVertex(v3)
-
+		val v1: Vertex<Int> = graph.addVertex(1)
+		val v2: Vertex<Int> = graph.addVertex(2)
+		val v3: Vertex<Int> = graph.addVertex(3)
 		val set = graph.adjList
 		val setTest: HashMap<Vertex<Int>, HashSet<Vertex<Int>>> = hashMapOf(
 			v1 to hashSetOf(),
@@ -91,7 +86,7 @@ class GraphTest {
 		@BeforeEach
 		fun setup() {
 			for (i in 0..9) {
-				vertices = vertices.plus(graph.addVertex(Vertex(i)))
+				vertices = vertices.plus(graph.addVertex(i))
 			}
 			// cool graph I saw in a video
 			graph.addEdge(vertices[0], vertices[1])
