@@ -10,6 +10,45 @@ class GraphTest {
 	private var graph = Graph<Int>()
 
 	@Nested
+	inner class AddVertexTest {
+		@Test
+		@DisplayName("New vertex in an empty graph")
+		fun emptyGraph() {
+			val v1 = graph.addVertex(1)
+
+			val answer = HashMap<Vertex<Int>, HashSet<Vertex<Int>>>()
+			answer[v1] = HashSet()
+
+			assertEquals(answer, graph.adjList)
+		}
+
+		@Test
+		@DisplayName("New vertex in a non-empty graph")
+		fun addVertex() {
+			val v1 = graph.addVertex(1)
+			val v2 = graph.addVertex(2)
+
+			val answer = HashMap<Vertex<Int>, HashSet<Vertex<Int>>>()
+			answer[v1] = HashSet()
+			answer[v2] = HashSet()
+
+			assertEquals(answer, graph.adjList)
+		}
+
+		@Test
+		@DisplayName("Node won't be added if a node with the same key already exists")
+		fun noDoubles() {
+			val v1 = graph.addVertex(1)
+			graph.addVertex(1)
+
+			val answer = HashMap<Vertex<Int>, HashSet<Vertex<Int>>>()
+			answer[v1] = HashSet()
+
+			assertEquals(answer, graph.adjList)
+		}
+	}
+
+	@Nested
 	inner class AddEdgesTest {
 		private val vertex1 = Vertex(1)
 		private val vertex2 = Vertex(2)
@@ -59,23 +98,6 @@ class GraphTest {
 			assertEquals(1, graph.adjList[vertex1]?.count { it == vertex2 })
 			assertEquals(1, graph.adjList[vertex2]?.count { it == vertex1 })
 		}
-	}
-
-	// дописать
-	@Test
-	@DisplayName("Add vertex")
-	fun testAddVertex() {
-		val v1: Vertex<Int> = graph.addVertex(1)
-		val v2: Vertex<Int> = graph.addVertex(2)
-		val v3: Vertex<Int> = graph.addVertex(3)
-		val set = graph.adjList
-		val setTest: HashMap<Vertex<Int>, HashSet<Vertex<Int>>> = hashMapOf(
-			v1 to hashSetOf(),
-			v2 to hashSetOf(),
-			v3 to hashSetOf()
-		)
-
-		assertEquals(setTest, set)
 	}
 
 	// мб стоит вынести в отдельный класс
