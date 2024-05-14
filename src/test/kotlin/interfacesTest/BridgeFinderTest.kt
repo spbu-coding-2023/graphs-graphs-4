@@ -115,4 +115,10 @@ class BridgeFinderTest {
 
 		assertEquals(answer, graphInt.findBridges())
 	}
+
+	@Test
+	@DisplayName("No bridges in an empty graph")
+	fun findNoBridgesInEmptyGraph() {
+		assertEquals(emptySet(), graphInt.findBridges())
+	}
 }
