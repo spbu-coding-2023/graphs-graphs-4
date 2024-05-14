@@ -5,11 +5,11 @@ import graphs.Vertex
 import kotlin.math.min
 
 class BridgeFinder<T> {
-	var discoveryTime = hashMapOf<Vertex<T>, Int>()
-	var bridges : Set<Pair<Vertex<T>, Vertex<T>>> = emptySet()
-	var parent = hashMapOf<Vertex<T>, Vertex<T>?>()
-	var low = hashMapOf<Vertex<T>, Int>()
-	var timer : Int = 0
+	private var discoveryTime = hashMapOf<Vertex<T>, Int>()
+	private var bridges : Set<Pair<Vertex<T>, Vertex<T>>> = emptySet()
+	private var parent = hashMapOf<Vertex<T>, Vertex<T>?>()
+	private var low = hashMapOf<Vertex<T>, Int>()
+	private var timer : Int = 0
 
 	fun findBridges(graph: Graph<T>) : Set<Pair<Vertex<T>, Vertex<T>>> {
 		for (element in graph.adjList.keys) {
