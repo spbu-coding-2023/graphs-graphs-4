@@ -11,11 +11,21 @@ class GraphTest {
 
 	@Nested
 	inner class AddEdgesTest {
+		private val vertex1 = Vertex(1)
+		private val vertex2 = Vertex(2)
+
+		@BeforeEach
+		fun init() {
+			graph.adjacencyList[vertex1] = HashSet()
+			graph.adjacencyList[vertex2] = HashSet()
+		}
+
 		@Test
 		@DisplayName("Edge can't be added if at least one of the nodes does not exist")
 		fun edgeException() {
 			val graphString = Graph<String>()
 			val vertex = Vertex("exists")
+
 			graphString.adjacencyList[vertex] = HashSet()
 
 			assertThrows(IllegalArgumentException::class.java) {graphString.addEdge(Vertex("doesn't exist"), Vertex("doesn't exist"))}
@@ -23,8 +33,27 @@ class GraphTest {
 			assertThrows(IllegalArgumentException::class.java) {graphString.addEdge(Vertex("doesn't exist"), vertex)}
 			assertDoesNotThrow { graphString.addEdge(vertex, vertex) }
 		}
-		// 0 -> 0
-		// 0 --> 0
+
+		@Test
+		@DisplayName("When add an edge between two nodes, v1 points to v2, and v2 points to v1")
+		fun edgeAdd() {
+			graph.addEdge(vertex1, vertex2)
+
+			assertEquals(true, graph.adjacencyList[vertex1]?.contains(vertex2) ?: false)
+			assertEquals(true, graph.adjacencyList[vertex2]?.contains(vertex1) ?: false)
+		}
+
+		@Test
+		@DisplayName("Don't create an edge if edge already exists")
+		fun edgeAlreadyExists() {
+			graph.adjacencyList[vertex1]?.add(vertex2)
+			graph.adjacencyList[vertex2]?.add(vertex1)
+
+			graph.addEdge(vertex1, vertex2)
+
+			assertEquals(1, graph.adjacencyList[vertex1]?.count { it == vertex2 })
+			assertEquals(1, graph.adjacencyList[vertex2]?.count { it == vertex1 })
+		}
 	}
 
 
