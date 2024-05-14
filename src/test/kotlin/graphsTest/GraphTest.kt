@@ -16,14 +16,13 @@ class GraphTest {
 		fun edgeException() {
 			val graphString = Graph<String>()
 			val vertex = Vertex("exists")
-			graphString.adjacencyList[vertex] = hashMapOf()
+			graphString.adjacencyList[vertex] = HashSet()
 
 			assertThrows(IllegalArgumentException::class.java) {graphString.addEdge(Vertex("doesn't exist"), Vertex("doesn't exist"))}
 			assertThrows(IllegalArgumentException::class.java) {graphString.addEdge(vertex, Vertex("doesn't exist"))}
 			assertThrows(IllegalArgumentException::class.java) {graphString.addEdge(Vertex("doesn't exist"), vertex)}
 			assertDoesNotThrow { graphString.addEdge(vertex, vertex) }
 		}
-
 		// 0 -> 0
 		// 0 --> 0
 	}
