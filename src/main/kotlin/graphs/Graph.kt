@@ -9,9 +9,18 @@ class Graph<T> : Iterable<Vertex<T>> {
 	var size: Int = adjList.size
 		private set
 
+	// стоит подумать а нельзя ли быстрее проверять на наличие узла
+	// с каким-то ключем
 	fun addVertex(key: T): Vertex<T> {
+		for (v in adjList.keys) {
+			if (v.key == key) {
+				return v
+			}
+		}
+
 		val vertex = Vertex(key)
 		adjList.putIfAbsent(vertex, HashSet())
+
 		return vertex
 	}
 

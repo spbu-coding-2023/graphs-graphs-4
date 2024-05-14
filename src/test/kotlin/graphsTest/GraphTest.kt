@@ -36,15 +36,16 @@ class GraphTest {
 		}
 
 		@Test
-		@DisplayName("Node won't be added if a node with the same key already exists")
+		@DisplayName("Return existing node if it has the same key as given key")
 		fun noDoubles() {
 			val v1 = graph.addVertex(1)
-			graph.addVertex(1)
+			val testVertex = graph.addVertex(1)
 
 			val answer = HashMap<Vertex<Int>, HashSet<Vertex<Int>>>()
 			answer[v1] = HashSet()
 
 			assertEquals(answer, graph.adjList)
+			assertEquals(v1, testVertex)
 		}
 	}
 
