@@ -6,12 +6,12 @@ import kotlin.math.min
 
 class BridgeFinder<T> {
 	private var discoveryTime = hashMapOf<Vertex<T>, Int>()
-	private var bridges : Set<Pair<Vertex<T>, Vertex<T>>> = emptySet()
+	private var bridges: Set<Pair<Vertex<T>, Vertex<T>>> = emptySet()
 	private var parent = hashMapOf<Vertex<T>, Vertex<T>?>()
 	private var low = hashMapOf<Vertex<T>, Int>()
-	private var timer : Int = 0
+	private var timer: Int = 0
 
-	fun findBridges(graph: Graph<T>) : Set<Pair<Vertex<T>, Vertex<T>>> {
+	fun findBridges(graph: Graph<T>): Set<Pair<Vertex<T>, Vertex<T>>> {
 		for (element in graph.adjList.keys) {
 			discoveryTime[element] = -1
 			low[element] = -1
@@ -34,27 +34,27 @@ class BridgeFinder<T> {
 		timer += 1
 
 		graph.adjList[vertex]?.forEach {
-				if (discoveryTime[it] == -1) {
-					parent[it] = vertex
-					dfsRecursive(graph, it)
+			if (discoveryTime[it] == -1) {
+				parent[it] = vertex
+				dfsRecursive(graph, it)
 
-					val lowVertex : Int = low[vertex] ?: -1
-					val lowIt : Int = low[it] ?: -1
-					val discVertex : Int = discoveryTime[vertex] ?: -1
+				val lowVertex: Int = low[vertex] ?: -1
+				val lowIt: Int = low[it] ?: -1
+				val discVertex: Int = discoveryTime[vertex] ?: -1
 
-					low[vertex] = min(lowVertex, lowIt)
+				low[vertex] = min(lowVertex, lowIt)
 
-					if (lowIt > discVertex) {
-						bridges = bridges.plus(Pair(it, vertex))
-					}
-				} else {
-					if (parent[vertex] != it) {
-						val lowVertex : Int = low[vertex] ?: -1
-						val discTimeIt : Int = discoveryTime[it] ?: -1
-
-						low[vertex] = min(lowVertex, discTimeIt)
-					}
+				if (lowIt > discVertex) {
+					bridges = bridges.plus(Pair(it, vertex))
 				}
+			} else {
+				if (parent[vertex] != it) {
+					val lowVertex: Int = low[vertex] ?: -1
+					val discTimeIt: Int = discoveryTime[it] ?: -1
+
+					low[vertex] = min(lowVertex, discTimeIt)
+				}
+			}
 		}
 	}
 }

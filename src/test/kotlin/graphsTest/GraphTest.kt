@@ -28,9 +28,14 @@ class GraphTest {
 
 			graphString.adjList[vertex] = HashSet()
 
-			assertThrows(IllegalArgumentException::class.java) {graphString.addEdge(Vertex("doesn't exist"), Vertex("doesn't exist"))}
-			assertThrows(IllegalArgumentException::class.java) {graphString.addEdge(vertex, Vertex("doesn't exist"))}
-			assertThrows(IllegalArgumentException::class.java) {graphString.addEdge(Vertex("doesn't exist"), vertex)}
+			assertThrows(IllegalArgumentException::class.java) {
+				graphString.addEdge(
+					Vertex("doesn't exist"),
+					Vertex("doesn't exist")
+				)
+			}
+			assertThrows(IllegalArgumentException::class.java) { graphString.addEdge(vertex, Vertex("doesn't exist")) }
+			assertThrows(IllegalArgumentException::class.java) { graphString.addEdge(Vertex("doesn't exist"), vertex) }
 			assertDoesNotThrow { graphString.addEdge(vertex, vertex) }
 		}
 

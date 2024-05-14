@@ -14,7 +14,7 @@ class BridgeFinderTest {
 	@Test
 	@DisplayName("Every edge is a bridge in a Simple Linear Chain")
 	// 1 - 2 - 3
-	fun findBridgesInChain () {
+	fun findBridgesInChain() {
 		for (i in 1..3) {
 			graphInt.addVertex(Vertex(i))
 		}
@@ -37,7 +37,7 @@ class BridgeFinderTest {
 	//  1---2
 	//  | X |
 	//  4---3
-	fun findNoBridgesInSquareWithDiagonal () {
+	fun findNoBridgesInSquareWithDiagonal() {
 		for (i in 1..4) {
 			graphInt.addVertex(Vertex(i))
 		}
@@ -118,6 +118,21 @@ class BridgeFinderTest {
 
 	@Test
 	@DisplayName("No bridges in an empty graph")
+	//⠀⠀⠀⠀⠀⠀⠀⠀⠀   ⢀⣴⠟⠋⠉⠉⠙⢦
+	//⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡾⠁⠀⠀⠀⣀⠀⠀⢻
+	//⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⡇⠀⠀⠀⡞⠁
+	//⠀⠀⠀ᵐᵉᵒʷ⠀⠀⠀⠀⠀⢷⡀⠀ ⠈⣧
+	//⠀⠀⠀⠀♡⠀⠀⠀⠀⠀⠀⠈⠳⣄⠀ ⠙⢷⣄
+	//⠀⠀⠀⠀⠀⠀⢀⣦⠀⠀⠀⠀⠀⠈⠑⠀⣀⣭⣷⣦⣤⣀
+	//⠀⠀⠀⠀⠀⠀⣘⠁⠡⠀⠀⠀⠀⠀⠠⠚⠁⠀⠀⠀⠀⠹⣧
+	//⠀⠀⠀⠀⠀⠀⠛⠀⠀⠐⠒⢤⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢹⡇
+	//⠀⠀⠀⠀⡐⠁⢴⡄⠀⠀⠀⠀⠐⠈⠉⡽⠂⠀⠀⠀⠀⠀⢸⡇
+	//⠀⠀⠀⠀⡇⠀⠀⣤⠀⠶⡦⠀⠀⠴⠚⠀⠀⠀⠀⠀⠀⠀⣸⠇
+	//⠀⠀⠀⠀⡼⠂⠀⠒⠀⠀⠀⠀⢠⠇⠀⠀⠀⠀⠀⢀⠀⣠⠏
+	//⠀⠀⠀⢸⠀⠀⠀⠀⠀⠀⠀⠘⠁⠀⠀⠀⠀⠀⢀⣎⠴⠋
+	//⠀⠀⠀⠘⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡴⠋
+	//⠀⠀⠀⠀⠘⠋⢠⡤⠂⠐⠀⠤⠤⠴⠚⠁⠀⠀
+	// the cat ate graph
 	fun findNoBridgesInEmptyGraph() {
 		assertEquals(emptySet(), graphInt.findBridges())
 	}

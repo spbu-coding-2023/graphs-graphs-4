@@ -1,9 +1,9 @@
 package graphs
 
-import interfaces.Traversable
 import interfaces.BridgeFinder
+import interfaces.Traversable
 
-class Graph<T>: Iterable<Vertex<T>> {
+class Graph<T> : Iterable<Vertex<T>> {
 	internal var adjList: HashMap<Vertex<T>, HashSet<Vertex<T>>> = HashMap()
 
 	var size: Int = adjList.size
@@ -75,7 +75,7 @@ class Graph<T>: Iterable<Vertex<T>> {
 		return this.dfs(vertex).iterator()
 	}
 
-	fun findBridges() : Set<Pair<Vertex<T>, Vertex<T>>>? {
+	fun findBridges(): Set<Pair<Vertex<T>, Vertex<T>>> {
 		return BridgeFinder<T>().findBridges(this)
 	}
 }
