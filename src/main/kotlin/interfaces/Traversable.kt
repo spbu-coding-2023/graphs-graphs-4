@@ -12,7 +12,7 @@ class Traversable<T> {
 		val marked: HashMap<Vertex<T>, Boolean> = hashMapOf()
 
 		stack.push(v)
-		for (element in graph.adjacencyList.keys) {
+		for (element in graph.adjList.keys) {
 			marked[element] = false
 		}
 
@@ -24,7 +24,7 @@ class Traversable<T> {
 
 				marked[vertex] = true
 
-				graph.adjacencyList[vertex]?.forEach {
+				graph.adjList[vertex]?.forEach {
 					if (marked[it] == false) {
 						stack.push(it)
 					}

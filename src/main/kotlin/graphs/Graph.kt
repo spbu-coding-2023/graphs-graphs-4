@@ -4,26 +4,25 @@ import interfaces.Traversable
 import interfaces.BridgeFinder
 
 class Graph<T>: Iterable<Vertex<T>> {
-	internal var adjacencyList: HashMap<Vertex<T>, HashSet<Vertex<T>>> = HashMap()
+	internal var adjList: HashMap<Vertex<T>, HashSet<Vertex<T>>> = HashMap()
 
-	var size: Int = adjacencyList.size
+	var size: Int = adjList.size
 		private set
 
 	// What should we do if vertex with given key already exists?
 	// need to test?
 	fun addVertex(vertex: Vertex<T>): Vertex<T> {
-		adjacencyList.putIfAbsent(vertex, HashSet())
+		adjList.putIfAbsent(vertex, HashSet())
 		return vertex
 	}
 
 	// Undirected graph -> we add both connections.
-	// need to test
 	fun addEdge(vertex1: Vertex<T>, vertex2: Vertex<T>) {
-		if (adjacencyList.containsKey(vertex1) and adjacencyList.containsKey(vertex2)) {
-			adjacencyList.getOrPut(vertex1) { HashSet() }.add(vertex2)
-			adjacencyList.getOrPut(vertex2) { HashSet() }.add(vertex1)
+		if (adjList.containsKey(vertex1) and adjList.containsKey(vertex2)) {
+			adjList.getOrPut(vertex1) { HashSet() }.add(vertex2)
+			adjList.getOrPut(vertex2) { HashSet() }.add(vertex1)
 		} else {
-			if (!adjacencyList.containsKey(vertex1)) {
+			if (!adjList.containsKey(vertex1)) {
 				throw IllegalArgumentException("Vertex1 does not exist")
 			} else {
 				throw IllegalArgumentException("Vertex2 does not exist")
@@ -34,24 +33,24 @@ class Graph<T>: Iterable<Vertex<T>> {
 	// Get the vertices adjacent to a given vertex
 	// need to test
 	fun giveNeighbors(vertex: Vertex<T>): Set<Vertex<T>>? {
-		return adjacencyList[vertex]
+		return adjList[vertex]
 	}
 
 	// need to test
 	fun removeEdge(vertex1: Vertex<T>, vertex2: Vertex<T>) {
-		adjacencyList[vertex1]?.remove(vertex2)
-		adjacencyList[vertex2]?.remove(vertex1)
+		adjList[vertex1]?.remove(vertex2)
+		adjList[vertex2]?.remove(vertex1)
 	}
 
 	// Can we reuse removeEdge?
 	// need to test
 	fun removeVertex(vertex: Vertex<T>) {
-		if (adjacencyList[vertex] != null) {
-			adjacencyList[vertex]?.forEach {
-				adjacencyList[it]?.remove(vertex)
+		if (adjList[vertex] != null) {
+			adjList[vertex]?.forEach {
+				adjList[it]?.remove(vertex)
 			}
 
-			adjacencyList.remove(vertex)
+			adjList.remove(vertex)
 		}
 	}
 
@@ -62,13 +61,13 @@ class Graph<T>: Iterable<Vertex<T>> {
 
 	// Display the graph; for now for debug purposes mostly
 	private fun printGraph() {
-		for (key in adjacencyList.keys) {
-			println("$key is connected to ${adjacencyList[key]}")
+		for (key in adjList.keys) {
+			println("$key is connected to ${adjList[key]}")
 		}
 	}
 
 	override fun iterator(): Iterator<Vertex<T>> {
-		return this.adjacencyList.keys.iterator()
+		return this.adjList.keys.iterator()
 	}
 
 	fun dfsIterator(vertex: Vertex<T>): Iterator<Vertex<T>> {

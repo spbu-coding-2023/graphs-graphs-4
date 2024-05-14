@@ -11,13 +11,13 @@ class BridgeFinder<T> {
 	var timer : Int = 0
 
 	fun findBridges(graph: Graph<T>) {
-		for (element in graph.adjacencyList.keys) {
+		for (element in graph.adjList.keys) {
 			discoveryTime[element] = -1
 			low[element] = -1
 			parent[element] = null
 		}
 
-		graph.adjacencyList.keys.forEach {
+		graph.adjList.keys.forEach {
 			if (discoveryTime[it] == -1) {
 				timer = 0
 				dfsRecursive(graph, it)
@@ -30,7 +30,7 @@ class BridgeFinder<T> {
 		low[vertex] = timer
 		timer += 1
 
-		graph.adjacencyList[vertex]?.forEach {
+		graph.adjList[vertex]?.forEach {
 				if (discoveryTime[it] == -1) {
 					parent[it] = vertex
 					dfsRecursive(graph, it)

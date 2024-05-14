@@ -16,8 +16,8 @@ class GraphTest {
 
 		@BeforeEach
 		fun init() {
-			graph.adjacencyList[vertex1] = HashSet()
-			graph.adjacencyList[vertex2] = HashSet()
+			graph.adjList[vertex1] = HashSet()
+			graph.adjList[vertex2] = HashSet()
 		}
 
 		@Test
@@ -26,7 +26,7 @@ class GraphTest {
 			val graphString = Graph<String>()
 			val vertex = Vertex("exists")
 
-			graphString.adjacencyList[vertex] = HashSet()
+			graphString.adjList[vertex] = HashSet()
 
 			assertThrows(IllegalArgumentException::class.java) {graphString.addEdge(Vertex("doesn't exist"), Vertex("doesn't exist"))}
 			assertThrows(IllegalArgumentException::class.java) {graphString.addEdge(vertex, Vertex("doesn't exist"))}
@@ -39,24 +39,24 @@ class GraphTest {
 		fun edgeAdd() {
 			graph.addEdge(vertex1, vertex2)
 
-			assertEquals(true, graph.adjacencyList[vertex1]?.contains(vertex2) ?: false)
-			assertEquals(true, graph.adjacencyList[vertex2]?.contains(vertex1) ?: false)
+			assertEquals(true, graph.adjList[vertex1]?.contains(vertex2) ?: false)
+			assertEquals(true, graph.adjList[vertex2]?.contains(vertex1) ?: false)
 		}
 
 		@Test
 		@DisplayName("Don't create an edge if edge already exists")
 		fun edgeAlreadyExists() {
-			graph.adjacencyList[vertex1]?.add(vertex2)
-			graph.adjacencyList[vertex2]?.add(vertex1)
+			graph.adjList[vertex1]?.add(vertex2)
+			graph.adjList[vertex2]?.add(vertex1)
 
 			graph.addEdge(vertex1, vertex2)
 
-			assertEquals(1, graph.adjacencyList[vertex1]?.count { it == vertex2 })
-			assertEquals(1, graph.adjacencyList[vertex2]?.count { it == vertex1 })
+			assertEquals(1, graph.adjList[vertex1]?.count { it == vertex2 })
+			assertEquals(1, graph.adjList[vertex2]?.count { it == vertex1 })
 		}
 	}
 
-
+	// дописать
 	@Test
 	@DisplayName("Add vertex")
 	fun testAddVertex() {
@@ -68,7 +68,7 @@ class GraphTest {
 		graph.addVertex(v2)
 		graph.addVertex(v3)
 
-		val set = graph.adjacencyList
+		val set = graph.adjList
 		val setTest: HashMap<Vertex<Int>, HashSet<Vertex<Int>>> = hashMapOf(
 			v1 to hashSetOf(),
 			v2 to hashSetOf(),
@@ -78,6 +78,7 @@ class GraphTest {
 		assertEquals(setTest, set)
 	}
 
+	// мб стоит вынести в отдельный класс
 	@Nested
 	inner class TraverseTests {
 		private var vertices: Array<Vertex<Int>> = emptyArray()

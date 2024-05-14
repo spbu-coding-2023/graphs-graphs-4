@@ -4,7 +4,7 @@ import graphs.Graph
 import graphs.Vertex
 
 class GraphIterator<K>(graph: Graph<K>) : Iterator<Vertex<K>> {
-    private val graphIterator = graph.adjacencyList.keys.iterator()
+    private val graphIterator = graph.adjList.keys.iterator()
 
     override fun hasNext() = graphIterator.hasNext()
 
