@@ -2,14 +2,33 @@ package graphsTest
 
 import graphs.Graph
 import graphs.Vertex
+import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Nested
-import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.Assertions.assertThrows
 
 class GraphTest {
 	private var graph = Graph<Int>()
+
+	@Nested
+	inner class AddEdgesTest {
+		@Test
+		@DisplayName("Edge can't be added if at least one of the nodes does not exist")
+		fun edgeException() {
+			val graphString = Graph<String>()
+			val vertex = Vertex("exists")
+
+			graphString.addVertex(vertex)
+
+			assertThrows(IllegalArgumentException::class.java) {graphString.addEdge(Vertex("doesn't exist"), Vertex("doesn't exist"))}
+			assertThrows(IllegalArgumentException::class.java) {graphString.addEdge(vertex, Vertex("doesn't exist"))}
+			assertThrows(IllegalArgumentException::class.java) {graphString.addEdge(Vertex("doesn't exist"), vertex)}
+			assertDoesNotThrow { graphString.addEdge(vertex, vertex) }
+		}
+
+		// 0 -> 0
+		// 0 --> 0
+	}
+
 
 	@Test
 	@DisplayName("Add vertex")
