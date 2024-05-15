@@ -1,11 +1,6 @@
 package graphs
 
-class Vertex<T>(
-    val key: T,
-    var sccIndex: Int = 0,
-    var lowLink: Int = 0,
-    var onStack: Boolean = false,
-    ) {
+open class Vertex<T>(key: T) {
 	// don't forget getter / setter etc.
 	// store coordinates here?
 }
