@@ -3,26 +3,11 @@ package graphs
 import interfaces.BridgeFinder
 import interfaces.Traversable
 
-class Graph<T> : Iterable<Vertex<T>> {
-	internal var adjList: HashMap<Vertex<T>, HashSet<Vertex<T>>> = HashMap()
+class Graph<T> : AbstractGraph<Vertex<T>, T>() {
+	override var adjList: HashMap<Vertex<T>, HashSet<Vertex<T>>> = HashMap()
 
 	var size: Int = adjList.size
 		private set
-
-	// стоит подумать а нельзя ли быстрее проверять на наличие узла
-	// с каким-то ключем
-	fun addVertex(key: T): Vertex<T> {
-		for (v in adjList.keys) {
-			if (v.key == key) {
-				return v
-			}
-		}
-
-		val vertex = Vertex(key)
-		adjList.putIfAbsent(vertex, HashSet())
-
-		return vertex
-	}
 
 	// Undirected graph -> we add both connections.
 	fun addEdge(vertex1: Vertex<T>, vertex2: Vertex<T>) {
@@ -36,12 +21,6 @@ class Graph<T> : Iterable<Vertex<T>> {
 				throw IllegalArgumentException("Vertex2 does not exist")
 			}
 		}
-	}
-
-	// Get the vertices adjacent to a given vertex
-	// need to test
-	fun giveNeighbors(vertex: Vertex<T>): Set<Vertex<T>>? {
-		return adjList[vertex]
 	}
 
 	// need to test
@@ -63,16 +42,12 @@ class Graph<T> : Iterable<Vertex<T>> {
 	}
 
 	// test on disconnected graph?
-	internal fun dfs(vertex: Vertex<T>): Set<Vertex<T>> {
-		return Traversable<T>().dfsIter(this, vertex)
-	}
-
-	override fun iterator(): Iterator<Vertex<T>> {
-		return this.adjList.keys.iterator()
-	}
-
 	fun dfsIterator(vertex: Vertex<T>): Iterator<Vertex<T>> {
 		return this.dfs(vertex).iterator()
+	}
+
+	internal fun dfs(vertex: Vertex<T>): Set<Vertex<T>> {
+		return Traversable<T>().dfsIter(this, vertex)
 	}
 
 	fun findBridges(): Set<Pair<Vertex<T>, Vertex<T>>> {
