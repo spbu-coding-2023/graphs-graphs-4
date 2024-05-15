@@ -47,7 +47,7 @@ fun <K>sccSearch(graph: Graph<K>): Array<Array<Vertex<K>>> {
         return scc
     }
 
-    for (vertex in graph.adjacencyList.keys) {
+    for (vertex in graph) {
         val vertexStats = sccSearchHelper[vertex] ?: TODO()
 
         if (vertexStats.sccIndex == 0) {
