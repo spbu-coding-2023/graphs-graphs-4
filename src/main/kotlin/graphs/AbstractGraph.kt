@@ -26,6 +26,11 @@ abstract class AbstractGraph<GRAPH_TYPE, T> : Iterable<Vertex<T>> {
 		return adjList[vertex]
 	}
 
+	//just converts graph to a set of vertices
+	fun convertToVerticesSet(): Set<Vertex<T>> {
+		return adjList.keys
+	}
+
 	override fun iterator(): Iterator<Vertex<T>> {
 		return this.adjList.keys.iterator()
 	}
