@@ -1,24 +1,10 @@
 package graphs
 
-class WeightedGraph<T> : Iterable<Vertex<T>> {
-	internal var adjList: HashMap<Vertex<T>, HashSet<Pair<Vertex<T>, Long?>>> = HashMap()
+class WeightedGraph<T> : AbstractGraph<Pair<Vertex<T>, Long?>, T>() {
+	override var adjList: HashMap<Vertex<T>, HashSet<Pair<Vertex<T>, Long?>>> = HashMap()
 
 	var size: Int = adjList.size
 		private set
-
-	// скорее всего можно как-то переиспользовать из graphs
-	fun addVertex(key: T): Vertex<T> {
-		for (v in adjList.keys) {
-			if (v.key == key) {
-				return v
-			}
-		}
-
-		val vertex = Vertex(key)
-		adjList.putIfAbsent(vertex, HashSet())
-
-		return vertex
-	}
 
 	fun addEdge(vertex1: Vertex<T>, vertex2: Vertex<T>, weight: Long) {
 		if (adjList.containsKey(vertex1) and adjList.containsKey(vertex2)) {
@@ -33,18 +19,12 @@ class WeightedGraph<T> : Iterable<Vertex<T>> {
 		}
 	}
 
-	//	// Get the vertices adjacent to a given vertex
-	//	// need to test
-	//	fun giveNeighbors(vertex: Vertex<T>): Set<Vertex<T>>? {
-	//		return adjList[vertex]
-	//	}
-	//
-	//	// need to test
-	//	fun removeEdge(vertex1: Vertex<T>, vertex2: Vertex<T>) {
-	//		adjList[vertex1]?.remove(vertex2)
-	//		adjList[vertex2]?.remove(vertex1)
-	//	}
-	//
+//	// need to test
+//	fun removeEdge(vertex1: Vertex<T>, vertex2: Vertex<T>) {
+//		adjList[vertex1]?.removeAll { it.first == vertex2 }
+//		adjList[vertex2]?.removeAll { it.first == vertex1 }
+//	}
+
 	//	// Can we reuse removeEdge?
 	//	// need to test
 	//	fun removeVertex(vertex: Vertex<T>) {
