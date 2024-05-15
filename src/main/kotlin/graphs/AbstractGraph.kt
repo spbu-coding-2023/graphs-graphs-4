@@ -20,6 +20,12 @@ abstract class AbstractGraph<GRAPH_TYPE, T> : Iterable<Vertex<T>> {
 		return vertex
 	}
 
+	fun addVertex(vertex: Vertex<T>): Vertex<T> {
+		adjList.putIfAbsent(vertex, HashSet())
+
+		return vertex
+	}
+
 	// Get the vertices adjacent to a given vertex
 	// need to test
 	fun giveNeighbors(vertex: Vertex<T>): Set<GRAPH_TYPE>? {
