@@ -5,8 +5,8 @@ import interfaces.Traversable
 abstract class AbstractGraph<GRAPH_TYPE, T> : Iterable<Vertex<T>> {
 	internal open var adjList: HashMap<Vertex<T>, HashSet<GRAPH_TYPE>> = HashMap()
 
-	var size: Int = 0
-		internal set
+    var size: Int = 0
+        internal set
 
 	fun addVertex(key: T): Vertex<T> {
 		for (v in adjList.keys) {
