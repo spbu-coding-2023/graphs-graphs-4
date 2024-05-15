@@ -54,6 +54,13 @@ open class WeightedGraph<T, NUMBER_TYPE : Number> : AbstractGraph<Pair<Vertex<T>
 	//		return BridgeFinder<T>().findBridges(this)
 	//	}
 
+	fun findMinAdjacentVertex(vertex: Vertex<T>): Vertex<T>?  {
+		val neighbors = adjList[vertex] ?: return null
+		val result = neighbors.maxBy { it.second ?: TODO() }.first
+
+		return result
+	}
+
 	override fun iterator(): Iterator<Vertex<T>> {
 		TODO("Not yet implemented")
 	}
