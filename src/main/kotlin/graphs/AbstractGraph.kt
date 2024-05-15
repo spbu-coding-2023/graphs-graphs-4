@@ -3,10 +3,9 @@ package graphs
 abstract class AbstractGraph<GRAPH_TYPE, T> : Iterable<Vertex<T>> {
 	internal open var adjList: HashMap<Vertex<T>, HashSet<GRAPH_TYPE>> = HashMap()
 
-	var size: Int = 0
-		internal set
+    var size: Int = 0
+        internal set
 
-	// need to remade the test
 	fun addVertex(key: T): Vertex<T> {
 		for (v in adjList.keys) {
 			if (v.key == key) {
@@ -22,7 +21,12 @@ abstract class AbstractGraph<GRAPH_TYPE, T> : Iterable<Vertex<T>> {
 		return vertex
 	}
 
-	// need to test?
+    //just converts graph to a set of vertices
+    fun convertToVerticesSet(): Set<Vertex<T>> {
+        return adjList.keys
+    }
+
+    //need to test
 	override fun iterator(): Iterator<Vertex<T>> {
 		return this.adjList.keys.iterator()
 	}
