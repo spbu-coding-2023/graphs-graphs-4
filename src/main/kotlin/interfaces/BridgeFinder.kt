@@ -1,6 +1,6 @@
 package interfaces
 
-import graphs.Graph
+import graphs.UndirectedGraph
 import graphs.Vertex
 import kotlin.math.min
 
@@ -11,7 +11,7 @@ class BridgeFinder<T> {
 	private var low = hashMapOf<Vertex<T>, Int>()
 	private var timer: Int = 0
 
-	fun findBridges(graph: Graph<T>): Set<Pair<Vertex<T>, Vertex<T>>> {
+	fun findBridges(graph: UndirectedGraph<T>): Set<Pair<Vertex<T>, Vertex<T>>> {
 		for (element in graph.adjList.keys) {
 			discoveryTime[element] = -1
 			low[element] = -1
@@ -28,7 +28,7 @@ class BridgeFinder<T> {
 		return bridges
 	}
 
-	private fun dfsRecursive(graph: Graph<T>, vertex: Vertex<T>) {
+	private fun dfsRecursive(graph: UndirectedGraph<T>, vertex: Vertex<T>) {
 		discoveryTime[vertex] = timer
 		low[vertex] = timer
 		timer += 1

@@ -3,7 +3,7 @@ package graphs
 import interfaces.BridgeFinder
 import interfaces.Traversable
 
-class Graph<T> : AbstractGraph<Vertex<T>, T>() {
+class UndirectedGraph<T> : AbstractGraph<Vertex<T>, T>() {
 	override var adjList: HashMap<Vertex<T>, HashSet<Vertex<T>>> = HashMap()
 
 	// Undirected graph -> we add both connections.
