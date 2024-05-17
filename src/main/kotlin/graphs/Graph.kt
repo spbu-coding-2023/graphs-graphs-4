@@ -26,7 +26,6 @@ class Graph<T> : AbstractGraph<Vertex<T>, T>() {
 		adjList[vertex2]?.remove(vertex1)
 	}
 
-	// Can we reuse removeEdge?
 	// need to test
 	fun removeVertex(vertex: Vertex<T>) {
 		if (adjList[vertex] != null) {

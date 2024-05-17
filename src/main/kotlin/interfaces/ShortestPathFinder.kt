@@ -5,7 +5,7 @@ import graphs.WeightedGraph
 import kotlin.Double.Companion.NEGATIVE_INFINITY
 import kotlin.Double.Companion.POSITIVE_INFINITY
 
-class ShortestPathFinder<T>(private val graph: WeightedGraph<T>)  {
+class ShortestPathFinder<T>(private val graph: WeightedGraph<T>) {
 	fun bellmanFord(start: Vertex<T>): Map<Vertex<T>, Double> {
 		val dist = graph.adjList.mapValues { POSITIVE_INFINITY }.toMutableMap()
 		dist[start] = 0.0
