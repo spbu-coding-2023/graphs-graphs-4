@@ -6,6 +6,7 @@ abstract class AbstractGraph<GRAPH_TYPE, T> : Iterable<Vertex<T>> {
 	var size: Int = 0
 		internal set
 
+	// need to remade the test
 	fun addVertex(key: T): Vertex<T> {
 		for (v in adjList.keys) {
 			if (v.key == key) {
@@ -21,11 +22,7 @@ abstract class AbstractGraph<GRAPH_TYPE, T> : Iterable<Vertex<T>> {
 		return vertex
 	}
 
-	// need to test
-	fun giveNeighbors(vertex: Vertex<T>): Set<GRAPH_TYPE>? {
-		return adjList[vertex]
-	}
-
+	// need to test?
 	override fun iterator(): Iterator<Vertex<T>> {
 		return this.adjList.keys.iterator()
 	}

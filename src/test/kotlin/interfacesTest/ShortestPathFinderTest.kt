@@ -3,10 +3,9 @@ package interfacesTest
 import graphs.DirectedWeightedGraph
 import graphs.Vertex
 import graphs.WeightedGraph
-import org.junit.jupiter.api.Test
-
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 import kotlin.Double.Companion.NEGATIVE_INFINITY
 import kotlin.Double.Companion.POSITIVE_INFINITY
 import kotlin.test.assertEquals
@@ -16,9 +15,9 @@ class ShortestPathFinderTest {
 	@Nested
 	inner class DirecionIndependedTest {
 		private val graph = WeightedGraph<Int, Double>()
-		private var nodes : List<Vertex<Int>> = emptyList()
+		private var nodes: List<Vertex<Int>> = emptyList()
 
-		private fun setup (end: Int) {
+		private fun setup(end: Int) {
 			for (i in 0..end) {
 				graph.addVertex(i)
 			}
@@ -52,8 +51,10 @@ class ShortestPathFinderTest {
 		}
 
 		@Test
-		@DisplayName("Nodes from disconnected components of a graph" +
-			" have an infinite distance to each other.")
+		@DisplayName(
+			"Nodes from disconnected components of a graph" +
+				" have an infinite distance to each other."
+		)
 		// 0 -- - (no edges)
 		// 1 -- - (no edges)
 		fun disconnectedTest2() {
@@ -75,9 +76,9 @@ class ShortestPathFinderTest {
 	@Nested
 	inner class DirectedGraphTest {
 		private val graph = DirectedWeightedGraph<Int, Double>()
-		private var nodes : List<Vertex<Int>> = emptyList()
+		private var nodes: List<Vertex<Int>> = emptyList()
 
-		private fun setup (end: Int) {
+		private fun setup(end: Int) {
 			for (i in 0..end) {
 				graph.addVertex(i)
 			}
@@ -166,9 +167,9 @@ class ShortestPathFinderTest {
 	@Nested
 	inner class UndirectedGraphTest {
 		private val graph = WeightedGraph<Int, Double>()
-		private var nodes : List<Vertex<Int>> = emptyList()
+		private var nodes: List<Vertex<Int>> = emptyList()
 
-		private fun setup (end: Int) {
+		private fun setup(end: Int) {
 			for (i in 0..end) {
 				graph.addVertex(i)
 			}
