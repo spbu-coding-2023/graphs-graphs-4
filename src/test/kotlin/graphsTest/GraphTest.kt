@@ -1,13 +1,13 @@
 package graphsTest
 
-import graphs.Graph
+import graphs.UndirectedGraph
 import graphs.Vertex
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertThrows
 
 class GraphTest {
-	private var graph = Graph<Int>()
+	private var graph = UndirectedGraph<Int>()
 
 	@Nested
 	inner class AddVertexTest {
@@ -63,7 +63,7 @@ class GraphTest {
 		@Test
 		@DisplayName("Edge can't be added if at least one of the nodes does not exist")
 		fun edgeException() {
-			val graphString = Graph<String>()
+			val graphString = UndirectedGraph<String>()
 			val vertex = Vertex("exists")
 
 			graphString.adjList[vertex] = HashSet()

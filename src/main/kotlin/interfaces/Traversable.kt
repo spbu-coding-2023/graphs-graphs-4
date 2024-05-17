@@ -1,12 +1,12 @@
 package interfaces
 
-import graphs.Graph
+import graphs.UndirectedGraph
 import graphs.Vertex
 import java.util.*
 
 class Traversable<T> {
 	// tested on connected undirected graph only
-	fun dfsIter(graph: Graph<T>, v: Vertex<T>): Set<Vertex<T>> {
+	fun dfsIter(graph: UndirectedGraph<T>, v: Vertex<T>): Set<Vertex<T>> {
 		var dfsSet: Set<Vertex<T>> = emptySet()
 		val stack: Stack<Vertex<T>> = Stack()
 		val marked: HashMap<Vertex<T>, Boolean> = hashMapOf()

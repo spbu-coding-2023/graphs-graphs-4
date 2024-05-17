@@ -1,7 +1,6 @@
 package interfacesTest
 
-import graphs.Graph
-import graphs.Vertex
+import graphs.UndirectedGraph
 import org.junit.jupiter.api.DisplayName
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -9,7 +8,7 @@ import kotlin.test.assertEquals
 
 // запускать этот тест только если прошли тесты на графы?
 class BridgeFinderTest {
-	private var graphInt = Graph<Int>()
+	private var graphInt = UndirectedGraph<Int>()
 
 	@Test
 	@DisplayName("Every edge is a bridge in a Simple Linear Chain")

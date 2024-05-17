@@ -1,9 +1,9 @@
 package interfaces
 
-import graphs.Graph
+import graphs.UndirectedGraph
 import graphs.Vertex
 
-class GraphIterator<K>(graph: Graph<K>) : Iterator<Vertex<K>> {
+class GraphIterator<K>(graph: UndirectedGraph<K>) : Iterator<Vertex<K>> {
 	private val graphIterator = graph.adjList.keys.iterator()
 
 	override fun hasNext() = graphIterator.hasNext()
