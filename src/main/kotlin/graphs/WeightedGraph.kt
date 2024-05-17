@@ -1,12 +1,9 @@
 package graphs
 
-class WeightedGraph<T> : AbstractGraph<Pair<Vertex<T>, Long?>, T>() {
-	override var adjList: HashMap<Vertex<T>, HashSet<Pair<Vertex<T>, Long?>>> = HashMap()
+class WeightedGraph<T> : AbstractGraph<Pair<Vertex<T>, Double>, T>() {
+	override var adjList: HashMap<Vertex<T>, HashSet<Pair<Vertex<T>, Double>>> = HashMap()
 
-	var size: Int = adjList.size
-		private set
-
-	fun addEdge(vertex1: Vertex<T>, vertex2: Vertex<T>, weight: Long) {
+	fun addEdge(vertex1: Vertex<T>, vertex2: Vertex<T>, weight: Double) {
 		if (adjList.containsKey(vertex1) and adjList.containsKey(vertex2)) {
 			adjList.getOrPut(vertex1) { HashSet() }.add(Pair(vertex2, weight))
 			adjList.getOrPut(vertex2) { HashSet() }.add(Pair(vertex1, weight))

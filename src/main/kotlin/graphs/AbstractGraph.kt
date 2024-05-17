@@ -5,6 +5,9 @@ import interfaces.Traversable
 abstract class AbstractGraph<GRAPH_TYPE, T> : Iterable<Vertex<T>> {
 	internal open var adjList: HashMap<Vertex<T>, HashSet<GRAPH_TYPE>> = HashMap()
 
+	var size: Int = 0
+		internal set
+
 	// стоит подумать а нельзя ли быстрее проверять на наличие узла
 	// с каким-то ключем
 	fun addVertex(key: T): Vertex<T> {
@@ -16,6 +19,8 @@ abstract class AbstractGraph<GRAPH_TYPE, T> : Iterable<Vertex<T>> {
 
 		val vertex = Vertex(key)
 		adjList.putIfAbsent(vertex, HashSet())
+
+		size += 1
 
 		return vertex
 	}
