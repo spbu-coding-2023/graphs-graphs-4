@@ -6,9 +6,6 @@ import interfaces.Traversable
 class Graph<T> : AbstractGraph<Vertex<T>, T>() {
 	override var adjList: HashMap<Vertex<T>, HashSet<Vertex<T>>> = HashMap()
 
-	var size: Int = adjList.size
-		private set
-
 	// Undirected graph -> we add both connections.
 	fun addEdge(vertex1: Vertex<T>, vertex2: Vertex<T>) {
 		if (adjList.containsKey(vertex1) and adjList.containsKey(vertex2)) {
@@ -39,6 +36,8 @@ class Graph<T> : AbstractGraph<Vertex<T>, T>() {
 
 			adjList.remove(vertex)
 		}
+
+		size -= 1
 	}
 
 	// test on disconnected graph?
