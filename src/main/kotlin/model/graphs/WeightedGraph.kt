@@ -1,7 +1,6 @@
-package model.graphs
+package graphs
 
-import model.functionality.MinSpanTreeFinder
-import model.functionality.ShortestPathFinder
+import interfaces.ShortestPathFinder
 
 open class WeightedGraph<T, NUMBER_TYPE : Number> : AbstractGraph<Pair<Vertex<T>, NUMBER_TYPE>, T>() {
 
@@ -13,30 +12,6 @@ open class WeightedGraph<T, NUMBER_TYPE : Number> : AbstractGraph<Pair<Vertex<T>
 
 		adjList.getOrPut(vertex1) { HashSet() }.add(Pair(vertex2, weight))
 		adjList.getOrPut(vertex2) { HashSet() }.add(Pair(vertex1, weight))
-	}
-
-	open fun addEdge(key1: T, key2: T, weight: NUMBER_TYPE) {
-		addEdge(Vertex(key1), Vertex(key2), weight)
-	}
-
-	open fun addEdge(edge: WeightedEdge<T, NUMBER_TYPE>) {
-		addEdge(edge.from, edge.to, edge. weight)
-	}
-
-	//Declaration clash error
-//	open fun addEdges(vararg edges: Triple<Vertex<T>, Vertex<T>, NUMBER_TYPE>) {
-//		for (edge in edges) {
-//			val vertex1 = edge.first
-//			val vertex2 = edge.second
-//			val weight = edge.third
-//			addEdge(vertex1, vertex2, weight)
-//		}
-//	}
-
-	open fun addEdges(vararg edges: WeightedEdge<T, NUMBER_TYPE>) {
-		for (edge in edges) {
-			addEdge(edge)
-		}
 	}
 
 	fun findShortestDistance(start: Vertex<T>): Map<Vertex<T>, Double> {
@@ -79,20 +54,7 @@ open class WeightedGraph<T, NUMBER_TYPE : Number> : AbstractGraph<Pair<Vertex<T>
 	//		return BridgeFinder<T>().findBridges(this)
 	//	}
 
-//	fun findMinAdjacentVertexForPrimAlgo(vertex: Vertex<T>, spanningTree: Graph<T>): WeightedEdge<T>?  {
-//		val neighbors = adjList[vertex] ?: return null
-//		val result = neighbors.maxBy { edge ->
-//			if (spanningTree.contains(edge.vertex)) {
-//				0
-//			} else {
-//				edge.weight
-//			}
-//		}
-//
-//		return result
-//	}
-
-	fun mstSearch(): Set<WeightedEdge<T, NUMBER_TYPE>>? {
-		return MinSpanTreeFinder(this).mstSearch()
+	override fun iterator(): Iterator<Vertex<T>> {
+		TODO("Not yet implemented")
 	}
 }
