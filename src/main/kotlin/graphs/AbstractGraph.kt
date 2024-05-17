@@ -8,8 +8,6 @@ abstract class AbstractGraph<GRAPH_TYPE, T> : Iterable<Vertex<T>> {
 	var size: Int = 0
 		internal set
 
-	// стоит подумать а нельзя ли быстрее проверять на наличие узла
-	// с каким-то ключем
 	fun addVertex(key: T): Vertex<T> {
 		for (v in adjList.keys) {
 			if (v.key == key) {
@@ -25,6 +23,7 @@ abstract class AbstractGraph<GRAPH_TYPE, T> : Iterable<Vertex<T>> {
 		return vertex
 	}
 
+	// need to test?
 	fun addVertex(vertex: Vertex<T>): Vertex<T> {
 		adjList.putIfAbsent(vertex, HashSet())
 

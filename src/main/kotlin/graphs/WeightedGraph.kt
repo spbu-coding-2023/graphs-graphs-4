@@ -14,7 +14,7 @@ open class WeightedGraph<T, NUMBER_TYPE : Number> : AbstractGraph<Pair<Vertex<T>
 		adjList.getOrPut(vertex2) { HashSet() }.add(Pair(vertex1, weight))
 	}
 
-	fun findShortestDistance(start: Vertex<T>) : Map<Vertex<T>, Double> {
+	fun findShortestDistance(start: Vertex<T>): Map<Vertex<T>, Double> {
 		val output = ShortestPathFinder(this).bellmanFord(start)
 		return output
 	}
