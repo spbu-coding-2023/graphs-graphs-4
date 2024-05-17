@@ -1,9 +1,12 @@
 package graphs
 
-class WeightedGraph<T> : AbstractGraph<Pair<Vertex<T>, Double>, T>() {
-	override var adjList: HashMap<Vertex<T>, HashSet<Pair<Vertex<T>, Double>>> = HashMap()
+import interfaces.ShortestPathFinder
 
-	fun addEdge(vertex1: Vertex<T>, vertex2: Vertex<T>, weight: Double) {
+class WeightedGraph<T, NUMBER_TYPE : Number> : AbstractGraph<Pair<Vertex<T>, NUMBER_TYPE>, T>() {
+
+	override var adjList: HashMap<Vertex<T>, HashSet<Pair<Vertex<T>, NUMBER_TYPE>>> = HashMap()
+
+	fun addEdge(vertex1: Vertex<T>, vertex2: Vertex<T>, weight: NUMBER_TYPE) {
 		if (adjList.containsKey(vertex1) and adjList.containsKey(vertex2)) {
 			adjList.getOrPut(vertex1) { HashSet() }.add(Pair(vertex2, weight))
 			adjList.getOrPut(vertex2) { HashSet() }.add(Pair(vertex1, weight))
@@ -14,6 +17,11 @@ class WeightedGraph<T> : AbstractGraph<Pair<Vertex<T>, Double>, T>() {
 				throw IllegalArgumentException("Vertex2 does not exist")
 			}
 		}
+	}
+
+	fun findShortestDistance(start: Vertex<T>) : Map<Vertex<T>, Double> {
+		val output = ShortestPathFinder(this).bellmanFord(start)
+		return output
 	}
 
 //	// need to test
