@@ -8,16 +8,11 @@ class UndirectedGraph<T> : AbstractGraph<Vertex<T>, T>() {
 
 	// Undirected graph -> we add both connections.
 	fun addEdge(vertex1: Vertex<T>, vertex2: Vertex<T>) {
-		if (adjList.containsKey(vertex1) and adjList.containsKey(vertex2)) {
-			adjList.getOrPut(vertex1) { HashSet() }.add(vertex2)
-			adjList.getOrPut(vertex2) { HashSet() }.add(vertex1)
-		} else {
-			if (!adjList.containsKey(vertex1)) {
-				throw IllegalArgumentException("Vertex1 does not exist")
-			} else {
-				throw IllegalArgumentException("Vertex2 does not exist")
-			}
-		}
+		require(adjList.containsKey(vertex1))
+		require(adjList.containsKey(vertex2))
+
+		adjList.getOrPut(vertex1) { HashSet() }.add(vertex2)
+		adjList.getOrPut(vertex2) { HashSet() }.add(vertex1)
 	}
 
 	// need to test
