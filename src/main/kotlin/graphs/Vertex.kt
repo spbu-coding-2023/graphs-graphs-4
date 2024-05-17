@@ -1,5 +1,3 @@
 package graphs
 
-class Vertex<T>(val key: T) {
-
-}
+class Vertex<T>(val key: T)

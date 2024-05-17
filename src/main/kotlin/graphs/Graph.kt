@@ -6,7 +6,6 @@ import interfaces.Traversable
 class Graph<T> : AbstractGraph<Vertex<T>, T>() {
 	override var adjList: HashMap<Vertex<T>, HashSet<Vertex<T>>> = HashMap()
 
-	// Undirected graph -> we add both connections.
 	fun addEdge(vertex1: Vertex<T>, vertex2: Vertex<T>) {
 		if (adjList.containsKey(vertex1) and adjList.containsKey(vertex2)) {
 			adjList.getOrPut(vertex1) { HashSet() }.add(vertex2)
@@ -44,6 +43,7 @@ class Graph<T> : AbstractGraph<Vertex<T>, T>() {
 		return this.dfs(vertex).iterator()
 	}
 
+	// test?
 	internal fun dfs(vertex: Vertex<T>): Set<Vertex<T>> {
 		return Traversable<T>().dfsIter(this, vertex)
 	}
