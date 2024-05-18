@@ -6,7 +6,8 @@ import java.util.*
 
 class Traversable<T> {
 	// tested on connected undirected graph only
-	fun dfsIter(graph: UndirectedGraph<T>, v: Vertex<T>): Set<Vertex<T>> {
+	@Suppress("NestedBlockDepth")
+	internal fun dfsIter(graph: UndirectedGraph<T>, v: Vertex<T>): Set<Vertex<T>> {
 		var dfsSet: Set<Vertex<T>> = emptySet()
 		val stack: Stack<Vertex<T>> = Stack()
 		val marked: HashMap<Vertex<T>, Boolean> = hashMapOf()

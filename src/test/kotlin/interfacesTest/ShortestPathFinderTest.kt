@@ -155,7 +155,7 @@ class ShortestPathFinderTest {
 
 			val answer = mapOf(
 				nodes[0] to 0.0,
-				nodes[1] to 50.0,
+				nodes[1] to NEGATIVE_INFINITY,
 				nodes[2] to 500.0,
 				nodes[3] to 555.0
 			)

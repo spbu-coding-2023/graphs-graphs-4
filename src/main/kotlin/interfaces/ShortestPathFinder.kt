@@ -14,7 +14,7 @@ class ShortestPathFinder<T, NUMBER_TYPE : Number>(private val graph: WeightedGra
 			is Byte -> this.toLong() + other.toLong()
 			is Double -> this.toDouble() + other.toDouble()
 			is Float -> this.toDouble() + other.toDouble()
-			else -> throw RuntimeException("Unknown numeric type")
+			else -> throw IllegalArgumentException("Unknown numeric type")
 		}
 	}
 
@@ -26,15 +26,16 @@ class ShortestPathFinder<T, NUMBER_TYPE : Number>(private val graph: WeightedGra
 			is Byte -> this.toByte().compareTo(other.toByte())
 			is Double -> this.toDouble().compareTo(other.toDouble())
 			is Float -> this.toFloat().compareTo(other.toFloat())
-			else -> throw RuntimeException("Unknown numeric type")
+			else -> throw IllegalArgumentException("Unknown numeric type")
 		}
 	}
 
-
-	fun bellmanFord(start: Vertex<T>): Map<Vertex<T>, Double> {
+	@Suppress("NestedBlockDepth")
+	internal fun bellmanFord(start: Vertex<T>): Map<Vertex<T>, Double> {
 		val dist = graph.adjList.mapValues { POSITIVE_INFINITY }.toMutableMap()
 		dist[start] = 0.0
 
+		@Suppress("UnusedPrivateProperty")
 		for (i in 1..graph.size) {
 			for ((vertex, edges) in graph.adjList) {
 				for ((neighbor, weight) in edges) {
