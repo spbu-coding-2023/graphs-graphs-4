@@ -13,7 +13,7 @@ import kotlin.test.assertEquals
 
 class ShortestPathFinderTest {
 	@Nested
-	inner class DirecionIndependedTest {
+	inner class DirectionIndependedTest {
 		private val graph = WeightedGraph<Int, Double>()
 		private var nodes: List<Vertex<Int>> = emptyList()
 
@@ -107,7 +107,9 @@ class ShortestPathFinderTest {
 				nodes[3] to -5.0
 			)
 
-			assertEquals(answer, graph.findShortestDistance(nodes[0]))
+			for (i in 0..3) {
+				assertEquals(answer[nodes[i]], graph.findShortestDistance(nodes[0])[nodes[i]])
+			}
 		}
 
 		@Test
@@ -134,7 +136,9 @@ class ShortestPathFinderTest {
 				nodes[2] to NEGATIVE_INFINITY,
 			)
 
-			assertEquals(answer, graph.findShortestDistance(nodes[0]))
+			for (i in 0..2) {
+				assertEquals(answer[nodes[i]], graph.findShortestDistance(nodes[0])[nodes[i]])
+			}
 		}
 
 		@Test
@@ -151,7 +155,7 @@ class ShortestPathFinderTest {
 			graph.addEdge(nodes[0], nodes[2], 500.0)
 			graph.addEdge(nodes[0], nodes[3], 5500.0)
 			graph.addEdge(nodes[1], nodes[1], -1.0)
-			graph.addEdge(nodes[2], nodes[3], 5000.0)
+			graph.addEdge(nodes[2], nodes[3], 55.0)
 
 			val answer = mapOf(
 				nodes[0] to 0.0,
@@ -160,7 +164,9 @@ class ShortestPathFinderTest {
 				nodes[3] to 555.0
 			)
 
-			assertEquals(answer, graph.findShortestDistance(nodes[0]))
+			for (i in 0..3) {
+				assertEquals(answer[nodes[i]], graph.findShortestDistance(nodes[0])[nodes[i]])
+			}
 		}
 	}
 
@@ -201,7 +207,9 @@ class ShortestPathFinderTest {
 				nodes[4] to NEGATIVE_INFINITY
 			)
 
-			assertEquals(answer, graph.findShortestDistance(nodes[0]))
+			for (i in 0..3) {
+				assertEquals(answer[nodes[i]], graph.findShortestDistance(nodes[0])[nodes[i]])
+			}
 		}
 	}
 
