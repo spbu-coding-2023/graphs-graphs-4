@@ -1,4 +1,4 @@
-package interfaces
+package functionality
 
 import graphs.Vertex
 import graphs.WeightedGraph

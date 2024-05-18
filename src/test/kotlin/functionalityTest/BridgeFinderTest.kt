@@ -1,4 +1,4 @@
-package interfacesTest
+package functionalityTest
 
 import graphs.UndirectedGraph
 import org.junit.jupiter.api.DisplayName

@@ -1,4 +1,4 @@
-package interfaces
+package functionality
 
 import graphs.UndirectedGraph
 import graphs.Vertex
