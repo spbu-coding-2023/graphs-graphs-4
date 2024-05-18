@@ -54,9 +54,18 @@ open class WeightedGraph<T, NUMBER_TYPE : Number> : AbstractGraph<Pair<Vertex<T>
 	//		return BridgeFinder<T>().findBridges(this)
 	//	}
 
-	fun findMinAdjacentVertex(vertex: Vertex<T>): Vertex<T>?  {
+	fun findMinAdjacentVertexForPrimAlgo(vertex: Vertex<T>, spanningTree: Graph<T>): Pair<Vertex<T>, Long?>?  {
 		val neighbors = adjList[vertex] ?: return null
-		val result = neighbors.maxBy { it.second ?: TODO() }.first
+		val result = neighbors.maxBy { pair ->
+			val neighbor = pair.first
+			val weight = pair.second
+
+			if (spanningTree.contains(neighbor)) {
+				0
+			} else {
+				weight ?: throw Exception("I except nothing")
+			}
+		}
 
 		return result
 	}
