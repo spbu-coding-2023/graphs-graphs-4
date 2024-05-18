@@ -1,4 +1,4 @@
-package interfacesTest
+package functionalityTest
 
 import graphs.DirectedWeightedGraph
 import graphs.Vertex

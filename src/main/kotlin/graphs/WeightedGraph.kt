@@ -1,6 +1,6 @@
 package graphs
 
-import interfaces.ShortestPathFinder
+import functionality.ShortestPathFinder
 
 open class WeightedGraph<T, NUMBER_TYPE : Number> : AbstractGraph<Pair<Vertex<T>, NUMBER_TYPE>, T>() {
 
