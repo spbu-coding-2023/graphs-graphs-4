@@ -1,7 +1,5 @@
 package graphs
 
-import interfaces.Traversable
-
 abstract class AbstractGraph<GRAPH_TYPE, T> : Iterable<Vertex<T>> {
 	internal open var adjList: HashMap<Vertex<T>, HashSet<GRAPH_TYPE>> = HashMap()
 
@@ -23,7 +21,6 @@ abstract class AbstractGraph<GRAPH_TYPE, T> : Iterable<Vertex<T>> {
 		return vertex
 	}
 
-	// need to test?
 	fun addVertex(vertex: Vertex<T>): Vertex<T> {
 		adjList.putIfAbsent(vertex, HashSet())
 
