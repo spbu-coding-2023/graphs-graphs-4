@@ -44,7 +44,7 @@ abstract class AbstractGraph<GRAPH_TYPE, T> : Iterable<Vertex<T>> {
 	}
 
 	// just converts graph to a set of vertices
-	internal fun convertToVerticesSet(): Set<Vertex<T>> {
+	internal fun vertices(): Set<Vertex<T>> {
 		return adjList.keys
 	}
 
