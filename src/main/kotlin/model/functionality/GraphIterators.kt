@@ -1,7 +1,7 @@
-package functionality
+package model.functionality
 
-import graphs.UndirectedGraph
-import graphs.Vertex
+import model.graphs.UndirectedGraph
+import model.graphs.Vertex
 
 class GraphIterator<K>(graph: UndirectedGraph<K>) : Iterator<Vertex<K>> {
 	private val graphIterator = graph.adjList.keys.iterator()

@@ -1,8 +1,8 @@
 package functionalityTest
 
-import graphs.DirectedWeightedGraph
-import graphs.Vertex
-import graphs.WeightedGraph
+import model.graphs.DirectedWeightedGraph
+import model.graphs.Vertex
+import model.graphs.WeightedGraph
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -175,8 +175,10 @@ class ShortestPathFinderTest {
 		}
 
 		@Test
-		@DisplayName("Find the shortest distance correctly " +
-			"in a directed graph without negative weights.")
+		@DisplayName(
+			"Find the shortest distance correctly " +
+				"in a directed graph without negative weights."
+		)
 		// 0 -> 2 (weight 9)
 		// 0 -> 6 (weight 14)
 		// 0 -> 1 (weight 15)
@@ -275,8 +277,10 @@ class ShortestPathFinderTest {
 		}
 
 		@Test
-		@DisplayName("Find the shortest distance correctly " +
-			"in an undirected graph without negative weights.")
+		@DisplayName(
+			"Find the shortest distance correctly " +
+				"in an undirected graph without negative weights."
+		)
 		// 0 -> 1 (weight 2)
 		// 0 -> 3 (weight 8)
 		// 1 -> 3 (weight 5)
@@ -319,7 +323,7 @@ class ShortestPathFinderTest {
 	@Nested
 	inner class EdgesTypesTest {
 		private var nodes: List<Vertex<Int>> = emptyList()
-		private var answer : Map<Vertex<Int>, Double> = emptyMap()
+		private var answer: Map<Vertex<Int>, Double> = emptyMap()
 
 		private fun <T : Number> setup(graph: DirectedWeightedGraph<Int, T>) {
 			for (i in 0..7) {

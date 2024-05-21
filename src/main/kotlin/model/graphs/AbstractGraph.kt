@@ -1,11 +1,11 @@
-package graphs
+package model.graphs
 
 abstract class AbstractGraph<GRAPH_TYPE, T> : Iterable<Vertex<T>> {
 	open var adjList: HashMap<Vertex<T>, HashSet<GRAPH_TYPE>> = HashMap()
 		protected set
 
 	var size: Int = 0
-        protected set
+		protected set
 
 	fun addVertex(key: T): Vertex<T> {
 		for (v in adjList.keys) {
@@ -61,7 +61,7 @@ abstract class AbstractGraph<GRAPH_TYPE, T> : Iterable<Vertex<T>> {
 		return adjList.keys
 	}
 
-//	fun dfsIterator(vertex: Vertex<T>): Iterator<Vertex<T>> {
+	//	fun dfsIterator(vertex: Vertex<T>): Iterator<Vertex<T>> {
 //		return this.dfs(vertex).iterator()
 //	}
 //
@@ -69,7 +69,7 @@ abstract class AbstractGraph<GRAPH_TYPE, T> : Iterable<Vertex<T>> {
 //	internal fun dfs(vertex: Vertex<T>): Set<Vertex<T>> {
 //		return Traversable<T>().dfsIter(this, vertex)
 //	}
-    // need to test
+	// need to test
 	override fun iterator(): Iterator<Vertex<T>> {
 		return this.adjList.keys.iterator()
 	}

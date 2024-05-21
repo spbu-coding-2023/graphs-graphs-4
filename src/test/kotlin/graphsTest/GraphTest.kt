@@ -1,14 +1,12 @@
 package graphsTest
 
-import graphs.UndirectedGraph
-import graphs.Vertex
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertThrows
-import org.junit.jupiter.api.Assertions.assertDoesNotThrow
-import org.junit.jupiter.api.Nested
-import org.junit.jupiter.api.DisplayName
+import model.graphs.UndirectedGraph
+import model.graphs.Vertex
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
 class GraphTest {
 	private var graph = UndirectedGraph<Int>()
@@ -126,18 +124,6 @@ class GraphTest {
 			graph.addEdge(vertices[5], vertices[7])
 			graph.addEdge(vertices[5], vertices[8])
 			graph.addEdge(vertices[8], vertices[9])
-		}
-
-		@Test
-		@DisplayName("Run dfs (connected - undirected graph)")
-		fun dfsIterTest() {
-			var assertSet: Set<Vertex<Int>> = emptySet()
-
-			for (element in vertices) {
-				assertSet = assertSet.plus(element)
-			}
-
-			assertEquals(assertSet, graph.dfs(vertices[0]))
 		}
 	}
 }

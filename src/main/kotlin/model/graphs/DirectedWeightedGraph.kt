@@ -1,4 +1,4 @@
-package graphs
+package model.graphs
 
 class DirectedWeightedGraph<T, NUMBER_TYPE : Number> : WeightedGraph<T, NUMBER_TYPE>() {
 	// need to test?
