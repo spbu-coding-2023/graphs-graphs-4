@@ -1,7 +1,6 @@
-package graphs
+package model.graphs
 
-import functionality.BridgeFinder
-import functionality.Traversable
+import model.functionality.BridgeFinder
 
 class UndirectedGraph<T> : AbstractGraph<Vertex<T>, T>() {
 	override var adjList: HashMap<Vertex<T>, HashSet<Vertex<T>>> = HashMap()

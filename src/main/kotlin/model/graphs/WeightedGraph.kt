@@ -1,6 +1,6 @@
-package graphs
+package model.graphs
 
-import functionality.ShortestPathFinder
+import model.functionality.ShortestPathFinder
 
 open class WeightedGraph<T, NUMBER_TYPE : Number> : AbstractGraph<Pair<Vertex<T>, NUMBER_TYPE>, T>() {
 

@@ -1,6 +1,6 @@
 package functionalityTest
 
-import graphs.UndirectedGraph
+import model.graphs.UndirectedGraph
 import org.junit.jupiter.api.DisplayName
 import kotlin.test.Test
 import kotlin.test.assertEquals
