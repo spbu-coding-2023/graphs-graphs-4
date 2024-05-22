@@ -1,4 +1,4 @@
-package graphs
+package model.functionality
 
 class TarjanAlgoVertexStats(
     var sccIndex: Int = 0,

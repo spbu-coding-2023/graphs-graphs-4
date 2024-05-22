@@ -1,12 +1,11 @@
-package algorithms
+package model.functionality
 
-import graphs.Graph
-import graphs.TarjanAlgoVertexStats
-import graphs.Vertex
+import model.graphs.UndirectedGraph
+import model.graphs.Vertex
 import java.util.Stack
 import kotlin.math.min
 
-fun <K>sccSearch(graph: Graph<K>): Array<Array<Vertex<K>>> {
+fun <K>sccSearch(graph: UndirectedGraph<K>): Array<Array<Vertex<K>>> {
     var index = 1
     val stack = Stack<Vertex<K>>()
     val result = arrayOf(arrayOf<Vertex<K>>())
@@ -23,7 +22,7 @@ fun <K>sccSearch(graph: Graph<K>): Array<Array<Vertex<K>>> {
         stack.push(vertex)
         index++
 
-        for (neighbor in graph.giveNeighbors(vertex) ?: emptySet()) {
+        for (neighbor in graph.adjList[vertex] ?: emptySet()) {
             val neighborStats = sccSearchHelper[neighbor] ?: throw Exception("как лучше обработать ситуацию?")
 
             if (sccSearchHelper[neighbor]?.sccIndex == 0) {
