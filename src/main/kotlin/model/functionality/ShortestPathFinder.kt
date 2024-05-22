@@ -1,7 +1,7 @@
-package functionality
+package model.functionality
 
-import graphs.Vertex
-import graphs.WeightedGraph
+import model.graphs.Vertex
+import model.graphs.WeightedGraph
 import kotlin.Double.Companion.NEGATIVE_INFINITY
 import kotlin.Double.Companion.POSITIVE_INFINITY
 

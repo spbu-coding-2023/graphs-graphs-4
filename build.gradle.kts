@@ -1,8 +1,10 @@
+import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import io.gitlab.arturbosch.detekt.Detekt
 
 plugins {
 	kotlin("jvm") version "1.9.23"
 	id("io.gitlab.arturbosch.detekt").version("1.23.6")
+	id("org.jetbrains.compose") version "1.6.1"
 	jacoco
 }
 
@@ -11,9 +13,12 @@ version = "1.0-SNAPSHOT"
 
 repositories {
 	mavenCentral()
+	maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+	google()
 }
 
 dependencies {
+	implementation(compose.desktop.currentOs)
 	testImplementation(kotlin("test"))
 }
 
@@ -58,5 +63,17 @@ tasks.jacocoTestReport {
 		xml.required = false
 		csv.required = true
 		html.required = true
+	}
+}
+
+compose.desktop {
+	application {
+		mainClass = "MainKt"
+
+		nativeDistributions {
+			targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
+			packageName = "graphs-4"
+			packageVersion = "1.0.0"
+		}
 	}
 }

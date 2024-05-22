@@ -1,3 +1,3 @@
-package graphs
+package model.graphs
 
 class Vertex<T>(val key: T)
