@@ -3,54 +3,38 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
+import model.graphs.AbstractGraph
+import model.graphs.UndirectedGraph
+import model.graphs.Vertex
+import view.MainScreen
+import viewmodel.MainScreenViewModel
+import viewmodel.graphs.CircularPlacementStrategy
 
-//import androidx.compose.desktop.ui.tooling.preview.Preview
-//import androidx.compose.material.MaterialTheme
-//import androidx.compose.runtime.Composable
-//import model.graphs.WeightedGraph
-//import view.MainScreen
-//import viewmodel.MainScreenViewModel
-//import viewmodel.graphs.CircularPlacementStrategy
-//
-//val sampleGraph: WeightedGraph<String, Long>().apply {
-//	addVertex("A")
-//	addVertex("B")
-//	addVertex("C")
-//	addVertex("D")
-//	addVertex("E")
-//	addVertex("F")
-//	addVertex("G")
-//
-//	addEdge("A", "B", 1)
-//	addEdge("A", "C", 2)
-//	addEdge("A", "D", 3)
-//	addEdge("A", "E", 4)
-//	addEdge("A", "F", 5)
-//	addEdge("A", "G", 6)
-//
-//	addVertex("H")
-//	addVertex("I")
-//	addVertex("J")
-//	addVertex("K")
-//	addVertex("L")
-//	addVertex("M")
-//	addVertex("N")
-//
-//	addEdge("H", "I", 7)
-//	addEdge("H", "J", 8)
-//	addEdge("H", "K", 9)
-//	addEdge("H", "L", 10)
-//	addEdge("H", "M", 11)
-//	addEdge("H", "N", 12)
-//
-//	addEdge("A", "H", 0)
-//}
-//
+
+val sampleGraph: AbstractGraph<Vertex<Int>, Int> = UndirectedGraph<Int>().apply {
+	for (i in 1..10) {
+		addVertex(i)
+	}
+
+	val nodes = arrayListOf(adjList.keys.toList())
+
+	addEdge(nodes[0][0], nodes[0][1])
+	addEdge(nodes[0][1], nodes[0][2])
+	addEdge(nodes[0][2], nodes[0][3])
+	addEdge(nodes[0][0], nodes[0][6])
+	addEdge(nodes[0][6], nodes[0][7])
+	addEdge(nodes[0][7], nodes[0][8])
+	addEdge(nodes[0][2], nodes[0][8])
+	addEdge(nodes[0][3], nodes[0][4])
+	addEdge(nodes[0][4], nodes[0][5])
+	addEdge(nodes[0][4], nodes[0][9])
+}
+
 @Composable
 @Preview
 fun App() {
 	MaterialTheme {
-		//MainScreen(MainScreenViewModel(sampleGraph, CircularPlacementStrategy()))
+		MainScreen(MainScreenViewModel(sampleGraph, CircularPlacementStrategy()))
 	}
 }
 
