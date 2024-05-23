@@ -14,6 +14,7 @@ import viewmodel.MainScreenViewModel
 @Composable
 fun <GRAPH_TYPE, T> MainScreen(viewModel: MainScreenViewModel<GRAPH_TYPE, T>) {
 	var showMenu by remember { mutableStateOf(false) }
+	var showGraph by remember { mutableStateOf(false) }
 
 	MaterialTheme {
 		Scaffold(
@@ -30,7 +31,7 @@ fun <GRAPH_TYPE, T> MainScreen(viewModel: MainScreenViewModel<GRAPH_TYPE, T>) {
 							expanded = showMenu,
 							onDismissRequest = { showMenu = false }
 						) {
-							DropdownMenuItem(onClick = { /* код */ }) {
+							DropdownMenuItem(onClick = { showGraph = true }) {
 								Text("New Graph")
 							}
 
@@ -63,7 +64,9 @@ fun <GRAPH_TYPE, T> MainScreen(viewModel: MainScreenViewModel<GRAPH_TYPE, T>) {
 				}
 
 				Surface(modifier = Modifier.weight(1f)) {
-					GraphView(viewModel.graphViewModel)
+					if (showGraph) {
+						GraphView(viewModel.graphViewModel)
+					}
 				}
 			}
 		}
