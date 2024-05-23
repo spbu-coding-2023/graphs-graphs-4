@@ -2,10 +2,10 @@ package model.graphs
 
 import model.functionality.BridgeFinder
 
-class UndirectedGraph<T> : AbstractGraph<Vertex<T>, T>() {
+open class UndirectedGraph<T> : AbstractGraph<Vertex<T>, T>() {
 	override var adjList: HashMap<Vertex<T>, HashSet<Vertex<T>>> = HashMap()
 
-	fun addEdge(vertex1: Vertex<T>, vertex2: Vertex<T>) {
+	open fun addEdge(vertex1: Vertex<T>, vertex2: Vertex<T>) {
 		require(adjList.containsKey(vertex1))
 		require(adjList.containsKey(vertex2))
 
