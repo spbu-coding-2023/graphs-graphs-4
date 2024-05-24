@@ -7,4 +7,21 @@ class DirectedGraph<T> : UndirectedGraph<T>() {
 
 		adjList.getOrPut(vertex1) { HashSet() }.add(vertex2)
 	}
+
+	override fun addEdge(key1: T, key2: T) {
+		addEdge(Vertex(key1), Vertex(key2))
+	}
+
+	//Declaration error clash
+//	override fun addEdges(vararg edges: Pair<Vertex<T>, Vertex<T>>) {
+//		for (edge in edges) {
+//			addEdge(edge.first, edge.second)
+//		}
+//	}
+
+	override fun addEdges(vararg edges: Pair<T, T>) {
+		for (edge in edges) {
+			addEdge(edge.first, edge.second)
+		}
+	}
 }

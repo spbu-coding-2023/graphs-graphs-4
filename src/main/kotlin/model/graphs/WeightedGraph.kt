@@ -14,6 +14,29 @@ open class WeightedGraph<T, NUMBER_TYPE : Number> : AbstractGraph<Pair<Vertex<T>
 		adjList.getOrPut(vertex2) { HashSet() }.add(Pair(vertex1, weight))
 	}
 
+	open fun addEdge(key1: T, key2: T, weight: NUMBER_TYPE) {
+		addEdge(Vertex(key1), Vertex(key2), weight)
+	}
+
+	//Declaration clash error
+//	open fun addEdges(vararg edges: Triple<Vertex<T>, Vertex<T>, NUMBER_TYPE>) {
+//		for (edge in edges) {
+//			val vertex1 = edge.first
+//			val vertex2 = edge.second
+//			val weight = edge.third
+//			addEdge(vertex1, vertex2, weight)
+//		}
+//	}
+
+	open fun addEdges(vararg edges: Triple<T, T, NUMBER_TYPE>) {
+		for (edge in edges) {
+			val key1 = edge.first
+			val key2 = edge.second
+			val weight = edge.third
+			addEdge(key1, key2, weight)
+		}
+	}
+
 	fun findShortestDistance(start: Vertex<T>): Map<Vertex<T>, Double> {
 		val output = ShortestPathFinder(this).bellmanFord(start)
 		return output

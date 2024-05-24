@@ -13,6 +13,23 @@ open class UndirectedGraph<T> : AbstractGraph<Vertex<T>, T>() {
 		adjList.getOrPut(vertex2) { HashSet() }.add(vertex1)
 	}
 
+	open fun addEdge(key1: T, key2: T) {
+		addEdge(Vertex(key1), Vertex(key2))
+	}
+
+	//Declaration clash error wtf
+//	open fun addEdges(vararg edges: Pair<Vertex<T>, Vertex<T>>) {
+//		for (edge in edges) {
+//			addEdge(edge.first, edge.second)
+//		}
+//	}
+
+	open fun addEdges(vararg edges: Pair<T, T>) {
+		for (edge in edges) {
+			addEdge(edge.first, edge.second)
+		}
+	}
+
 	fun findBridges(): Set<Pair<Vertex<T>, Vertex<T>>> {
 		return BridgeFinder<T>().findBridges(this)
 	}
