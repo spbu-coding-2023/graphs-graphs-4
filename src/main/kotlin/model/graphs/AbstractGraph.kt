@@ -34,6 +34,18 @@ abstract class AbstractGraph<GRAPH_TYPE, T> : Iterable<Vertex<T>> {
 		return vertex
 	}
 
+	fun addVertices(vararg keys: T): Unit {
+		for (key in keys) {
+			addVertex(key)
+		}
+	}
+
+	fun addVertices(vararg vertices: Vertex<T>): Unit {
+		for (vertex in vertices) {
+			addVertex(vertex)
+		}
+	}
+
 	// need to test
 	fun removeEdge(vertex1: Vertex<T>, vertex2: Vertex<T>) {
 		require(adjList.containsKey(vertex1))
