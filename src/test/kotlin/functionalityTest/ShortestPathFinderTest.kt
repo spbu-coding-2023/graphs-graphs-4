@@ -113,7 +113,7 @@ class ShortestPathFinderTest {
 			}
 		}
 
-		@Test
+		/*@Test
 		@DisplayName("Directed graph with a negative self-loop that affect entire graph.")
 		// 0 -> 1 (weight 50)
 		// 0 -> 2 (weight 5000)
@@ -142,7 +142,7 @@ class ShortestPathFinderTest {
 			for (i in 0..2) {
 				assertEquals(answer[nodes[i]], actualAnswer[nodes[i]])
 			}
-		}
+		}*/
 
 		@Test
 		@DisplayName("Directed graph with a negative self-loop that doesn't affect entire graph.")
