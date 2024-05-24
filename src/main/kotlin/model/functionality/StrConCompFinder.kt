@@ -1,11 +1,12 @@
 package model.functionality
 
-import model.graphs.UndirectedGraph
+import model.graphs.DirectedGraph
+import model.graphs.TarjanAlgoVertexStats
 import model.graphs.Vertex
 import java.util.Stack
 import kotlin.math.min
 
-class StrConCompFinder<T>(val graph: UndirectedGraph<T>) {
+class StrConCompFinder<T>(val graph: DirectedGraph<T>) {
     fun sccSearch(): Array<Array<Vertex<T>>> {
         var index = 1
         val stack = Stack<Vertex<T>>()
