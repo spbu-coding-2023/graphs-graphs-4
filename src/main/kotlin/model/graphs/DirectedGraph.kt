@@ -1,5 +1,7 @@
 package model.graphs
 
+import model.functionality.StrConCompFinder
+
 class DirectedGraph<T> : UndirectedGraph<T>() {
 	override fun addEdge(vertex1: Vertex<T>, vertex2: Vertex<T>) {
 		require(adjList.containsKey(vertex1))
@@ -27,5 +29,9 @@ class DirectedGraph<T> : UndirectedGraph<T>() {
 		for (edge in edges) {
 			addEdge(edge)
 		}
+	}
+
+	fun findSCC(): Array<Array<Vertex<T>>> {
+		return StrConCompFinder(this).sccSearch()
 	}
 }
