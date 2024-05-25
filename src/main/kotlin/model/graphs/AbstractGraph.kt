@@ -47,12 +47,21 @@ abstract class AbstractGraph<GRAPH_TYPE, T> : Iterable<Vertex<T>> {
 	}
 
 	// need to test
+	//Странно, что добавлять узлы в абстрактном графе нельзя, а удалять - можно.
+	//Причём он неверно будет работать для ориентированного графа.
 	fun removeEdge(vertex1: Vertex<T>, vertex2: Vertex<T>) {
 		require(adjList.containsKey(vertex1))
 		require(adjList.containsKey(vertex2))
 
 		adjList[vertex1]?.remove<Any?>(vertex2)
 		adjList[vertex2]?.remove<Any?>(vertex1)
+	}
+
+	fun <E: Edge<T>>removeEdge(edge: E ) {
+		val vertex1 = Vertex(edge.from)
+		val vertex2 = Vertex(edge.to)
+
+		return removeEdge(vertex1, vertex2)
 	}
 
 	// need to test AND generalise
