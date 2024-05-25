@@ -31,7 +31,7 @@ class DirectedGraph<T> : UndirectedGraph<T>() {
 		}
 	}
 
-	fun findSCC(): Array<Array<Vertex<T>>> {
+	fun findSCC(): Set<Set<Vertex<T>>> {
 		return StrConCompFinder(this).sccSearch()
 	}
 }

@@ -7,16 +7,16 @@ import java.util.Stack
 import kotlin.math.min
 
 class StrConCompFinder<T>(val graph: DirectedGraph<T>) {
-    fun sccSearch(): Array<Array<Vertex<T>>> {
+    fun sccSearch(): Set<Set<Vertex<T>>> {
         var index = 1
         val stack = Stack<Vertex<T>>()
-        val result = arrayOf(arrayOf<Vertex<T>>())
         val sccSearchHelper = HashMap<Vertex<T>, TarjanAlgoVertexStats>()
         for (vertex in graph) {
             sccSearchHelper[vertex] = TarjanAlgoVertexStats()
         }
 
-        fun strongConnect(vertex: Vertex<T>): Array<Vertex<T>> {
+        val result = mutableSetOf<Set<Vertex<T>>>()
+        fun strongConnect(vertex: Vertex<T>): Set<Vertex<T>> {
             val vertexStats = sccSearchHelper[vertex] ?: throw Exception("как лучше обработать ситуацию?")
             vertexStats.sccIndex = index
             vertexStats.lowLink = index
@@ -35,13 +35,13 @@ class StrConCompFinder<T>(val graph: DirectedGraph<T>) {
                 }
             }
 
-            val scc = arrayOf<Vertex<T>>()
+            val scc = mutableSetOf<Vertex<T>>()
             if (vertexStats.lowLink == vertexStats.sccIndex) {
                 do {
                     val visitedVertex = stack.pop()
                     val visitedVertexStats = sccSearchHelper[visitedVertex] ?: TODO()
                     visitedVertexStats.onStack = false
-                    scc.plusElement(visitedVertex)
+                    scc.add(visitedVertex)
                 } while (visitedVertex != vertex)
             }
 
@@ -55,7 +55,7 @@ class StrConCompFinder<T>(val graph: DirectedGraph<T>) {
                 val scc = strongConnect(vertex)
 
                 if (scc.isNotEmpty()) {
-                    result.plusElement(scc)
+                    result.add(scc)
                 }
             }
         }
