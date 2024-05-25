@@ -17,6 +17,10 @@ open class UndirectedGraph<T> : AbstractGraph<Vertex<T>, T>() {
 		addEdge(Vertex(key1), Vertex(key2))
 	}
 
+	open fun addEdge(edge: Edge<T>) {
+		addEdge(edge.from, edge.to)
+	}
+
 	//Declaration clash error wtf
 //	open fun addEdges(vararg edges: Pair<Vertex<T>, Vertex<T>>) {
 //		for (edge in edges) {
@@ -24,9 +28,9 @@ open class UndirectedGraph<T> : AbstractGraph<Vertex<T>, T>() {
 //		}
 //	}
 
-	open fun addEdges(vararg edges: Pair<T, T>) {
+	open fun addEdges(vararg edges: Edge<T>) {
 		for (edge in edges) {
-			addEdge(edge.first, edge.second)
+			addEdge(edge)
 		}
 	}
 

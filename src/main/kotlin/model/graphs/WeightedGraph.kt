@@ -18,6 +18,10 @@ open class WeightedGraph<T, NUMBER_TYPE : Number> : AbstractGraph<Pair<Vertex<T>
 		addEdge(Vertex(key1), Vertex(key2), weight)
 	}
 
+	open fun addEdge(edge: WeightedEdge<T, NUMBER_TYPE>) {
+		addEdge(edge.from, edge.to, edge. weight)
+	}
+
 	//Declaration clash error
 //	open fun addEdges(vararg edges: Triple<Vertex<T>, Vertex<T>, NUMBER_TYPE>) {
 //		for (edge in edges) {
@@ -28,12 +32,9 @@ open class WeightedGraph<T, NUMBER_TYPE : Number> : AbstractGraph<Pair<Vertex<T>
 //		}
 //	}
 
-	open fun addEdges(vararg edges: Triple<T, T, NUMBER_TYPE>) {
+	open fun addEdges(vararg edges: WeightedEdge<T, NUMBER_TYPE>) {
 		for (edge in edges) {
-			val key1 = edge.first
-			val key2 = edge.second
-			val weight = edge.third
-			addEdge(key1, key2, weight)
+			addEdge(edge)
 		}
 	}
 
