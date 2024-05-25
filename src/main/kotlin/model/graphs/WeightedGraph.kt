@@ -1,5 +1,6 @@
 package model.graphs
 
+import model.functionality.MinSpanTreeFinder
 import model.functionality.ShortestPathFinder
 
 open class WeightedGraph<T, NUMBER_TYPE : Number> : AbstractGraph<Pair<Vertex<T>, NUMBER_TYPE>, T>() {
@@ -93,5 +94,9 @@ open class WeightedGraph<T, NUMBER_TYPE : Number> : AbstractGraph<Pair<Vertex<T>
 
 	override fun iterator(): Iterator<Vertex<T>> {
 		TODO("Not yet implemented")
+	}
+
+	fun mstSearch(): Set<WeightedEdge<T, NUMBER_TYPE>>? {
+		return MinSpanTreeFinder(this).mstSearch()
 	}
 }
