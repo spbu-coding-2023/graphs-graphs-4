@@ -5,7 +5,6 @@ import model.graphs.Edge
 import model.graphs.Vertex
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
-import kotlin.math.exp
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -22,9 +21,9 @@ class StrConCompFinderTest {
     @Test
     @DisplayName("Max-edged graph.")
     fun sccTest1() {
-        for (key in 0..5) {
-            graphInt.addVertex(key)
-        }
+        val vertices = Array(6) { Vertex(it) }
+
+        graphInt.addVertices(*vertices)
 
         for (vertex1 in 0..5) {
             for (vertex2 in 0..5) {
@@ -34,7 +33,7 @@ class StrConCompFinderTest {
             }
         }
 
-        val component = graphInt.vertices()
+        val component = vertices.toSet()
         expectedSCC.add(component)
 
         assertEquals(expectedSCC, graphInt.findSCC())
@@ -43,12 +42,12 @@ class StrConCompFinderTest {
     @Test
     @DisplayName("Zero-edged graph.")
     fun sccTest2() {
-        for (key in 0..5) {
-            graphInt.addVertex(key)
-        }
+        val vertices = Array(6) { Vertex(it) }
 
-        for (key in 0..5) {
-            val component = setOf(Vertex(key))
+        graphInt.addVertices(*vertices)
+
+        for (vertex in vertices) {
+            val component = setOf(vertex)
             expectedSCC.add(component)
         }
 
