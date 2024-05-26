@@ -3,7 +3,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
-import model.graphs.AbstractGraph
+import model.graphs.Graph
 import model.graphs.UndirectedGraph
 import model.graphs.Vertex
 import view.MainScreen
@@ -11,7 +11,7 @@ import viewmodel.MainScreenViewModel
 import viewmodel.graphs.CircularPlacementStrategy
 
 
-val sampleGraph: AbstractGraph<Vertex<Int>, Int> = UndirectedGraph<Int>().apply {
+val sampleGraph: Graph<Vertex<Int>, Int> = UndirectedGraph<Int>().apply {
 	for (i in 1..10) {
 		addVertex(i)
 	}

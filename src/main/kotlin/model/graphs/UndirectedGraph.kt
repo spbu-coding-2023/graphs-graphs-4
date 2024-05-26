@@ -2,7 +2,7 @@ package model.graphs
 
 import model.functionality.BridgeFinder
 
-open class UndirectedGraph<T> : AbstractGraph<Vertex<T>, T>() {
+open class UndirectedGraph<T> : Graph<Vertex<T>, T>() {
 	override var adjList: HashMap<Vertex<T>, HashSet<Vertex<T>>> = HashMap()
 
 	open fun addEdge(vertex1: Vertex<T>, vertex2: Vertex<T>) {
