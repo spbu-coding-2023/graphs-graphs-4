@@ -1,12 +1,13 @@
 package model.graphs
 
-import model.functionality.BridgeFinder
+import model.functionality.ShortestPathFinder
 
-open class UndirectedGraph<T> : Graph<Vertex<T>, T> {
-	var adjList: HashMap<Vertex<T>, HashSet<Vertex<T>>> = HashMap()
+open class UndirectedWeightedGraph<T, NUMBER_TYPE : Number> : Graph<Pair<Vertex<T>, NUMBER_TYPE>, T> {
+	var adjList: HashMap<Vertex<T>, HashSet<Pair<Vertex<T>, NUMBER_TYPE>>> = HashMap()
 		private set
 
-	private var size: Int = 0
+	var size: Int = 0
+		private set
 
 	@Suppress("DuplicatedCode")
 	override fun addVertex(key: T): Vertex<T> {
@@ -48,30 +49,31 @@ open class UndirectedGraph<T> : Graph<Vertex<T>, T> {
 		}
 	}
 
-	open fun addEdge(vertex1: Vertex<T>, vertex2: Vertex<T>) {
+	open fun addEdge(vertex1: Vertex<T>, vertex2: Vertex<T>, weight: NUMBER_TYPE) {
 		require(adjList.containsKey(vertex1))
 		require(adjList.containsKey(vertex2))
 
-		adjList.getOrPut(vertex1) { HashSet() }.add(vertex2)
-		adjList.getOrPut(vertex2) { HashSet() }.add(vertex1)
+		adjList.getOrPut(vertex1) { HashSet() }.add(Pair(vertex2, weight))
+		adjList.getOrPut(vertex2) { HashSet() }.add(Pair(vertex1, weight))
 	}
 
-	open fun addEdge(key1: T, key2: T) {
-		addEdge(Vertex(key1), Vertex(key2))
+	open fun addEdge(key1: T, key2: T, weight: NUMBER_TYPE) {
+		addEdge(Vertex(key1), Vertex(key2), weight)
 	}
 
-	open fun addEdge(edge: Edge<T>) {
-		addEdge(edge.from, edge.to)
+	open fun addEdge(edge: WeightedEdge<T, NUMBER_TYPE>) {
+		addEdge(edge.from, edge.to, edge. weight)
 	}
 
-	open fun addEdges(vararg edges: Edge<T>) {
+	open fun addEdges(vararg edges: WeightedEdge<T, NUMBER_TYPE>) {
 		for (edge in edges) {
 			addEdge(edge)
 		}
 	}
 
-	fun findBridges(): Set<Pair<Vertex<T>, Vertex<T>>> {
-		return BridgeFinder<T>().findBridges(this)
+	fun findShortestDistance(start: Vertex<T>): Map<Vertex<T>, Double> {
+		val output = ShortestPathFinder(this).bellmanFord(start)
+		return output
 	}
 
 	override fun vertices(): Set<Vertex<T>> {
@@ -82,7 +84,7 @@ open class UndirectedGraph<T> : Graph<Vertex<T>, T> {
 		return this.adjList.keys.iterator()
 	}
 
-	override fun getNeighbors(vertex: Vertex<T>): HashSet<Vertex<T>> {
+	override fun getNeighbors(vertex: Vertex<T>): HashSet<Pair<Vertex<T>, NUMBER_TYPE>> {
 		return adjList[vertex] ?: throw IllegalArgumentException(
 			"Can't get neighbors for vertex $vertex that is not in the graph"
 		)

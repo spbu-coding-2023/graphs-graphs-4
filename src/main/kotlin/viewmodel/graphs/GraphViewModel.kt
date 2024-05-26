@@ -3,14 +3,14 @@ package viewmodel.graphs
 import androidx.compose.runtime.State
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import model.graphs.AbstractGraph
+import model.graphs.Graph
 
 class GraphViewModel<GRAPH_TYPE, T>(
-    private val graph: AbstractGraph<GRAPH_TYPE, T>,
-    showVerticesLabels: State<Boolean>,
-    showEdgesLabels: State<Boolean>,
+	private val graph: Graph<GRAPH_TYPE, T>,
+	showVerticesLabels: State<Boolean>,
+	showEdgesLabels: State<Boolean>,
 ) {
-	private val _vertices = graph.adjList.keys.associateWith { v ->
+	private val _vertices = graph.vertices().associateWith { v ->
 		VertexViewModel(0.dp, 0.dp, Color.Gray, v, showVerticesLabels)
 	}
 
