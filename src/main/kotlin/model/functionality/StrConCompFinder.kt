@@ -6,7 +6,9 @@ import model.graphs.Vertex
 import java.util.Stack
 import kotlin.math.min
 
-class StrConCompFinder<T>(val graph: DirectedGraph<T>) {
+class StrConCompFinder<T>(private val graph: DirectedGraph<T>) {
+    private val strConCompSet = mutableSetOf<Set<Vertex<T>>>()
+
     fun sccSearch(): Set<Set<Vertex<T>>> {
         var index = 1
         val stack = Stack<Vertex<T>>()
@@ -15,17 +17,19 @@ class StrConCompFinder<T>(val graph: DirectedGraph<T>) {
             sccSearchHelper[vertex] = TarjanAlgoVertexStats()
         }
 
-        val result = mutableSetOf<Set<Vertex<T>>>()
         fun strongConnect(vertex: Vertex<T>): Set<Vertex<T>> {
-            val vertexStats = sccSearchHelper[vertex] ?: throw Exception("как лучше обработать ситуацию?")
+            val vertexStats = sccSearchHelper[vertex]
+                ?: throw IllegalArgumentException("$vertex vertex does not presented in graph.")
             vertexStats.sccIndex = index
             vertexStats.lowLink = index
             vertexStats.onStack = true
             stack.push(vertex)
             index++
 
-            for (neighbor in graph.adjList[vertex] ?: emptySet()) {
-                val neighborStats = sccSearchHelper[neighbor] ?: throw Exception("как лучше обработать ситуацию?")
+            val neighbors = graph.getNeighbors(vertex)
+            for (neighbor in neighbors) {
+                val neighborStats = sccSearchHelper[neighbor]
+                    ?: throw IllegalArgumentException("$neighbor vertex does not presented in graph.")
 
                 if (sccSearchHelper[neighbor]?.sccIndex == 0) {
                     strongConnect(neighbor)
@@ -39,7 +43,8 @@ class StrConCompFinder<T>(val graph: DirectedGraph<T>) {
             if (vertexStats.lowLink == vertexStats.sccIndex) {
                 do {
                     val visitedVertex = stack.pop()
-                    val visitedVertexStats = sccSearchHelper[visitedVertex] ?: TODO()
+                    val visitedVertexStats = sccSearchHelper[visitedVertex]
+                        ?: throw IllegalArgumentException("$visitedVertex vertex does not presented in graph.")
                     visitedVertexStats.onStack = false
                     scc.add(visitedVertex)
                 } while (visitedVertex != vertex)
@@ -49,17 +54,18 @@ class StrConCompFinder<T>(val graph: DirectedGraph<T>) {
         }
 
         for (vertex in graph) {
-            val vertexStats = sccSearchHelper[vertex] ?: TODO()
+            val vertexStats = sccSearchHelper[vertex]
+                ?: throw IllegalArgumentException("$vertex vertex does not presented in graph.")
 
             if (vertexStats.sccIndex == 0) {
                 val scc = strongConnect(vertex)
 
                 if (scc.isNotEmpty()) {
-                    result.add(scc)
+                    strConCompSet.add(scc)
                 }
             }
         }
 
-        return result
+        return strConCompSet
     }
 }
