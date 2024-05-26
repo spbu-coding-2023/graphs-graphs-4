@@ -1,8 +1,8 @@
 package functionalityTest
 
 import model.graphs.DirectedWeightedGraph
+import model.graphs.UndirectedWeightedGraph
 import model.graphs.Vertex
-import model.graphs.WeightedGraph
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -14,7 +14,7 @@ import kotlin.test.assertEquals
 class ShortestPathFinderTest {
 	@Nested
 	inner class DisconnectedPartsTest {
-		private val graph = WeightedGraph<Int, Double>()
+		private val graph = UndirectedWeightedGraph<Int, Double>()
 		private var nodes: List<Vertex<Int>> = emptyList()
 
 		private fun setup(end: Int) {
@@ -234,7 +234,7 @@ class ShortestPathFinderTest {
 
 	@Nested
 	inner class UndirectedGraphTest {
-		private val graph = WeightedGraph<Int, Double>()
+		private val graph = UndirectedWeightedGraph<Int, Double>()
 		private var nodes: List<Vertex<Int>> = emptyList()
 
 		private fun setup(end: Int) {

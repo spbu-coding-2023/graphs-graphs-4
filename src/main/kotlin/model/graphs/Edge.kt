@@ -6,6 +6,8 @@ class Edge<K>(
     val from: K,
     val to: K,
     ): Comparable<Edge<K>>  {
+
+
     override fun toString(): String {
         return "($from, $to)"
     }
