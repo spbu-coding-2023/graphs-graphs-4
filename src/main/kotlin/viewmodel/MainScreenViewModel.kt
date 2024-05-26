@@ -2,12 +2,12 @@ package viewmodel
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
-import model.graphs.AbstractGraph
+import model.graphs.Graph
 import viewmodel.graphs.GraphViewModel
 import viewmodel.graphs.RepresentationStrategy
 
 class MainScreenViewModel<GRAPH_TYPE, T> (
-	graph: AbstractGraph<GRAPH_TYPE, T>,
+	graph: Graph<GRAPH_TYPE, T>,
 	private val representationStrategy: RepresentationStrategy)
 {
 	val showVerticesLabels = mutableStateOf(false)

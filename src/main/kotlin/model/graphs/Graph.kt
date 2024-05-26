@@ -1,6 +1,6 @@
 package model.graphs
 
-interface AbstractGraph<GRAPH_TYPE, T> : Iterable<Vertex<T>> {
+interface Graph<GRAPH_TYPE, T> : Iterable<Vertex<T>> {
 
 	var adjList: HashMap<Vertex<T>, HashSet<GRAPH_TYPE>>
 
