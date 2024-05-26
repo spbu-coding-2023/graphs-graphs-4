@@ -71,7 +71,7 @@ open class UndirectedGraph<T> : Graph<Vertex<T>, T> {
 	}
 
 	fun findBridges(): Set<Pair<Vertex<T>, Vertex<T>>> {
-		return BridgeFinder<T>().findBridges(this)
+		return BridgeFinder<Vertex<T>, T>().findBridges(this)
 	}
 
 	override fun vertices(): Set<Vertex<T>> {
