@@ -92,10 +92,6 @@ open class WeightedGraph<T, NUMBER_TYPE : Number> : AbstractGraph<Pair<Vertex<T>
 //		return result
 //	}
 
-	override fun iterator(): Iterator<Vertex<T>> {
-		TODO("Not yet implemented")
-	}
-
 	fun mstSearch(): Set<WeightedEdge<T, NUMBER_TYPE>>? {
 		return MinSpanTreeFinder(this).mstSearch()
 	}
