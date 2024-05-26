@@ -21,4 +21,8 @@ class DirectedWeightedGraph<T, NUMBER_TYPE : Number> : UndirectedWeightedGraph<T
 			addEdge(edge)
 		}
 	}
+
+	override fun edges(): Set<WeightedEdge<T, NUMBER_TYPE>> {
+		TODO("Not yet implemented")
+	}
 }
