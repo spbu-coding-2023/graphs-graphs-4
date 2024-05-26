@@ -2,11 +2,11 @@ package model.graphs
 
 import java.util.*
 
-data class WeightedEdge<K, W: Number>(
-	val from: K,
-	val to: K,
+data class WeightedEdge<K, W : Number>(
+	override val from: K,
+	override val to: K,
 	val weight: W,
-	) : Comparable<WeightedEdge<K, W>> {
+) : Comparable<WeightedEdge<K, W>>, GraphEdge<K> {
 	operator fun Number.minus(other: Number): Number {
 		return when (this) {
 			is Long -> this - other.toLong()
