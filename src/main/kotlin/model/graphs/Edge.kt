@@ -3,10 +3,8 @@ package model.graphs
 import java.util.*
 
 class Edge<K>(
-    val from: K,
-    val to: K,
-    ): Comparable<Edge<K>>  {
-
+    override val from: K, override val to: K
+) : Comparable<Edge<K>>, GraphEdge<K> {
 
     override fun toString(): String {
         return "($from, $to)"
