@@ -1,11 +1,11 @@
 package functionality
 
 import java.util.Stack
-import graphs.Vertex
-import graphs.AbstractGraph
+import model.graphs.Vertex
+import model.graphs.DirectedGraph
 import kotlin.math.min
 
-class JohnsonAlg<T>(val graph: AbstractGraph<Vertex<T>, T>) {
+class JohnsonAlg<T>(val graph: DirectedGraph<T>) {
     private val stack = Stack<Vertex<T>>()
     private val blocked = mutableMapOf<Vertex<T>, Boolean>()
     private val blockedMap = mutableMapOf<Vertex<T>, MutableSet<Vertex<T>>>()
@@ -77,11 +77,11 @@ class TarjanSCC<T> {
     val processed = hashSetOf<Vertex<T>>()
     var curIndex = 1
 
-    fun findSCC(vertex: Vertex<T>, graph: AbstractGraph<Vertex<T>, T>): HashSet<Vertex<T>>{
+    fun findSCC(vertex: Vertex<T>, graph: DirectedGraph<T>): HashSet<Vertex<T>>{
         return dfsTarjan(vertex, graph)
     }
 
-    fun findSCCs(graph: AbstractGraph<Vertex<T>, T>): HashSet<HashSet<Vertex<T>>>{
+    fun findSCCs(graph: DirectedGraph<T>): HashSet<HashSet<Vertex<T>>>{
         val allSCCs: HashSet<HashSet<Vertex<T>>> = HashSet<HashSet<Vertex<T>>>()
         for(v in graph.adjList.keys){
             if(!visited.contains(v)) allSCCs.add(dfsTarjan(v, graph))
@@ -90,7 +90,7 @@ class TarjanSCC<T> {
     }
 
 
-    fun dfsTarjan(vertex: Vertex<T>, graph: AbstractGraph<Vertex<T>, T>): HashSet<Vertex<T>>{
+    fun dfsTarjan(vertex: Vertex<T>, graph: DirectedGraph<T>): HashSet<Vertex<T>>{
         num[vertex] = curIndex
         lowest[vertex] = curIndex
         curIndex++

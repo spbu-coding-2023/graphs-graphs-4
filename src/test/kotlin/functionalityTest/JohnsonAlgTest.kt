@@ -1,13 +1,13 @@
 package functionalityTest
 
-import graphs.DirectedWeightedGraph
+import model.graphs.DirectedGraph
 import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 
 class JohnsonAlgTest {
-    val graph = DirectedWeightedGraph<Int, Int>()
+    val graph = DirectedGraph<Int>()
 
     @BeforeEach
     fun setUp() {

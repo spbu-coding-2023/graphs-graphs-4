@@ -1,12 +1,12 @@
 package functionality
 
-import graphs.AbstractGraph
-import graphs.Vertex
+import model.graphs.DirectedGraph
+import model.graphs.Vertex
 import java.util.PriorityQueue
 import kotlin.math.exp
 import kotlin.math.log10
 
-class DistanceRank<T>(val graph: AbstractGraph<Vertex<T>, T>) {
+class DistanceRank<T>(val graph: DirectedGraph<T>) {
     private val vertexQueue = PriorityQueue<Pair<Vertex<T>, Double>>(compareBy {it.second} )
     private val Dist = mutableMapOf<Vertex<T>, Double>().withDefault { 1e6 }
     private var size = 0
@@ -50,8 +50,8 @@ class DistanceRank<T>(val graph: AbstractGraph<Vertex<T>, T>) {
 
 
             size++
-            t = (size / graph.size).toDouble()
-            val alpha = exp(t*beta)
+            t = (size / graph.adjList.keys.size).toDouble()
+            val alpha = exp(-t*beta)
 
             graph.adjList[vertex]?.forEach{child ->
                 distance = (1 - alpha) * Dist[vertex]!! + alpha * newDistance
