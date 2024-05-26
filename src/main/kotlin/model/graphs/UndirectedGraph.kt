@@ -6,9 +6,9 @@ open class UndirectedGraph<T> : Graph<Vertex<T>, T> {
 	var adjList: HashMap<Vertex<T>, HashSet<Vertex<T>>> = HashMap()
 		private set
 
-	internal var size: Int = 0
-		private set
+	private var size: Int = 0
 
+	@Suppress("DuplicatedCode")
 	override fun addVertex(key: T): Vertex<T> {
 		for (v in adjList.keys) {
 			if (v.key == key) {
@@ -63,13 +63,6 @@ open class UndirectedGraph<T> : Graph<Vertex<T>, T> {
 	open fun addEdge(edge: Edge<T>) {
 		addEdge(edge.from, edge.to)
 	}
-
-	//Declaration clash error wtf
-//	open fun addEdges(vararg edges: Pair<Vertex<T>, Vertex<T>>) {
-//		for (edge in edges) {
-//			addEdge(edge.first, edge.second)
-//		}
-//	}
 
 	open fun addEdges(vararg edges: Edge<T>) {
 		for (edge in edges) {
