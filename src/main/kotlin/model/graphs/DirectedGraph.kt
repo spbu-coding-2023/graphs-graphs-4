@@ -3,6 +3,7 @@ package model.graphs
 import model.functionality.StrConCompFinder
 
 class DirectedGraph<T> : UndirectedGraph<T>() {
+
 	override fun addEdge(vertex1: Vertex<T>, vertex2: Vertex<T>) {
 		require(adjList.containsKey(vertex1))
 		require(adjList.containsKey(vertex2))

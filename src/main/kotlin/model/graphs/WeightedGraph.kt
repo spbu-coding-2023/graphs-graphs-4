@@ -2,9 +2,51 @@ package model.graphs
 
 import model.functionality.ShortestPathFinder
 
-open class WeightedGraph<T, NUMBER_TYPE : Number> : Graph<Pair<Vertex<T>, NUMBER_TYPE>, T>() {
+open class WeightedGraph<T, NUMBER_TYPE : Number> : Graph<Pair<Vertex<T>, NUMBER_TYPE>, T> {
+	var adjList: HashMap<Vertex<T>, HashSet<Pair<Vertex<T>, NUMBER_TYPE>>> = HashMap()
+		private set
 
-	override var adjList: HashMap<Vertex<T>, HashSet<Pair<Vertex<T>, NUMBER_TYPE>>> = HashMap()
+	var size: Int = 0
+		private set
+
+	override fun addVertex(key: T): Vertex<T> {
+		for (v in adjList.keys) {
+			if (v.key == key) {
+				return v
+			}
+		}
+
+		val vertex = Vertex(key)
+		adjList[vertex] = HashSet()
+
+		size += 1
+
+		return vertex
+	}
+
+	override fun addVertex(vertex: Vertex<T>): Vertex<T> {
+		if (adjList.containsKey(vertex)) {
+			return vertex
+		}
+
+		adjList[vertex] = HashSet()
+
+		size += 1
+
+		return vertex
+	}
+
+	override fun addVertices(vararg keys: T) {
+		for (key in keys) {
+			addVertex(key)
+		}
+	}
+
+	override fun addVertices(vararg vertices: Vertex<T>) {
+		for (vertex in vertices) {
+			addVertex(vertex)
+		}
+	}
 
 	open fun addEdge(vertex1: Vertex<T>, vertex2: Vertex<T>, weight: NUMBER_TYPE) {
 		require(adjList.containsKey(vertex1))
@@ -41,6 +83,10 @@ open class WeightedGraph<T, NUMBER_TYPE : Number> : Graph<Pair<Vertex<T>, NUMBER
 	fun findShortestDistance(start: Vertex<T>): Map<Vertex<T>, Double> {
 		val output = ShortestPathFinder(this).bellmanFord(start)
 		return output
+	}
+
+	override fun vertices(): Set<Vertex<T>> {
+		return adjList.keys
 	}
 
 //	// need to test
@@ -89,5 +135,16 @@ open class WeightedGraph<T, NUMBER_TYPE : Number> : Graph<Pair<Vertex<T>, NUMBER
 //		}
 //
 //		return result
-//	}
+//	}.
+
+	override fun iterator(): Iterator<Vertex<T>> {
+		return this.adjList.keys.iterator()
+	}
+
+	override fun getNeighbors(vertex: Vertex<T>): HashSet<Pair<Vertex<T>, NUMBER_TYPE>> {
+		return adjList[vertex] ?: throw IllegalArgumentException(
+			"Can't get neighbors for vertex $vertex that is not in the graph"
+		)
+	}
+
 }

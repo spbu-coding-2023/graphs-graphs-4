@@ -10,7 +10,7 @@ class GraphViewModel<GRAPH_TYPE, T>(
 	showVerticesLabels: State<Boolean>,
 	showEdgesLabels: State<Boolean>,
 ) {
-	private val _vertices = graph.adjList.keys.associateWith { v ->
+	private val _vertices = graph.vertices().associateWith { v ->
 		VertexViewModel(0.dp, 0.dp, Color.Gray, v, showVerticesLabels)
 	}
 
