@@ -1,11 +1,10 @@
 package model.graphs
 
-abstract class AbstractGraph<GRAPH_TYPE, T> : Iterable<Vertex<T>> {
-	open var adjList: HashMap<Vertex<T>, HashSet<GRAPH_TYPE>> = HashMap()
-		protected set
+interface AbstractGraph<GRAPH_TYPE, T> : Iterable<Vertex<T>> {
 
-	var size: Int = 0
-		protected set
+	var adjList: HashMap<Vertex<T>, HashSet<GRAPH_TYPE>>
+
+	var size: Int
 
 	fun addVertex(key: T): Vertex<T> {
 		for (v in adjList.keys) {
@@ -78,7 +77,7 @@ abstract class AbstractGraph<GRAPH_TYPE, T> : Iterable<Vertex<T>> {
 //	}
 
 	// just converts graph to a set of vertices
-	internal fun vertices(): Set<Vertex<T>> {
+	fun vertices(): Set<Vertex<T>> {
 		return adjList.keys
 	}
 
