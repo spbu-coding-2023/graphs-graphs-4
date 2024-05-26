@@ -1,11 +1,11 @@
-package functionality
+package model.functionality
 
-import graphs.Vertex
-import graphs.WeightedGraph
+import model.graphs.UndirectedWeightedGraph
+import model.graphs.Vertex
 import kotlin.Double.Companion.NEGATIVE_INFINITY
 import kotlin.Double.Companion.POSITIVE_INFINITY
 
-class ShortestPathFinder<T, NUMBER_TYPE : Number>(private val graph: WeightedGraph<T, NUMBER_TYPE>) {
+class ShortestPathFinder<T, NUMBER_TYPE : Number>(private val graph: UndirectedWeightedGraph<T, NUMBER_TYPE>) {
 	operator fun Number.plus(other: Number): Number {
 		return when (this) {
 			is Long -> this.toLong() + other.toLong()
