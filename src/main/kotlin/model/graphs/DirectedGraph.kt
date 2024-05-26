@@ -17,13 +17,6 @@ class DirectedGraph<T> : UndirectedGraph<T>() {
 		addEdge(edge.from, edge.to)
 	}
 
-	//Declaration error clash
-//	override fun addEdges(vararg edges: Pair<Vertex<T>, Vertex<T>>) {
-//		for (edge in edges) {
-//			addEdge(edge.first, edge.second)
-//		}
-//	}
-
 	override fun addEdges(vararg edges: Edge<T>) {
 		for (edge in edges) {
 			addEdge(edge)

@@ -9,6 +9,7 @@ open class WeightedGraph<T, NUMBER_TYPE : Number> : Graph<Pair<Vertex<T>, NUMBER
 	var size: Int = 0
 		private set
 
+	@Suppress("DuplicatedCode")
 	override fun addVertex(key: T): Vertex<T> {
 		for (v in adjList.keys) {
 			if (v.key == key) {
@@ -64,16 +65,6 @@ open class WeightedGraph<T, NUMBER_TYPE : Number> : Graph<Pair<Vertex<T>, NUMBER
 		addEdge(edge.from, edge.to, edge. weight)
 	}
 
-	//Declaration clash error
-//	open fun addEdges(vararg edges: Triple<Vertex<T>, Vertex<T>, NUMBER_TYPE>) {
-//		for (edge in edges) {
-//			val vertex1 = edge.first
-//			val vertex2 = edge.second
-//			val weight = edge.third
-//			addEdge(vertex1, vertex2, weight)
-//		}
-//	}
-
 	open fun addEdges(vararg edges: WeightedEdge<T, NUMBER_TYPE>) {
 		for (edge in edges) {
 			addEdge(edge)
@@ -88,54 +79,6 @@ open class WeightedGraph<T, NUMBER_TYPE : Number> : Graph<Pair<Vertex<T>, NUMBER
 	override fun vertices(): Set<Vertex<T>> {
 		return adjList.keys
 	}
-
-//	// need to test
-//	fun removeEdge(vertex1: Vertex<T>, vertex2: Vertex<T>) {
-//		adjList[vertex1]?.removeAll { it.first == vertex2 }
-//		adjList[vertex2]?.removeAll { it.first == vertex1 }
-//	}
-
-	//	// Can we reuse removeEdge?
-	//	// need to test
-	//	fun removeVertex(vertex: Vertex<T>) {
-	//		if (adjList[vertex] != null) {
-	//			adjList[vertex]?.forEach {
-	//				adjList[it]?.remove(vertex)
-	//			}
-	//
-	//			adjList.remove(vertex)
-	//		}
-	//	}
-	//
-	//	// test on disconnected graph?
-	//	internal fun dfs(vertex: Vertex<T>): Set<Vertex<T>> {
-	//		return Traversable<T>().dfsIter(this, vertex)
-	//	}
-	//
-	//	override fun iterator(): Iterator<Vertex<T>> {
-	//		return this.adjList.keys.iterator()
-	//	}
-	//
-	//	fun dfsIterator(vertex: Vertex<T>): Iterator<Vertex<T>> {
-	//		return this.dfs(vertex).iterator()
-	//	}
-	//
-	//	fun findBridges(): Set<Pair<Vertex<T>, Vertex<T>>> {
-	//		return BridgeFinder<T>().findBridges(this)
-	//	}
-
-//	fun findMinAdjacentVertexForPrimAlgo(vertex: Vertex<T>, spanningTree: Graph<T>): WeightedEdge<T>?  {
-//		val neighbors = adjList[vertex] ?: return null
-//		val result = neighbors.maxBy { edge ->
-//			if (spanningTree.contains(edge.vertex)) {
-//				0
-//			} else {
-//				edge.weight
-//			}
-//		}
-//
-//		return result
-//	}.
 
 	override fun iterator(): Iterator<Vertex<T>> {
 		return this.adjList.keys.iterator()
