@@ -1,6 +1,6 @@
 package model.graphs
 
-class DirectedWeightedGraph<T, NUMBER_TYPE : Number> : WeightedGraph<T, NUMBER_TYPE>() {
+class DirectedWeightedGraph<T, NUMBER_TYPE : Number> : UndirectedWeightedGraph<T, NUMBER_TYPE>() {
 	override fun addEdge(vertex1: Vertex<T>, vertex2: Vertex<T>, weight: NUMBER_TYPE) {
 		require(adjList.containsKey(vertex1))
 		require(adjList.containsKey(vertex2))
