@@ -80,6 +80,17 @@ open class UndirectedWeightedGraph<T, NUMBER_TYPE : Number> : Graph<Pair<Vertex<
 		return adjList.keys
 	}
 
+	override fun edges(): Set<WeightedEdge<T, NUMBER_TYPE>> {
+		val edges = HashSet<WeightedEdge<T, NUMBER_TYPE>>()
+		for (vertex in adjList.keys) {
+			for (neighbour in adjList[vertex] ?: continue) {
+				edges.add(WeightedEdge(vertex, neighbour.first, neighbour.second))
+			}
+		}
+
+		return edges
+	}
+
 	override fun iterator(): Iterator<Vertex<T>> {
 		return this.adjList.keys.iterator()
 	}

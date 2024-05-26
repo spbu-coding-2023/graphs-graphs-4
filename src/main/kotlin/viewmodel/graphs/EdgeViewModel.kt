@@ -1,16 +1,17 @@
-//package viewmodel.graphs
-//
-//import androidx.compose.runtime.State
-//
-//class EdgeViewModel<E, V>(
-//    val u: VertexViewModel<V>,
-//    val v: VertexViewModel<V>,
-//    private val e: Edge<E, V>,
-//    private val _labelVisible: State<Boolean>,
-//) {
-//	val label
-//		get() = e.element.toString()
-//
-//	val labelVisible
-//		get() = _labelVisible.value
-//}
+package viewmodel.graphs
+
+import androidx.compose.runtime.State
+import model.graphs.GraphEdge
+
+class EdgeViewModel<T>(
+	val u: VertexViewModel<T>,
+	val v: VertexViewModel<T>,
+	private val e: GraphEdge<T>,
+	private val _labelVisible: State<Boolean>,
+) {
+	val label
+		get() = e.weight.toString()
+
+	val labelVisible
+		get() = _labelVisible.value
+}
