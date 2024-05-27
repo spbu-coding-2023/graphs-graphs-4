@@ -11,7 +11,7 @@ class GraphViewModel<GRAPH_TYPE, T>(
 	showEdgesLabels: State<Boolean>,
 ) {
 	private val _vertices = graph.vertices().associateWith { v ->
-		VertexViewModel(0.dp, 0.dp, Color.Gray, v, showVerticesLabels)
+		VertexViewModel(0.dp, 0.dp, Color.DarkGray, v, showVerticesLabels)
 	}
 
 	private val _edges = graph.edges().associateWith { e ->

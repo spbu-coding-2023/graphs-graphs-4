@@ -3,6 +3,7 @@ package viewmodel
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
 import model.graphs.Graph
+import model.graphs.Vertex
 import viewmodel.graphs.GraphViewModel
 import viewmodel.graphs.RepresentationStrategy
 
@@ -20,7 +21,7 @@ class MainScreenViewModel<GRAPH_TYPE, T>(
 
 	fun resetGraphView() {
 		representationStrategy.place(800.0, 600.0, graphViewModel.vertices)
-		graphViewModel.vertices.forEach { v -> v.color = Color.Gray }
+		graphViewModel.vertices.forEach { v -> v.color = Color.DarkGray }
 		graphViewModel.edges.forEach {
 			it.color = Color.Black
 			it.width = 3.toFloat()
@@ -35,5 +36,19 @@ class MainScreenViewModel<GRAPH_TYPE, T>(
 		val bridges = graph.findBridges()
 
 		representationStrategy.highlightBridges(graphViewModel.edges, bridges)
+	}
+
+	private fun colorNotSelected(currV: Vertex<T>) {
+		graphViewModel.vertices.forEach { v ->
+			if (v.v != currV) {
+				v.color = Color.DarkGray
+			}
+		}
+	}
+
+	fun displayDistanceBellman(startVertex: Vertex<T>?) {
+		if (startVertex != null) {
+			colorNotSelected(startVertex)
+		}
 	}
 }

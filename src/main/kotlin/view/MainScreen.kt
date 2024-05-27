@@ -8,6 +8,7 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import model.graphs.Vertex
 import view.graphs.GraphView
 import viewmodel.MainScreenViewModel
 
@@ -15,6 +16,7 @@ import viewmodel.MainScreenViewModel
 fun <GRAPH_TYPE, T> MainScreen(viewModel: MainScreenViewModel<GRAPH_TYPE, T>) {
 	var showMenu by remember { mutableStateOf(false) }
 	var showGraph by remember { mutableStateOf(false) }
+	var currentVertex: Vertex<T>? by remember { mutableStateOf(null) }
 
 	MaterialTheme {
 		Scaffold(
@@ -59,13 +61,14 @@ fun <GRAPH_TYPE, T> MainScreen(viewModel: MainScreenViewModel<GRAPH_TYPE, T>) {
 				Column(modifier = Modifier.width(370.dp)) {
 					ToolsPanel(
 						modifier = Modifier.weight(1f).background(MaterialTheme.colors.secondary),
-						viewModel = viewModel
+						viewModel = viewModel,
+						selectedVertex = currentVertex
 					)
 				}
 
 				Surface(modifier = Modifier.weight(1f)) {
 					if (showGraph) {
-						GraphView(viewModel.graphViewModel)
+						GraphView(viewModel.graphViewModel, onVertexClick = { currentVertex = it })
 					}
 				}
 			}
@@ -73,12 +76,14 @@ fun <GRAPH_TYPE, T> MainScreen(viewModel: MainScreenViewModel<GRAPH_TYPE, T>) {
 	}
 }
 
-
 @Composable
 fun <GRAPH_TYPE, T> ToolsPanel(
 	viewModel: MainScreenViewModel<GRAPH_TYPE, T>,
-	modifier: Modifier = Modifier
+	modifier: Modifier = Modifier,
+	selectedVertex: Vertex<T>?
 ) {
+	var text by remember { mutableStateOf("") }
+
 	Column(
 		modifier = modifier
 			.fillMaxHeight()
@@ -92,13 +97,18 @@ fun <GRAPH_TYPE, T> ToolsPanel(
 		}
 
 		Button(
-			onClick = viewModel::highlightBridges,
+			onClick = { (viewModel::displayDistanceBellman)(selectedVertex) },
 			enabled = true,
 		) {
-			Text(text = "Find the shortest path")
+			Text(text = "Find the shortest distance")
 		}
 
-		fillInKey()
+//		OutlinedTextField(
+//			value = text,
+//			colors = TextFieldDefaults.outlinedTextFieldColors(),
+//			onValueChange = { text = it },
+//			label = { Text("Enter the starting vertex's key") }
+//		)
 
 		Button(
 			onClick = viewModel::resetGraphView,
@@ -107,16 +117,4 @@ fun <GRAPH_TYPE, T> ToolsPanel(
 			Text(text = "Reset default settings")
 		}
 	}
-}
-
-@Composable
-fun fillInKey() {
-	var text by remember { mutableStateOf("") }
-
-	OutlinedTextField(
-		value = text,
-		colors = TextFieldDefaults.outlinedTextFieldColors(),
-		onValueChange = { text = it },
-		label = { Text("Enter the starting vertex's key") }
-	)
 }
