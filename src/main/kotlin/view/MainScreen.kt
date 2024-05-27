@@ -92,10 +92,31 @@ fun <GRAPH_TYPE, T> ToolsPanel(
 		}
 
 		Button(
+			onClick = viewModel::highlightBridges,
+			enabled = true,
+		) {
+			Text(text = "Find the shortest path")
+		}
+
+		fillInKey()
+
+		Button(
 			onClick = viewModel::resetGraphView,
 			enabled = true,
 		) {
 			Text(text = "Reset default settings")
 		}
 	}
+}
+
+@Composable
+fun fillInKey() {
+	var text by remember { mutableStateOf("") }
+
+	OutlinedTextField(
+		value = text,
+		colors = TextFieldDefaults.outlinedTextFieldColors(),
+		onValueChange = { text = it },
+		label = { Text("Enter the starting vertex's key") }
+	)
 }
