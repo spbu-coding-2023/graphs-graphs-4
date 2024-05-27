@@ -1,7 +1,11 @@
 package model.graphs
 
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 import model.functionality.StrConCompFinder
 
+@Serializable
+//@SerialName("DirectedGraph")
 class DirectedGraph<T> : UndirectedGraph<T>() {
 
 	override fun addEdge(vertex1: Vertex<T>, vertex2: Vertex<T>) {
@@ -25,7 +29,7 @@ class DirectedGraph<T> : UndirectedGraph<T>() {
 		}
 	}
 
-	fun findSCC(): Array<Array<Vertex<T>>> {
+	fun findSCC(): Set<Set<Vertex<T>>> {
 		return StrConCompFinder(this).sccSearch()
 	}
 }

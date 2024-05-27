@@ -1,6 +1,10 @@
 package model.graphs
 
-class Vertex<T>(val key: T) {
+import kotlinx.serialization.Serializable
+import model.functionality.iograph.VertexSerializer
+
+@Serializable(with = VertexSerializer::class)
+data class Vertex<T>(val key: T) {
     override fun hashCode(): Int {
         return key.hashCode()
     }

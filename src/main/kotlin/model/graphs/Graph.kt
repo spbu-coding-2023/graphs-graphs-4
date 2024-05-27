@@ -1,5 +1,9 @@
 package model.graphs
 
+/*import kotlinx.serialization.Serializable
+import model.functionality.iograph.GraphSerializer
+
+@Serializable(with = GraphSerializer::class)*/
 interface Graph<GRAPH_TYPE, T> : Iterable<Vertex<T>> {
 	fun addVertex(key: T): Vertex<T>
 

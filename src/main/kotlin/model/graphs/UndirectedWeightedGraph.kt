@@ -1,10 +1,14 @@
 package model.graphs
 
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 import model.functionality.BridgeFinder
 import model.functionality.MinSpanTreeFinder
 import model.functionality.ShortestPathFinder
 
+@Serializable
 open class UndirectedWeightedGraph<T, NUMBER_TYPE : Number> : Graph<Pair<Vertex<T>, NUMBER_TYPE>, T> {
+	@SerialName("WeightedGraph")
 	var adjList: HashMap<Vertex<T>, HashSet<Pair<Vertex<T>, NUMBER_TYPE>>> = HashMap()
 		private set
 

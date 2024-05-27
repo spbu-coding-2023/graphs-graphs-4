@@ -1,8 +1,12 @@
 package model.graphs
 
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 import model.functionality.BridgeFinder
 
+@Serializable
 open class UndirectedGraph<T> : Graph<Vertex<T>, T> {
+	@SerialName("UndirectedGraph")
 	var adjList: HashMap<Vertex<T>, HashSet<Vertex<T>>> = HashMap()
 		private set
 
