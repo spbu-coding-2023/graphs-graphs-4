@@ -92,7 +92,7 @@ open class UndirectedWeightedGraph<T, NUMBER_TYPE : Number> : Graph<Pair<Vertex<
 		return edges
 	}
 
-	fun findBridges(): Set<Pair<Vertex<T>, Vertex<T>>> {
+	override fun findBridges(): Set<Pair<Vertex<T>, Vertex<T>>> {
 		return BridgeFinder<Pair<Vertex<T>, NUMBER_TYPE>, T>().findBridges(this)
 	}
 

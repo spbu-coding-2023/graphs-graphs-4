@@ -1,7 +1,6 @@
 package model.graphs
 
 class Vertex<T>(val key: T) {
-
     override fun hashCode(): Int {
         return key.hashCode()
     }

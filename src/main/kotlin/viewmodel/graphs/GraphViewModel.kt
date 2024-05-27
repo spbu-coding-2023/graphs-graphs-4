@@ -19,7 +19,8 @@ class GraphViewModel<GRAPH_TYPE, T>(
 			?: throw IllegalStateException("VertexView for ${e.from} not found")
 		val snd = _vertices[e.to]
 			?: throw IllegalStateException("VertexView for ${e.to} not found")
-		EdgeViewModel(fst, snd, e, showEdgesLabels)
+
+		EdgeViewModel(fst, snd, Color.Black, 3.toFloat(), e, showEdgesLabels)
 	}
 
 	val vertices: Collection<VertexViewModel<T>>

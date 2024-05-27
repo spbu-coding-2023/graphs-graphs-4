@@ -2,6 +2,7 @@ package viewmodel.graphs
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import model.graphs.Vertex
 import kotlin.math.cos
 import kotlin.math.min
 import kotlin.math.sin
@@ -38,6 +39,15 @@ class CircularPlacementStrategy : RepresentationStrategy {
 			.onEach {
 				it.color = if (Random.nextBoolean()) Color.Green else Color.Blue
 			}
+	}
+
+	override fun <T> highlightBridges(edges: Collection<EdgeViewModel<T>>, bridges: Set<Pair<Vertex<T>, Vertex<T>>>) {
+		for (edge in edges) {
+			if (bridges.contains(Pair(edge.u.v, edge.v.v)) || bridges.contains(Pair(edge.v.v, edge.u.v))) {
+				edge.color = Color.Red
+				edge.width = 6.toFloat()
+			}
+		}
 	}
 
 	private fun Pair<Double, Double>.rotate(pivot: Pair<Double, Double>, angle: Double): Pair<Double, Double> {
