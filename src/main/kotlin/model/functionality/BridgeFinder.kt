@@ -56,7 +56,7 @@ class BridgeFinder<GRAPH_TYPE, T> {
 						low[vertex] = min(lowVertex, lowIt)
 
 						if (lowIt > discVertex) {
-							bridges = bridges.plus(Pair(it, vertex))
+							bridges = bridges.plus(Pair(vertex, it))
 						}
 					} else {
 						if (parent[vertex] != it) {
@@ -82,7 +82,7 @@ class BridgeFinder<GRAPH_TYPE, T> {
 						low[vertex] = min(lowVertex, lowIt)
 
 						if (lowIt > discVertex) {
-							bridges = bridges.plus(Pair(it.first, vertex))
+							bridges = bridges.plus(Pair(vertex, it.first))
 						}
 					} else {
 						if (parent[vertex] != it.first) {
