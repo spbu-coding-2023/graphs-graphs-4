@@ -59,15 +59,15 @@ class StrConCompFinderTest {
     fun sccTest3() {
         val vertices = Array(8) { Vertex(it) }
         val edges = arrayOf(
-            Edge(0, 1),
-            Edge(1, 0),
-            Edge(2, 3),
-            Edge(3, 4),
-            Edge(4, 2),
-            Edge(5, 6),
-            Edge(6, 7),
-            Edge(7, 6),
-            Edge(7, 5),
+            Edge(vertices[0], vertices[1]),
+            Edge(vertices[1], vertices[0]),
+            Edge(vertices[2], vertices[3]),
+            Edge(vertices[3], vertices[4]),
+            Edge(vertices[4], vertices[2]),
+            Edge(vertices[5], vertices[6]),
+            Edge(vertices[6], vertices[7]),
+            Edge(vertices[7], vertices[6]),
+            Edge(vertices[7], vertices[5]),
             )
 
         graphInt.addVertices(*vertices)

@@ -1,6 +1,7 @@
 package model.graphs
 
 import model.functionality.BridgeFinder
+import model.functionality.MinSpanTreeFinder
 import model.functionality.ShortestPathFinder
 
 open class UndirectedWeightedGraph<T, NUMBER_TYPE : Number> : Graph<Pair<Vertex<T>, NUMBER_TYPE>, T> {
@@ -106,4 +107,7 @@ open class UndirectedWeightedGraph<T, NUMBER_TYPE : Number> : Graph<Pair<Vertex<
 		)
 	}
 
+	fun mstSearch(): Set<WeightedEdge<T, NUMBER_TYPE>>? {
+		return MinSpanTreeFinder(this).mstSearch()
+	}
 }

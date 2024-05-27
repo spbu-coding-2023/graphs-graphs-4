@@ -5,15 +5,14 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
 class MinSpanTreeFinderTest {
-    private lateinit var graphInt: WeightedGraph<Int, Int>
+    private lateinit var graphInt: UndirectedWeightedGraph<Int, Int>
     private lateinit var expectedTree: MutableSet<WeightedEdge<Int, Int>>
 
     @BeforeEach
     fun setup() {
-        graphInt = WeightedGraph()
+        graphInt = UndirectedWeightedGraph()
         expectedTree = mutableSetOf()
     }
 
@@ -22,10 +21,10 @@ class MinSpanTreeFinderTest {
     fun mstTest1() {
         val vertices = Array(6) { Vertex(it) }
         val edges = arrayOf(
-            WeightedEdge(0, 1, 1),
-            WeightedEdge(0, 2, 2),
-            WeightedEdge(0, 3, 3),
-            WeightedEdge(4, 5, 4),
+            WeightedEdge(vertices[0], vertices[1], 1),
+            WeightedEdge(vertices[0], vertices[2], 2),
+            WeightedEdge(vertices[0], vertices[3], 3),
+            WeightedEdge(vertices[4], vertices[5], 4),
         )
 
         graphInt.addVertices(*vertices)
@@ -39,10 +38,10 @@ class MinSpanTreeFinderTest {
     fun mstTest2() {
         val vertices = Array(5) { Vertex(it) }
         val edges = arrayOf(
-            WeightedEdge(0, 1, 10),
-            WeightedEdge(1, 2, 12),
-            WeightedEdge(2, 3, 21),
-            WeightedEdge(3, 4, 23),
+            WeightedEdge(vertices[0], vertices[1], 10),
+            WeightedEdge(vertices[1], vertices[2], 12),
+            WeightedEdge(vertices[2], vertices[3], 21),
+            WeightedEdge(vertices[3], vertices[4], 23),
         )
 
         graphInt.addVertices(*vertices)
@@ -50,7 +49,7 @@ class MinSpanTreeFinderTest {
 
         expectedTree = mutableSetOf(*edges)
 
-        assertEquals(expectedTree, graphInt.mstSearch())
+        assertEquals(expectedTree.sorted(), graphInt.mstSearch()!!.sorted())
     }
 
     @DisplayName("Find minimal spanning tree in shamrock.")
@@ -58,27 +57,27 @@ class MinSpanTreeFinderTest {
     fun mstTest3() {
         val vertices = Array(7) { Vertex(it) }
         val edges = arrayOf(
-            WeightedEdge(0, 1, 3),
-            WeightedEdge(0, 2, 2),
-            WeightedEdge(0, 3, 1),
-            WeightedEdge(0, 4, 3),
-            WeightedEdge(0, 5, 1),
-            WeightedEdge(0, 6, 2),
-            WeightedEdge(1, 2, 1),
-            WeightedEdge(3, 4, 2),
-            WeightedEdge(5, 6, 3),
+            WeightedEdge(vertices[0], vertices[1], 3),
+            WeightedEdge(vertices[0], vertices[2], 2),
+            WeightedEdge(vertices[0], vertices[3], 1),
+            WeightedEdge(vertices[0], vertices[4], 3),
+            WeightedEdge(vertices[0], vertices[5], 1),
+            WeightedEdge(vertices[0], vertices[6], 2),
+            WeightedEdge(vertices[1], vertices[2], 1),
+            WeightedEdge(vertices[3], vertices[4], 2),
+            WeightedEdge(vertices[5], vertices[6], 3),
         )
 
         graphInt.addVertices(*vertices)
         graphInt.addEdges(*edges)
 
         expectedTree = mutableSetOf(
-            WeightedEdge(0, 2, 2),
-            WeightedEdge(0, 3, 1),
-            WeightedEdge(0, 5, 1),
-            WeightedEdge(0, 6, 2),
-            WeightedEdge(1, 2, 1),
-            WeightedEdge(3, 4, 2),
+            WeightedEdge(vertices[0], vertices[2], 2),
+            WeightedEdge(vertices[0], vertices[3], 1),
+            WeightedEdge(vertices[0], vertices[5], 1),
+            WeightedEdge(vertices[0], vertices[6], 2),
+            WeightedEdge(vertices[1], vertices[2], 1),
+            WeightedEdge(vertices[3], vertices[4], 2),
 
         )
 
