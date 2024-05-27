@@ -7,7 +7,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
 import viewmodel.graphs.EdgeViewModel
 
 @Composable
@@ -21,13 +20,18 @@ fun <T> EdgeView(
 				viewModel.u.x.toPx() + viewModel.u.radius.toPx(),
 				viewModel.u.y.toPx() + viewModel.u.radius.toPx(),
 			),
+
 			end = Offset(
 				viewModel.v.x.toPx() + viewModel.v.radius.toPx(),
 				viewModel.v.y.toPx() + viewModel.v.radius.toPx(),
 			),
-			color = Color.Black
+
+			color = viewModel.color,
+
+			strokeWidth = viewModel.width
 		)
 	}
+
 	if (viewModel.labelVisible) {
 		Text(
 			modifier = Modifier
