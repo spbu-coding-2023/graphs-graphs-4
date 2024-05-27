@@ -27,8 +27,8 @@ class BridgeFinderTest {
 			graphInt.addEdge(nodes[0][1], nodes[0][2])
 
 			val answer = setOf(
-				Pair(nodes[0][2], nodes[0][1]),
-				Pair(nodes[0][1], nodes[0][0])
+				Pair(nodes[0][1], nodes[0][2]),
+				Pair(nodes[0][0], nodes[0][1])
 			)
 
 			assertEquals(answer, graphInt.findBridges())
@@ -78,8 +78,8 @@ class BridgeFinderTest {
 			graphInt.addEdge(nodes[0][4], nodes[0][5])
 
 			val answer = setOf(
-				Pair(nodes[0][5], nodes[0][4]),
-				Pair(nodes[0][3], nodes[0][2])
+				Pair(nodes[0][4], nodes[0][5]),
+				Pair(nodes[0][2], nodes[0][3])
 			)
 
 			assertEquals(answer, graphInt.findBridges())
@@ -109,10 +109,10 @@ class BridgeFinderTest {
 			graphInt.addEdge(nodes[0][4], nodes[0][9])
 
 			val answer = setOf(
-				Pair(nodes[0][9], nodes[0][4]),
-				Pair(nodes[0][5], nodes[0][4]),
-				Pair(nodes[0][4], nodes[0][3]),
-				Pair(nodes[0][3], nodes[0][2])
+				Pair(nodes[0][4], nodes[0][9]),
+				Pair(nodes[0][4], nodes[0][5]),
+				Pair(nodes[0][3], nodes[0][4]),
+				Pair(nodes[0][2], nodes[0][3])
 			)
 
 			assertEquals(answer, graphInt.findBridges())
@@ -168,10 +168,10 @@ class BridgeFinderTest {
 			graphInt.addEdge(nodes[0][4], nodes[0][9], 78)
 
 			val answer = setOf(
-				Pair(nodes[0][9], nodes[0][4]),
-				Pair(nodes[0][5], nodes[0][4]),
-				Pair(nodes[0][4], nodes[0][3]),
-				Pair(nodes[0][3], nodes[0][2])
+				Pair(nodes[0][4], nodes[0][9]),
+				Pair(nodes[0][4], nodes[0][5]),
+				Pair(nodes[0][3], nodes[0][4]),
+				Pair(nodes[0][2], nodes[0][3])
 			)
 
 			assertEquals(answer, graphInt.findBridges())
