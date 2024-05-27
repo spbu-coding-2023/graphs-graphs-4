@@ -76,13 +76,13 @@ class ShortestPathFinder<T, NUMBER_TYPE : Number>(private val graph: UndirectedW
 
 		while (priorityQueue.isNotEmpty()) {
 			val (current, currentDist) = priorityQueue.poll()
-			var flag = false
+			/*var flag = false
 			dist[current]?.let {if(currentDist > it) flag = true}
-			if (flag) continue
+			if (flag) continue*/
 
-			graph.adjList[current]?.forEach{
-				val next = it.first
-				val nextDist: Double = currentDist.plus(it.second).toDouble()
+			graph.adjList[current]?.forEach{ child ->
+				val next = child.first
+				val nextDist: Double = currentDist.plus(child.second).toDouble()
 
 				dist[next]?.let{
 					if(nextDist < it){
