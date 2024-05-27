@@ -11,6 +11,10 @@ interface Graph<GRAPH_TYPE, T> : Iterable<Vertex<T>> {
 
 	fun vertices(): Set<Vertex<T>>
 
+	fun edges(): Set<GraphEdge<T>>
+
+	fun findBridges(): Set<Pair<Vertex<T>, Vertex<T>>>
+
 	override fun iterator(): Iterator<Vertex<T>>
 
 	fun getNeighbors(vertex: Vertex<T>): HashSet<GRAPH_TYPE>

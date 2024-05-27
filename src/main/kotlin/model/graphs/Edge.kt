@@ -2,11 +2,9 @@ package model.graphs
 
 import java.util.*
 
-class Edge<K>(
-    val from: K,
-    val to: K,
-    ): Comparable<Edge<K>>  {
-
+class Edge<T>(
+    override val from: Vertex<T>, override val to: Vertex<T>, override val weight: Nothing? = null
+) : Comparable<Edge<T>>, GraphEdge<T> {
 
     override fun toString(): String {
         return "($from, $to)"
@@ -22,7 +20,7 @@ class Edge<K>(
         return Objects.hash(from, to)
     }
 
-    override fun compareTo(other: Edge<K>): Int {
+    override fun compareTo(other: Edge<T>): Int {
         return when {
             from == other.from -> to.hashCode().compareTo(other.to.hashCode())
             else -> from.hashCode().compareTo(other.from.hashCode())

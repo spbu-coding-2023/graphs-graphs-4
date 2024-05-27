@@ -6,12 +6,12 @@ import model.graphs.Graph
 import viewmodel.graphs.GraphViewModel
 import viewmodel.graphs.RepresentationStrategy
 
-class MainScreenViewModel<GRAPH_TYPE, T> (
-	graph: Graph<GRAPH_TYPE, T>,
-	private val representationStrategy: RepresentationStrategy)
-{
-	val showVerticesLabels = mutableStateOf(false)
-	val showEdgesLabels = mutableStateOf(false)
+class MainScreenViewModel<GRAPH_TYPE, T>(
+	val graph: Graph<GRAPH_TYPE, T>,
+	private val representationStrategy: RepresentationStrategy
+) {
+	private val showVerticesLabels = mutableStateOf(false)
+	private val showEdgesLabels = mutableStateOf(false)
 	val graphViewModel = GraphViewModel(graph, showVerticesLabels, showEdgesLabels)
 
 	init {
@@ -21,9 +21,19 @@ class MainScreenViewModel<GRAPH_TYPE, T> (
 	fun resetGraphView() {
 		representationStrategy.place(800.0, 600.0, graphViewModel.vertices)
 		graphViewModel.vertices.forEach { v -> v.color = Color.Gray }
+		graphViewModel.edges.forEach {
+			it.color = Color.Black
+			it.width = 3.toFloat()
+		}
 	}
 
 	fun setVerticesColor() {
 		representationStrategy.highlight(graphViewModel.vertices)
+	}
+
+	fun highlightBridges() {
+		val bridges = graph.findBridges()
+
+		representationStrategy.highlightBridges(graphViewModel.edges, bridges)
 	}
 }
