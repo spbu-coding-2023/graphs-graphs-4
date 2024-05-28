@@ -1,5 +1,4 @@
 import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
@@ -33,9 +32,7 @@ val sampleGraph: Graph<Vertex<Int>, Int> = UndirectedGraph<Int>().apply {
 @Composable
 @Preview
 fun App() {
-	MaterialTheme {
-		MainScreen(MainScreenViewModel(sampleGraph, CircularPlacementStrategy()))
-	}
+	MainScreen(MainScreenViewModel(sampleGraph, CircularPlacementStrategy()))
 }
 
 fun main() = application {
