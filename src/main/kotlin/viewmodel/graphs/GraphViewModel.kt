@@ -9,9 +9,10 @@ class GraphViewModel<GRAPH_TYPE, T>(
 	graph: Graph<GRAPH_TYPE, T>,
 	showVerticesLabels: State<Boolean>,
 	showEdgesLabels: State<Boolean>,
+	showVerticesDistanceLabels: State<Boolean>,
 ) {
 	private val _vertices = graph.vertices().associateWith { v ->
-		VertexViewModel(0.dp, 0.dp, Color.DarkGray, v, showVerticesLabels)
+		VertexViewModel(0.dp, 0.dp, Color.DarkGray, v, showVerticesLabels, showVerticesDistanceLabels)
 	}
 
 	private val _edges = graph.edges().associateWith { e ->

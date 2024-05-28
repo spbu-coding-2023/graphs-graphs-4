@@ -8,6 +8,7 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import model.graphs.Vertex
 import view.graphs.GraphView
 import viewmodel.MainScreenViewModel
@@ -82,8 +83,6 @@ fun <GRAPH_TYPE, T> ToolsPanel(
 	modifier: Modifier = Modifier,
 	selectedVertex: Vertex<T>?
 ) {
-	var text by remember { mutableStateOf("") }
-
 	Column(
 		modifier = modifier
 			.fillMaxHeight()
@@ -97,18 +96,30 @@ fun <GRAPH_TYPE, T> ToolsPanel(
 		}
 
 		Button(
-			onClick = { (viewModel::displayDistanceBellman)(selectedVertex) },
+			onClick = { (viewModel::findDistanceBellman)(selectedVertex) },
 			enabled = true,
 		) {
 			Text(text = "Find the shortest distance")
 		}
 
-//		OutlinedTextField(
-//			value = text,
-//			colors = TextFieldDefaults.outlinedTextFieldColors(),
-//			onValueChange = { text = it },
-//			label = { Text("Enter the starting vertex's key") }
-//		)
+		Row {
+			Checkbox(checked = viewModel.showVerticesLabels.value, onCheckedChange = {
+				viewModel.showVerticesLabels.value = it
+			})
+			Text("Show vertices labels", fontSize = 28.sp, modifier = Modifier.padding(4.dp))
+		}
+		Row {
+			Checkbox(checked = viewModel.showEdgesLabels.value, onCheckedChange = {
+				viewModel.showEdgesLabels.value = it
+			})
+			Text("Show edges labels", fontSize = 28.sp, modifier = Modifier.padding(4.dp))
+		}
+		Row {
+			Checkbox(checked = viewModel.showVerticesDistanceLabels.value, onCheckedChange = {
+				viewModel.showVerticesDistanceLabels.value = it
+			})
+			Text("Show distance labels", fontSize = 28.sp, modifier = Modifier.padding(4.dp))
+		}
 
 		Button(
 			onClick = viewModel::resetGraphView,

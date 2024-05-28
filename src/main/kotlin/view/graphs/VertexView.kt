@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -47,6 +48,15 @@ fun <V> VertexView(
 					.align(Alignment.Center)
 					.offset(0.dp, -viewModel.radius - 10.dp),
 				text = viewModel.label,
+			)
+		}
+		if (viewModel.distanceLabelVisible) {
+			Text(
+				modifier = Modifier
+					.align(Alignment.Center)
+					.offset(0.dp, -viewModel.radius - 10.dp),
+				text = viewModel.distanceLabel,
+				color = MaterialTheme.colors.primary
 			)
 		}
 	}

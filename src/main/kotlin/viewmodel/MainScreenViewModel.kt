@@ -11,9 +11,10 @@ class MainScreenViewModel<GRAPH_TYPE, T>(
 	val graph: Graph<GRAPH_TYPE, T>,
 	private val representationStrategy: RepresentationStrategy
 ) {
-	private val showVerticesLabels = mutableStateOf(false)
-	private val showEdgesLabels = mutableStateOf(false)
-	val graphViewModel = GraphViewModel(graph, showVerticesLabels, showEdgesLabels)
+	internal val showVerticesLabels = mutableStateOf(false)
+	internal val showVerticesDistanceLabels = mutableStateOf(false)
+	internal val showEdgesLabels = mutableStateOf(false)
+	val graphViewModel = GraphViewModel(graph, showVerticesLabels, showEdgesLabels, showVerticesDistanceLabels)
 
 	init {
 		representationStrategy.place(800.0, 600.0, graphViewModel.vertices)
@@ -26,10 +27,6 @@ class MainScreenViewModel<GRAPH_TYPE, T>(
 			it.color = Color.Black
 			it.width = 3.toFloat()
 		}
-	}
-
-	fun setVerticesColor() {
-		representationStrategy.highlight(graphViewModel.vertices)
 	}
 
 	fun highlightBridges() {
@@ -46,11 +43,16 @@ class MainScreenViewModel<GRAPH_TYPE, T>(
 		}
 	}
 
-	fun displayDistanceBellman(startVertex: Vertex<T>?) {
+	fun findDistanceBellman(startVertex: Vertex<T>?) {
 		if (startVertex != null) {
 			colorNotSelected(startVertex)
 
 			val labels = graph.findDistancesBellman(startVertex)
+
+			graphViewModel.vertices.forEach {
+				it.distanceLabel = (labels[it.v]).toString()
+			}
 		}
 	}
+
 }
