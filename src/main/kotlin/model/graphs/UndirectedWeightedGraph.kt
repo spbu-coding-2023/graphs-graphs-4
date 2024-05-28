@@ -8,9 +8,9 @@ import model.functionality.ShortestPathFinder
 
 @Serializable
 open class UndirectedWeightedGraph<T, NUMBER_TYPE : Number> : Graph<Pair<Vertex<T>, NUMBER_TYPE>, T> {
-	@SerialName("WeightedGraph")
-	var adjList: HashMap<Vertex<T>, HashSet<Pair<Vertex<T>, NUMBER_TYPE>>> = HashMap()
-		private set
+	@SerialName("UndirectedWeightedGraph")
+	open var adjList: HashMap<Vertex<T>, HashSet<Pair<Vertex<T>, NUMBER_TYPE>>> = HashMap()
+		internal set
 
 	var size: Int = 0
 		private set

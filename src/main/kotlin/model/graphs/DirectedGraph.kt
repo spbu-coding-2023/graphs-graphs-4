@@ -7,6 +7,9 @@ import model.functionality.StrConCompFinder
 @Serializable
 //@SerialName("DirectedGraph")
 class DirectedGraph<T> : UndirectedGraph<T>() {
+	@SerialName("DirectedGraph")
+	override var adjList: HashMap<Vertex<T>, HashSet<Vertex<T>>> = HashMap()
+		internal set
 
 	override fun addEdge(vertex1: Vertex<T>, vertex2: Vertex<T>) {
 		require(adjList.containsKey(vertex1))

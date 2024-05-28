@@ -7,8 +7,8 @@ import model.functionality.BridgeFinder
 @Serializable
 open class UndirectedGraph<T> : Graph<Vertex<T>, T> {
 	@SerialName("UndirectedGraph")
-	var adjList: HashMap<Vertex<T>, HashSet<Vertex<T>>> = HashMap()
-		private set
+	open var adjList: HashMap<Vertex<T>, HashSet<Vertex<T>>> = HashMap()
+		internal set
 
 	private var size: Int = 0
 
