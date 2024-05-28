@@ -33,24 +33,30 @@ fun <GRAPH_TYPE, T> MainScreen(viewModel: MainScreenViewModel<GRAPH_TYPE, T>) {
 		Scaffold(
 			topBar = {
 				TopAppBar(
-					title = { Text("Graph Application") },
+					title = { Text("Graph the Graph") },
+
 					navigationIcon = {
 						IconButton(onClick = { showMenu = true }) {
-							Icon(Icons.Filled.Menu, contentDescription = "Menu")
+							Icon(Icons.Filled.Menu, contentDescription = "Main Menu")
 						}
+
 						AppDropdownMenu(showMenu, onDismiss = { showMenu = false }) {
 							DropdownMenuItem(onClick = { showGraph = true }) {
 								Text("New Graph")
 							}
+
 							DropdownMenuItem(onClick = { /* код */ }) {
 								Text("Open Graph")
 							}
+
 							DropdownMenuItem(onClick = { /* код */ }) {
 								Text("Save Graph")
 							}
+
 							Divider()
-							DropdownMenuItem(onClick = { /* код */ }) {
-								Text("Exit")
+
+							DropdownMenuItem(onClick = { darkTheme.value = !darkTheme.value }) {
+								Text("Toggle Theme")
 							}
 						}
 					}
@@ -66,16 +72,19 @@ fun <GRAPH_TYPE, T> MainScreen(viewModel: MainScreenViewModel<GRAPH_TYPE, T>) {
 fun GraphAppTheme(darkTheme: Boolean, content: @Composable () -> Unit) {
 	MaterialTheme(
 		colors = if (darkTheme) darkColors() else lightColors(),
+
 		typography = Typography(
 			defaultFontFamily = FontFamily.SansSerif,
 			h1 = TextStyle(fontWeight = FontWeight.Bold, fontSize = 30.sp),
 			body1 = TextStyle(fontSize = 16.sp)
 		),
+
 		shapes = Shapes(
 			small = RoundedCornerShape(4.dp),
 			medium = RoundedCornerShape(8.dp),
 			large = RoundedCornerShape(16.dp)
 		),
+
 		content = content
 	)
 }
@@ -97,21 +106,30 @@ fun <GRAPH_TYPE, T> MainContent(
 	onVertexClick: (Vertex<T>) -> Unit
 ) {
 	Row(horizontalArrangement = Arrangement.spacedBy(20.dp)) {
+		Surface(
+			modifier = Modifier
+				.weight(1f)
+				.fillMaxSize(),
+			color = MaterialTheme.colors.surface
+		) {
+			if (showGraph) {
+				GraphView(viewModel.graphViewModel, onVertexClick)
+			}
+		}
+
 		Column(modifier = Modifier.width(370.dp)) {
 			ToolsPanel(
 				modifier = Modifier
 					.weight(1f)
+					.fillMaxHeight()
 					.background(MaterialTheme.colors.secondary),
+
 				viewModel = viewModel,
 				selectedVertex = currentVertex
 			)
 		}
 
-		Surface(modifier = Modifier.weight(1f)) {
-			if (showGraph) {
-				GraphView(viewModel.graphViewModel, onVertexClick)
-			}
-		}
+
 	}
 }
 

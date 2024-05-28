@@ -1,9 +1,13 @@
 package view.graphs
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import model.graphs.Vertex
 import viewmodel.graphs.GraphViewModel
 
@@ -15,13 +19,18 @@ fun <V, E> GraphView(
 	Box(
 		modifier = Modifier
 			.fillMaxSize()
+			.background(MaterialTheme.colors.background)
+			.padding(16.dp)
 	) {
-		viewModel.vertices.forEach { v ->
-			VertexView(v, Modifier, onClick = onVertexClick)
+		viewModel.edges.forEach { edge ->
+			EdgeView(edge)
 		}
 
-		viewModel.edges.forEach { e ->
-			EdgeView(e, Modifier)
+		viewModel.vertices.forEach { vertex ->
+			VertexView(
+				viewModel = vertex,
+				onClick = onVertexClick
+			)
 		}
 	}
 }

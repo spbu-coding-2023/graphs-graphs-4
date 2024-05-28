@@ -20,7 +20,6 @@ class EdgeViewModel<T>(
 			_width.value = value
 		}
 
-
 	private var _color = mutableStateOf(color)
 	var color: Color
 		get() = _color.value
