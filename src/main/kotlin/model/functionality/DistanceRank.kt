@@ -1,4 +1,4 @@
-package functionality
+package model.functionality
 
 import model.graphs.DirectedGraph
 import model.graphs.Vertex

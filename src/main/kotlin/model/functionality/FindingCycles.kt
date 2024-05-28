@@ -1,4 +1,4 @@
-package functionality
+package model.functionality
 
 import java.util.Stack
 import model.graphs.Vertex
@@ -14,15 +14,13 @@ class JohnsonAlg<T>(val graph: DirectedGraph<T>) {
 
     fun findCycles(startVertex: Vertex<T>): HashSet<List<Vertex<T>>> {
         val relevantSCC = TarjanSCC<T>().findSCC(startVertex, graph)
-        relevantSCC.let {
-            startFindCycles(startVertex, it)
-        }
+        startFindCycles(startVertex, relevantSCC)
         return allCycles
     }
 
     private fun startFindCycles(startVertex: Vertex<T>, subgraph: HashSet<Vertex<T>>) {
         val subGraphNodes = subgraph.associateWith { vertex ->
-            graph.adjList[startVertex]?.filter { subgraph.contains(it) } ?: listOf()
+            graph.adjList[vertex]?.filter { subgraph.contains(it) } ?: listOf()
         }
         subgraph.forEach { node ->
             blocked[node] = false
@@ -31,26 +29,37 @@ class JohnsonAlg<T>(val graph: DirectedGraph<T>) {
         dfsCycleFind(startVertex, startVertex, subGraphNodes)
     }
 
-    private fun dfsCycleFind(start: Vertex<T>, current: Vertex<T>, subGraph: Map<Vertex<T>, List<Vertex<T>>>) {
+    private fun dfsCycleFind(start: Vertex<T>, current: Vertex<T>, subGraph: Map<Vertex<T>, List<Vertex<T>>>): Boolean {
         stack.add(current)
         blocked[current] = true
+        var foundCycle = false
 
         for (neighbor in subGraph[current] ?: emptyList()) {
             if (neighbor == start && stack.size > 1) {
                 allCycles.add(ArrayList(stack))
+                foundCycle = true
             } else if (blocked[neighbor] == false) {
-                dfsCycleFind(start, neighbor, subGraph)
-            } else {
-                blockedMap[neighbor]?.add(current)
+                val gotCycle = dfsCycleFind(start, neighbor, subGraph)
+                foundCycle = foundCycle || gotCycle
             }
         }
 
-        processUnblocking(current)
+        if(foundCycle) unblock(current)
+        else{
+            for (neighbor in subGraph[current] ?: emptyList()) {
+                if (!blockedMap[neighbor]!!.contains(current)) {
+                    blockedMap[neighbor]!!.add(current)
+                }
+            }
+        }
+        stack.pop()
+        return foundCycle
     }
 
 
-    private fun processUnblocking(current: Vertex<T>) {
+    /*private fun processUnblocking(current: Vertex<T>) {
         val queue = ArrayDeque<Vertex<T>>()
+        stack.pop()
         queue.add(current)
 
         while (queue.isNotEmpty()) {
@@ -63,7 +72,16 @@ class JohnsonAlg<T>(val graph: DirectedGraph<T>) {
                 }
             }
             blockedMap[vertex]?.clear()
+        }*/
+
+    private fun unblock(vertex: Vertex<T>){
+        blocked[vertex] = false
+        if(blockedMap[vertex]?.size != 0){
+            blockedMap[vertex]?.forEach{
+                if(blocked[it] == true) unblock(it)
+            }
         }
+        blockedMap[vertex]?.clear()
     }
 
 
@@ -81,10 +99,17 @@ class TarjanSCC<T> {
         return dfsTarjan(vertex, graph)
     }
 
+    fun containsInAnySCC(allSCCs: HashSet<HashSet<Vertex<T>>>, v: Vertex<T>):Boolean {
+        for(scc in allSCCs){
+            if(scc.contains(v)) return false
+        }
+        return true
+    }
+
     fun findSCCs(graph: DirectedGraph<T>): HashSet<HashSet<Vertex<T>>>{
         val allSCCs: HashSet<HashSet<Vertex<T>>> = HashSet<HashSet<Vertex<T>>>()
         for(v in graph.adjList.keys){
-            if(!visited.contains(v)) allSCCs.add(dfsTarjan(v, graph))
+            if(containsInAnySCC(allSCCs, v)) allSCCs.add(dfsTarjan(v, graph))
         }
         return allSCCs
     }
@@ -103,7 +128,7 @@ class TarjanSCC<T> {
                 lowest[vertex] = min(lowest[vertex]!!, lowest[it]!!)
                 //Говорят что это крайне желательно
             }
-            else if(!processed.contains(it) && stack.contains(it)){
+            else if(stack.contains(it)){
                 lowest[vertex] = min(lowest[vertex]!!, num[it]!!)
                 //И здесь то же самое
             }
