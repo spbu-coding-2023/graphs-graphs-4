@@ -1,11 +1,11 @@
 package model.functionality
 
-import model.graphs.UndirectedWeightedGraph
+import model.graphs.Graph
 import model.graphs.Vertex
 import kotlin.Double.Companion.NEGATIVE_INFINITY
 import kotlin.Double.Companion.POSITIVE_INFINITY
 
-class ShortestPathFinder<T, NUMBER_TYPE : Number>(private val graph: UndirectedWeightedGraph<T, NUMBER_TYPE>) {
+class ShortestPathFinder<GRAPH_TYPE, T>(private val graph: Graph<GRAPH_TYPE, T>) {
 	operator fun Number.plus(other: Number): Number {
 		return when (this) {
 			is Long -> this.toLong() + other.toLong()
@@ -30,13 +30,30 @@ class ShortestPathFinder<T, NUMBER_TYPE : Number>(private val graph: UndirectedW
 
 	@Suppress("NestedBlockDepth")
 	internal fun bellmanFord(start: Vertex<T>): Map<Vertex<T>, Double> {
-		val dist = graph.adjList.mapValues { POSITIVE_INFINITY }.toMutableMap()
+		val dist: MutableMap<Vertex<T>, Double> = mutableMapOf()
+		graph.vertices().forEach {
+			dist[it] = POSITIVE_INFINITY
+		}
+
 		dist[start] = 0.0
 
 		@Suppress("UnusedPrivateProperty")
+		@Suppress("DuplicatedCode")
 		for (i in 1..graph.size) {
-			for ((vertex, edges) in graph.adjList) {
-				for ((neighbor, weight) in edges) {
+			for (vertex in graph.vertices()) {
+				for (neighbors in graph.getNeighbors(vertex)) {
+					val weight: Number
+					val neighbor: Vertex<T>
+
+					if (neighbors is Pair<*, *>) {
+						weight = neighbors.second as Number
+						neighbor = neighbors.first as Vertex<T>
+					} else {
+						weight = 1
+						neighbor = neighbors as Vertex<T>
+					}
+
+
 					val distVertex = dist[vertex]
 					val distNeighbor = dist[neighbor] ?: POSITIVE_INFINITY
 
@@ -49,9 +66,20 @@ class ShortestPathFinder<T, NUMBER_TYPE : Number>(private val graph: UndirectedW
 			}
 		}
 
-		// Check for negative-weight cycles
-		for ((vertex, edges) in graph.adjList) {
-			for ((neighbor, weight) in edges) {
+		@Suppress("DuplicatedCode")
+		for (vertex in graph.vertices()) {
+			for (neighbors in graph.getNeighbors(vertex)) {
+				val weight: Number
+				val neighbor: Vertex<T>
+
+				if (neighbors is Pair<*, *>) {
+					weight = neighbors.second as Number
+					neighbor = neighbors.first as Vertex<T>
+				} else {
+					weight = 1
+					neighbor = neighbors as Vertex<T>
+				}
+
 				val distVertex = dist[vertex]
 				val distNeighbor = dist[neighbor] ?: POSITIVE_INFINITY
 

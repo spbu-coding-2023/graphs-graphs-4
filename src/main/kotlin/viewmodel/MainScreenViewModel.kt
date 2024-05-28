@@ -49,6 +49,8 @@ class MainScreenViewModel<GRAPH_TYPE, T>(
 	fun displayDistanceBellman(startVertex: Vertex<T>?) {
 		if (startVertex != null) {
 			colorNotSelected(startVertex)
+
+			val labels = graph.findDistancesBellman(startVertex)
 		}
 	}
 }

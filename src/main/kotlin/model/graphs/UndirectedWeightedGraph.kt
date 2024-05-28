@@ -1,14 +1,14 @@
 package model.graphs
 
 import model.functionality.BridgeFinder
-import model.functionality.ShortestPathFinder
 
 open class UndirectedWeightedGraph<T, NUMBER_TYPE : Number> : Graph<Pair<Vertex<T>, NUMBER_TYPE>, T> {
 	var adjList: HashMap<Vertex<T>, HashSet<Pair<Vertex<T>, NUMBER_TYPE>>> = HashMap()
 		private set
 
-	var size: Int = 0
-		private set
+	private var _size: Int = 0
+	override val size: Int
+		get() = _size
 
 	@Suppress("DuplicatedCode")
 	override fun addVertex(key: T): Vertex<T> {
@@ -21,7 +21,7 @@ open class UndirectedWeightedGraph<T, NUMBER_TYPE : Number> : Graph<Pair<Vertex<
 		val vertex = Vertex(key)
 		adjList[vertex] = HashSet()
 
-		size += 1
+		_size += 1
 
 		return vertex
 	}
@@ -33,7 +33,7 @@ open class UndirectedWeightedGraph<T, NUMBER_TYPE : Number> : Graph<Pair<Vertex<
 
 		adjList[vertex] = HashSet()
 
-		size += 1
+		_size += 1
 
 		return vertex
 	}
@@ -70,11 +70,6 @@ open class UndirectedWeightedGraph<T, NUMBER_TYPE : Number> : Graph<Pair<Vertex<
 		for (edge in edges) {
 			addEdge(edge)
 		}
-	}
-
-	fun findShortestDistance(start: Vertex<T>): Map<Vertex<T>, Double> {
-		val output = ShortestPathFinder(this).bellmanFord(start)
-		return output
 	}
 
 	override fun vertices(): Set<Vertex<T>> {
