@@ -1,9 +1,9 @@
 package model.graphs
 
-/*import kotlinx.serialization.Serializable
+import kotlinx.serialization.Serializable
 import model.functionality.iograph.GraphSerializer
 
-@Serializable(with = GraphSerializer::class)*/
+@Serializable(with = GraphSerializer::class)
 interface Graph<GRAPH_TYPE, T> : Iterable<Vertex<T>> {
 	fun addVertex(key: T): Vertex<T>
 
@@ -18,6 +18,10 @@ interface Graph<GRAPH_TYPE, T> : Iterable<Vertex<T>> {
 	fun edges(): Set<GraphEdge<T>>
 
 	fun findBridges(): Set<Pair<Vertex<T>, Vertex<T>>>
+
+	fun findSCC(): Set<Set<Vertex<T>>>
+
+	fun findMinSpanTree(): Set<GraphEdge<T>>?
 
 	override fun iterator(): Iterator<Vertex<T>>
 

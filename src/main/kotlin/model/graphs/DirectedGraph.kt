@@ -32,7 +32,12 @@ class DirectedGraph<T> : UndirectedGraph<T>() {
 		}
 	}
 
-	fun findSCC(): Set<Set<Vertex<T>>> {
+
+	override fun findSCC(): Set<Set<Vertex<T>>> {
 		return StrConCompFinder(this).sccSearch()
+	}
+
+	override fun findMinSpanTree(): Set<GraphEdge<T>>? {
+		return null
 	}
 }

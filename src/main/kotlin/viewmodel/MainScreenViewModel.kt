@@ -2,17 +2,22 @@ package viewmodel
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
+import model.functionality.iograph.ReadWriteGraph
 import model.graphs.Graph
 import viewmodel.graphs.GraphViewModel
 import viewmodel.graphs.RepresentationStrategy
+import java.awt.FileDialog
+import java.awt.Frame
+import java.io.File
 
 class MainScreenViewModel<GRAPH_TYPE, T>(
-	val graph: Graph<GRAPH_TYPE, T>,
+	var graph: Graph<GRAPH_TYPE, T>,
 	private val representationStrategy: RepresentationStrategy
 ) {
 	private val showVerticesLabels = mutableStateOf(false)
 	private val showEdgesLabels = mutableStateOf(false)
-	val graphViewModel = GraphViewModel(graph, showVerticesLabels, showEdgesLabels)
+	var graphViewModel = GraphViewModel(graph, showVerticesLabels, showEdgesLabels)
+	var file: File? = null
 
 	init {
 		representationStrategy.place(800.0, 600.0, graphViewModel.vertices)
@@ -29,6 +34,32 @@ class MainScreenViewModel<GRAPH_TYPE, T>(
 
 	fun setVerticesColor() {
 		representationStrategy.highlight(graphViewModel.vertices)
+	}
+
+	fun openFile() {
+		val dialog = FileDialog(Frame(), "Select Graph File", FileDialog.LOAD)
+		dialog.isVisible = true
+		if (dialog.file != null) {
+			file = File("${dialog.directory}${dialog.file}")
+			val graphType = ReadWriteGraph().findType(file!!) ?: return
+			graph = ReadWriteGraph().read(file!!)
+			graphViewModel = GraphViewModel(graph, showVerticesLabels, showEdgesLabels)
+		}
+
+	}
+
+	fun highlightSCC() {
+		val scc = graph.findSCC()
+		representationStrategy.highlightSCC(scc, *graphViewModel.vertices.toTypedArray())
+	}
+
+	fun highlightMinSpanTree() {
+		val minSpanTree = graph.findMinSpanTree()
+		if (minSpanTree == null) {
+			return
+		} else {
+			representationStrategy.highlightMinSpanTree(minSpanTree, *graphViewModel.edges.toTypedArray())
+		}
 	}
 
 	fun highlightBridges() {

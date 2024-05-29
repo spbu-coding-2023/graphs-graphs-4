@@ -8,7 +8,12 @@ import model.graphs.Graph
 import java.io.File
 
 class ReadWriteGraph {
-    private val format = Json { isLenient = true; prettyPrint = true; allowStructuredMapKeys = true }
+    private val format = Json {
+        isLenient = true
+        prettyPrint = true
+        ignoreUnknownKeys = true
+        allowStructuredMapKeys = true
+    }
 
     @OptIn(ExperimentalSerializationApi::class)
     fun <GRAPH_T, K>write(file: File, graph: Graph<GRAPH_T, K>) {
@@ -18,7 +23,8 @@ class ReadWriteGraph {
     }
 
     fun findType(file: File): GraphType? {
-        val type = file.useLines { it.elementAtOrNull(2) } ?: return null
+        val type = file.useLines { it.elementAtOrNull(1) } ?: return null
+        println("file($file) type finded: $type")
         return when {
             GraphType.UNDIRECTED_GRAPH.type in type -> GraphType.UNDIRECTED_GRAPH
             GraphType.DIRECTED_GRAPH.type in type -> GraphType.DIRECTED_GRAPH
@@ -31,6 +37,7 @@ class ReadWriteGraph {
     @OptIn(ExperimentalSerializationApi::class)
     fun <GRAPH_T, K>read(file: File): Graph<GRAPH_T, K> {
         val input =  file.inputStream()
+        println("stream: ${input}")
         val graph = format.decodeFromStream<Graph<GRAPH_T, K>>(input)
         input.close()
 

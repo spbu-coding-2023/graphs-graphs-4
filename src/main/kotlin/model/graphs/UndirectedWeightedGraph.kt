@@ -101,6 +101,14 @@ open class UndirectedWeightedGraph<T, NUMBER_TYPE : Number> : Graph<Pair<Vertex<
 		return BridgeFinder<Pair<Vertex<T>, NUMBER_TYPE>, T>().findBridges(this)
 	}
 
+	override fun findSCC(): Set<Set<Vertex<T>>> {
+		return emptySet()//StrConCompFinder(this as UndirectedGraph<T>).sccSearch()
+	}
+
+	override fun findMinSpanTree(): Set<GraphEdge<T>>? {
+		return MinSpanTreeFinder(this).mstSearch()
+	}
+
 	override fun iterator(): Iterator<Vertex<T>> {
 		return this.adjList.keys.iterator()
 	}
@@ -109,9 +117,5 @@ open class UndirectedWeightedGraph<T, NUMBER_TYPE : Number> : Graph<Pair<Vertex<
 		return adjList[vertex] ?: throw IllegalArgumentException(
 			"Can't get neighbors for vertex $vertex that is not in the graph"
 		)
-	}
-
-	fun mstSearch(): Set<WeightedEdge<T, NUMBER_TYPE>>? {
-		return MinSpanTreeFinder(this).mstSearch()
 	}
 }

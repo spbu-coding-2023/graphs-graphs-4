@@ -3,6 +3,7 @@ package model.graphs
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import model.functionality.BridgeFinder
+import model.functionality.StrConCompFinder
 
 @Serializable
 open class UndirectedGraph<T> : Graph<Vertex<T>, T> {
@@ -76,6 +77,14 @@ open class UndirectedGraph<T> : Graph<Vertex<T>, T> {
 
 	override fun findBridges(): Set<Pair<Vertex<T>, Vertex<T>>> {
 		return BridgeFinder<Vertex<T>, T>().findBridges(this)
+	}
+
+	override fun findSCC(): Set<Set<Vertex<T>>> {
+		return StrConCompFinder(this).sccSearch()
+	}
+
+	override fun findMinSpanTree(): Set<GraphEdge<T>>? {
+		return null
 	}
 
 	override fun vertices(): Set<Vertex<T>> {

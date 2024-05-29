@@ -1,12 +1,12 @@
 package model.functionality
 
-import model.graphs.DirectedGraph
 import model.graphs.TarjanAlgoVertexStats
+import model.graphs.UndirectedGraph
 import model.graphs.Vertex
-import java.util.Stack
+import java.util.*
 import kotlin.math.min
 
-class StrConCompFinder<T>(private val graph: DirectedGraph<T>) {
+class StrConCompFinder<T>(private val graph: UndirectedGraph<T>) {
     private val strConCompSet = mutableSetOf<Set<Vertex<T>>>()
 
     fun sccSearch(): Set<Set<Vertex<T>>> {

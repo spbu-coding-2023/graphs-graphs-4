@@ -35,7 +35,7 @@ fun <GRAPH_TYPE, T> MainScreen(viewModel: MainScreenViewModel<GRAPH_TYPE, T>) {
 								Text("New Graph")
 							}
 
-							DropdownMenuItem(onClick = { /* код */ }) {
+							DropdownMenuItem(onClick = { viewModel.openFile() }) {
 								Text("Open Graph")
 							}
 
@@ -92,10 +92,27 @@ fun <GRAPH_TYPE, T> ToolsPanel(
 		}
 
 		Button(
+			onClick = viewModel::highlightSCC,
+			enabled = true,
+		) {
+			Text(text = "Find find scc")
+		}
+
+		Button(
+			onClick = viewModel::highlightMinSpanTree,
+			enabled = true,
+		) {
+			Text(text = "Find min spanning tree")
+		}
+
+		Button(
 			onClick = viewModel::resetGraphView,
 			enabled = true,
 		) {
 			Text(text = "Reset default settings")
+		}
+		if (viewModel.file?.exists() != null) {
+			Text("Selected File: ${viewModel.file}")
 		}
 	}
 }

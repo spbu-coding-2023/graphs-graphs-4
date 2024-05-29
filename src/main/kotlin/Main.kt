@@ -12,7 +12,7 @@ import viewmodel.graphs.CircularPlacementStrategy
 
 
 val sampleGraph: Graph<Vertex<Int>, Int> = UndirectedGraph<Int>().apply {
-	for (i in 1..10) {
+	for (i in 1..12) {
 		addVertex(i)
 	}
 
