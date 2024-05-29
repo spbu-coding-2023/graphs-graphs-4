@@ -15,7 +15,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import model.graphs.Vertex
 import viewmodel.graphs.VertexViewModel
 
@@ -47,6 +52,7 @@ fun <V> VertexView(
 		if (viewModel.isKeyLabelVisible) {
 			Text(
 				text = viewModel.label,
+				overflow = TextOverflow.Visible,
 				style = MaterialTheme.typography.body1.copy(color = MaterialTheme.colors.onPrimary),
 				modifier = Modifier.padding(8.dp)
 			)
@@ -54,9 +60,20 @@ fun <V> VertexView(
 
 		if (viewModel.isDistLabelVisible) {
 			Text(
+				modifier = Modifier
+					.offset(
+						1.dp,
+						(48).dp
+					),
+				softWrap = false,
 				text = viewModel.distanceLabel,
-				style = MaterialTheme.typography.body1.copy(color = MaterialTheme.colors.onBackground),
-				modifier = Modifier.padding(8.dp)
+				overflow = TextOverflow.Visible,
+				style = TextStyle(
+					color = MaterialTheme.colors.onBackground,
+					fontSize = 24.sp,
+					fontFamily = FontFamily.SansSerif,
+					textAlign = TextAlign.Left
+				)
 			)
 		}
 	}
