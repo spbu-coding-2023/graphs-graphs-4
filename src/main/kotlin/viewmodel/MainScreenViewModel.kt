@@ -16,12 +16,18 @@ class MainScreenViewModel<GRAPH_TYPE, T>(
 	internal val showEdgesLabels = mutableStateOf(false)
 	val graphViewModel = GraphViewModel(graph, showVerticesLabels, showEdgesLabels, showVerticesDistanceLabels)
 
+	@Suppress("MagicNumber")
+	private val width = 800.0
+
+	@Suppress("MagicNumber")
+	private val height = 600.0
+
 	init {
-		representationStrategy.place(800.0, 600.0, graphViewModel.vertices)
+		representationStrategy.place(width, height, graphViewModel.vertices)
 	}
 
 	fun resetGraphView() {
-		representationStrategy.place(800.0, 600.0, graphViewModel.vertices)
+		representationStrategy.place(width, height, graphViewModel.vertices)
 		graphViewModel.vertices.forEach { v -> v.color = Color.DarkGray }
 		graphViewModel.edges.forEach {
 			it.color = Color.Black

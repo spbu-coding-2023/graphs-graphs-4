@@ -5,6 +5,7 @@ import model.graphs.Vertex
 import kotlin.Double.Companion.NEGATIVE_INFINITY
 import kotlin.Double.Companion.POSITIVE_INFINITY
 
+@Suppress("CyclomaticComplexMethod")
 class ShortestPathFinder<GRAPH_TYPE, T>(private val graph: Graph<GRAPH_TYPE, T>) {
 	operator fun Number.plus(other: Number): Number {
 		return when (this) {

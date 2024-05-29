@@ -11,6 +11,7 @@ import androidx.compose.ui.unit.dp
 import model.graphs.Vertex
 import viewmodel.graphs.GraphViewModel
 
+@Suppress("FunctionNaming")
 @Composable
 fun <V, E> GraphView(
 	viewModel: GraphViewModel<V, E>,

@@ -1,6 +1,11 @@
 package model.functionality
 
-import model.graphs.*
+import model.graphs.DirectedGraph
+import model.graphs.DirectedWeightedGraph
+import model.graphs.Graph
+import model.graphs.UndirectedGraph
+import model.graphs.UndirectedWeightedGraph
+import model.graphs.Vertex
 import kotlin.math.min
 
 class BridgeFinder<GRAPH_TYPE, T> {
@@ -37,6 +42,7 @@ class BridgeFinder<GRAPH_TYPE, T> {
 		return bridges
 	}
 
+	@Suppress("CyclomaticComplexMethod", "NestedBlockDepth")
 	private fun dfsRecursive(graph: Graph<GRAPH_TYPE, T>, vertex: Vertex<T>) {
 		discoveryTime[vertex] = timer
 		low[vertex] = timer
@@ -97,4 +103,3 @@ class BridgeFinder<GRAPH_TYPE, T> {
 		}
 	}
 }
-

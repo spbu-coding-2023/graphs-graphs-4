@@ -1,17 +1,47 @@
 package view
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.Button
+import androidx.compose.material.Checkbox
+import androidx.compose.material.CheckboxDefaults
+import androidx.compose.material.Divider
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Shapes
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
+import androidx.compose.material.Typography
+import androidx.compose.material.darkColors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.runtime.*
+import androidx.compose.material.lightColors
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -21,7 +51,7 @@ import model.graphs.Vertex
 import view.graphs.GraphView
 import viewmodel.MainScreenViewModel
 
-
+@Suppress("FunctionNaming")
 @Composable
 fun <GRAPH_TYPE, T> MainScreen(viewModel: MainScreenViewModel<GRAPH_TYPE, T>) {
 	var showMenu by remember { mutableStateOf(false) }
@@ -68,10 +98,15 @@ fun <GRAPH_TYPE, T> MainScreen(viewModel: MainScreenViewModel<GRAPH_TYPE, T>) {
 	}
 }
 
+@Suppress("FunctionNaming")
 @Composable
 fun GraphAppTheme(darkTheme: Boolean, content: @Composable () -> Unit) {
+	val darkThemeColors = darkColors(
+		background = Color.White
+	)
+
 	MaterialTheme(
-		colors = if (darkTheme) darkColors() else lightColors(),
+		colors = if (darkTheme) darkThemeColors else lightColors(),
 
 		typography = Typography(
 			defaultFontFamily = FontFamily.SansSerif,
@@ -89,6 +124,7 @@ fun GraphAppTheme(darkTheme: Boolean, content: @Composable () -> Unit) {
 	)
 }
 
+@Suppress("FunctionNaming")
 @Composable
 fun AppDropdownMenu(expanded: Boolean, onDismiss: () -> Unit, content: @Composable ColumnScope.() -> Unit) {
 	DropdownMenu(
@@ -98,6 +134,7 @@ fun AppDropdownMenu(expanded: Boolean, onDismiss: () -> Unit, content: @Composab
 	)
 }
 
+@Suppress("FunctionNaming")
 @Composable
 fun <GRAPH_TYPE, T> MainContent(
 	viewModel: MainScreenViewModel<GRAPH_TYPE, T>,
@@ -133,6 +170,7 @@ fun <GRAPH_TYPE, T> MainContent(
 	}
 }
 
+@Suppress("FunctionNaming")
 @Composable
 fun <GRAPH_TYPE, T> ToolsPanel(
 	viewModel: MainScreenViewModel<GRAPH_TYPE, T>,
@@ -203,6 +241,7 @@ fun <GRAPH_TYPE, T> ToolsPanel(
 	}
 }
 
+@Suppress("FunctionNaming")
 @Composable
 fun ToggleRow(label: String, checked: Boolean, onCheckedChange: (Boolean) -> Unit) {
 	Row(

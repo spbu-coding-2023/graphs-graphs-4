@@ -11,7 +11,7 @@ class EdgeViewModel<T>(
 	color: Color,
 	width: Float,
 	private val e: GraphEdge<T>,
-	private val _labelVisible: State<Boolean>,
+	private val labelVisibility: State<Boolean>,
 ) {
 	private var _width = mutableStateOf(width)
 	var width: Float
@@ -30,6 +30,6 @@ class EdgeViewModel<T>(
 	val label
 		get() = e.weight.toString()
 
-	val labelVisible
-		get() = _labelVisible.value
+	val islWeightLabelVisible
+		get() = labelVisibility.value
 }

@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.unit.dp
 import viewmodel.graphs.EdgeViewModel
 
+@Suppress("FunctionNaming")
 @Composable
 fun <T> EdgeView(
 	viewModel: EdgeViewModel<T>,
@@ -40,7 +41,7 @@ fun <T> EdgeView(
 			)
 		}
 
-		if (viewModel.labelVisible) {
+		if (viewModel.islWeightLabelVisible) {
 			Text(
 				modifier = Modifier
 					.offset(

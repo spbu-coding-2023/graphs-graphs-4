@@ -3,40 +3,40 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import model.graphs.Graph
-import model.graphs.UndirectedGraph
+import model.graphs.UndirectedWeightedGraph
 import model.graphs.Vertex
 import view.MainScreen
 import viewmodel.MainScreenViewModel
 import viewmodel.graphs.CircularPlacementStrategy
 
-
-val sampleGraph: Graph<Vertex<Int>, Int> = UndirectedGraph<Int>().apply {
-	for (i in 1..10) {
+@Suppress("MagicNumber")
+val sampleGraph: Graph<Pair<Vertex<Int>, Int>, Int> = UndirectedWeightedGraph<Int, Int>().apply {
+	for (i in 1..25) {
 		addVertex(i)
 	}
 
 	val nodes = arrayListOf(adjList.keys.toList())
 
-	addEdge(nodes[0][0], nodes[0][1])
-	addEdge(nodes[0][1], nodes[0][2])
-	addEdge(nodes[0][2], nodes[0][3])
-	addEdge(nodes[0][0], nodes[0][6])
-	addEdge(nodes[0][6], nodes[0][7])
-	addEdge(nodes[0][7], nodes[0][8])
-	addEdge(nodes[0][2], nodes[0][8])
-	addEdge(nodes[0][3], nodes[0][4])
-	addEdge(nodes[0][4], nodes[0][5])
-	addEdge(nodes[0][4], nodes[0][9])
+	for (i in 0..24) {
+		val v1 = (0..24).random()
+		val v2 = (0..24).random()
+		val weight = (1..50).random()
+
+		addEdge(nodes[0][v1], nodes[0][v2], weight)
+	}
 }
 
 @Composable
 @Preview
+@Suppress("FunctionNaming")
 fun App() {
 	MainScreen(MainScreenViewModel(sampleGraph, CircularPlacementStrategy()))
 }
 
 fun main() = application {
-	Window(onCloseRequest = ::exitApplication) {
+	Window(
+		onCloseRequest = ::exitApplication,
+	) {
 		App()
 	}
 }

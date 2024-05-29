@@ -1,7 +1,6 @@
 package view.graphs
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Box
@@ -20,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import model.graphs.Vertex
 import viewmodel.graphs.VertexViewModel
 
-
+@Suppress("FunctionNaming")
 @Composable
 fun <V> VertexView(
 	viewModel: VertexViewModel<V>,
@@ -33,7 +32,6 @@ fun <V> VertexView(
 			.offset(viewModel.x, viewModel.y)
 			.size(viewModel.radius * 2, viewModel.radius * 2)
 			.background(viewModel.color, CircleShape)
-			.border(2.dp, MaterialTheme.colors.onPrimary, CircleShape)
 			.clickable {
 				viewModel.color = Color.Red
 				onClick(viewModel.v)
@@ -46,7 +44,7 @@ fun <V> VertexView(
 			}
 
 	) {
-		if (viewModel.labelVisible) {
+		if (viewModel.isKeyLabelVisible) {
 			Text(
 				text = viewModel.label,
 				style = MaterialTheme.typography.body1.copy(color = MaterialTheme.colors.onPrimary),
@@ -54,11 +52,11 @@ fun <V> VertexView(
 			)
 		}
 
-		if (viewModel.distanceLabelVisible) {
+		if (viewModel.isDistLabelVisible) {
 			Text(
 				text = viewModel.distanceLabel,
 				style = MaterialTheme.typography.body1.copy(color = MaterialTheme.colors.onBackground),
-				modifier = Modifier.align(Alignment.TopCenter).padding(top = 6.dp)
+				modifier = Modifier.padding(8.dp)
 			)
 		}
 	}
