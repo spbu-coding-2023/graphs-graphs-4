@@ -1,5 +1,7 @@
 package model.graphs
 
+import model.functionality.DistanceRank
+
 class DirectedGraph<T> : UndirectedGraph<T>() {
 
 	override fun addEdge(vertex1: Vertex<T>, vertex2: Vertex<T>) {
@@ -21,5 +23,9 @@ class DirectedGraph<T> : UndirectedGraph<T>() {
 		for (edge in edges) {
 			addEdge(edge)
 		}
+	}
+
+	fun distanceRank(): Map<Vertex<T>, Double> {
+		return DistanceRank<T>(this).rank()
 	}
 }
