@@ -1,8 +1,10 @@
 import io.gitlab.arturbosch.detekt.Detekt
+import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
 plugins {
 	kotlin("jvm") version "1.9.23"
 	id("io.gitlab.arturbosch.detekt").version("1.23.6")
+	id("org.jetbrains.compose") version "1.6.1"
 	jacoco
 }
 
@@ -11,9 +13,12 @@ version = "1.0-SNAPSHOT"
 
 repositories {
 	mavenCentral()
+	maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+	google()
 }
 
 dependencies {
+	implementation(compose.desktop.currentOs)
 	testImplementation(kotlin("test"))
 }
 
@@ -47,16 +52,39 @@ tasks.test {
 
 tasks.withType<Detekt>().configureEach {
 	reports {
-		html.required.set(true) // observe findings in your browser with structure and code snippets
-		sarif.required.set(true) // standardized SARIF format (https://sarifweb.azurewebsites.net/) to support integrations with GitHub Code Scanning
+		html.required.set(true)
+		sarif.required.set(true) // SARIF to support integrations with GitHub Code Scanning
 	}
 }
 
 tasks.jacocoTestReport {
 	dependsOn(tasks.test)
+
+	classDirectories.setFrom(
+		files(classDirectories.files.map {
+			fileTree(it) {
+				exclude("**/view/**", "**/viewmodel/**", "**/app/**")
+			}
+		})
+	)
+
 	reports {
 		xml.required = false
 		csv.required = true
 		html.required = true
+	}
+
+
+}
+
+compose.desktop {
+	application {
+		mainClass = "MainKt"
+
+		nativeDistributions {
+			targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
+			packageName = "graphs-4"
+			packageVersion = "1.0.0"
+		}
 	}
 }
