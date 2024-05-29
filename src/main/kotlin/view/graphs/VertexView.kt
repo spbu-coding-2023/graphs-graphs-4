@@ -58,12 +58,13 @@ fun <V> VertexView(
 			)
 		}
 
+		@Suppress("MagicNumber")
 		if (viewModel.isDistLabelVisible) {
 			Text(
 				modifier = Modifier
 					.offset(
 						1.dp,
-						(48).dp
+						(48).dp // Twice the size of the font.
 					),
 				softWrap = false,
 				text = viewModel.distanceLabel,

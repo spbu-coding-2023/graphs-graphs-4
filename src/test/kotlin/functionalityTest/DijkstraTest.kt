@@ -3,9 +3,8 @@ package functionalityTest
 import model.functionality.ShortestPathFinder
 import model.graphs.UndirectedWeightedGraph
 import model.graphs.Vertex
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-
-import org.junit.jupiter.api.Assertions.*
 
 class DijkstraTest {
     private val graph = UndirectedWeightedGraph<Int, Double>()
