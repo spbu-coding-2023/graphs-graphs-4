@@ -1,6 +1,7 @@
 package model.graphs
 
 import model.functionality.JohnsonAlg
+import model.functionality.DistanceRank
 
 class DirectedGraph<T> : UndirectedGraph<T>() {
 
@@ -25,7 +26,11 @@ class DirectedGraph<T> : UndirectedGraph<T>() {
 		}
 	}
 
-	fun cyclesForVertex(vertex: Vertex<T>): HashSet<List<Vertex<T>>>{
+	fun cyclesForVertex(vertex: Vertex<T>): HashSet<List<Vertex<T>>> {
 		return JohnsonAlg(this).findCycles(vertex)
+	}
+
+	fun distanceRank(): Map<Vertex<T>, Double> {
+		return DistanceRank<T>(this).rank()
 	}
 }
