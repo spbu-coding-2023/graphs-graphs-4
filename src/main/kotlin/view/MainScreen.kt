@@ -75,7 +75,7 @@ fun <GRAPH_TYPE, T> MainScreen(viewModel: MainScreenViewModel<GRAPH_TYPE, T>) {
 								Text("New Graph")
 							}
 
-							DropdownMenuItem(onClick = { /* код */ }) {
+							DropdownMenuItem(onClick = { viewModel.openFile() }) {
 								Text("Open Graph")
 							}
 
@@ -87,6 +87,9 @@ fun <GRAPH_TYPE, T> MainScreen(viewModel: MainScreenViewModel<GRAPH_TYPE, T>) {
 
 							DropdownMenuItem(onClick = { darkTheme.value = !darkTheme.value }) {
 								Text("Toggle Theme")
+
+							DropdownMenuItem(onClick = { viewModel.closeApp() }) {
+								Text("Exit")
 							}
 						}
 					}
@@ -165,8 +168,6 @@ fun <GRAPH_TYPE, T> MainContent(
 				selectedVertex = currentVertex
 			)
 		}
-
-
 	}
 }
 
@@ -210,6 +211,26 @@ fun <GRAPH_TYPE, T> ToolsPanel(
 			Spacer(modifier = Modifier.width(8.dp))
 			Text(text = "Find Shortest Distance")
 		}
+
+        Button(
+            onClick = viewModel::higlightMinSpanTree,
+            enabled = true,
+            modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
+        ) {
+            Icon(Icons.Default.Search, contentDescription = "Find the shortest distance")
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(text = "Find Min Span Tree")
+        }
+
+        Button(
+            onClick = viewModel::highlightSCC,
+            enabled = true,
+            modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
+        ) {
+            Icon(Icons.Default.Search, contentDescription = "Find the shortest distance")
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(text = "Find SCC")
+        }
 
 		ToggleRow(
 			label = "Show Vertices Labels",

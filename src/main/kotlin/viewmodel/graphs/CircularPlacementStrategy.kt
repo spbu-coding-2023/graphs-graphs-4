@@ -2,6 +2,7 @@ package viewmodel.graphs
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import model.graphs.GraphEdge
 import model.graphs.Vertex
 import kotlin.math.cos
 import kotlin.math.min
@@ -48,6 +49,47 @@ class CircularPlacementStrategy : RepresentationStrategy {
 				edge.width = 6.toFloat()
 			}
 		}
+	}
+
+
+	override fun <T> colorVertices(vararg vertices: VertexViewModel<T>, color: Color) {
+		for (vertex in vertices) {
+			vertex.color = color
+		}
+	}
+
+	override fun <T> colorEdges(vararg edges: EdgeViewModel<T>, color: Color) {
+		for (edge in edges) {
+			edge.color = color
+		}
+	}
+
+	override fun <T> highlightSCC(scc: Set<Set<Vertex<T>>>, vararg vertices: VertexViewModel<T>) {
+		for (component in scc) {
+			val array = Array(256) {it}
+			val color = Color(array.random(), array.random(), array.random())
+
+			for (vertex in vertices) {
+				if (component.contains(vertex.v)) {
+					vertex.color = color
+				}
+			}
+		}
+	}
+
+	override fun <T> highlightMinSpanTree(minSpanTree: Set<GraphEdge<T>>, vararg edges: EdgeViewModel<T>) {
+		val color = Color.Blue
+		for (edge in minSpanTree) {
+			val u = edge.from
+			val v = edge.to
+			for (edgeVM in edges) {
+				if (edgeVM.u.v == u && edgeVM.v.v == v) {
+					edgeVM.color = color
+					edgeVM.width = 6.toFloat()
+				}
+			}
+		}
+
 	}
 
 	private fun Pair<Double, Double>.rotate(pivot: Pair<Double, Double>, angle: Double): Pair<Double, Double> {

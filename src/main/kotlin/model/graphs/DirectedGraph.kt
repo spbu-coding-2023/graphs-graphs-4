@@ -1,9 +1,16 @@
 package model.graphs
 
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+import model.functionality.StrConCompFinder
 import model.functionality.JohnsonAlg
 import model.functionality.DistanceRank
 
+@Serializable
 class DirectedGraph<T> : UndirectedGraph<T>() {
+	@SerialName("DirectedGraph")
+	override var adjList: HashMap<Vertex<T>, HashSet<Vertex<T>>> = HashMap()
+		internal set
 
 	override fun addEdge(vertex1: Vertex<T>, vertex2: Vertex<T>) {
 		require(adjList.containsKey(vertex1))
@@ -28,9 +35,17 @@ class DirectedGraph<T> : UndirectedGraph<T>() {
 
 	fun cyclesForVertex(vertex: Vertex<T>): HashSet<List<Vertex<T>>> {
 		return JohnsonAlg(this).findCycles(vertex)
+    }
+
+	override fun findSCC(): Set<Set<Vertex<T>>> {
+		return StrConCompFinder(this).sccSearch()
 	}
 
 	fun distanceRank(): Map<Vertex<T>, Double> {
 		return DistanceRank<T>(this).rank()
+    }
+
+	override fun findMinSpanTree(): Set<GraphEdge<T>>? {
+		return null
 	}
 }

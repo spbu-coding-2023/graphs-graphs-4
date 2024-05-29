@@ -1,9 +1,15 @@
 package model.graphs
 
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 import model.functionality.BridgeFinder
+import model.functionality.MinSpanTreeFinder
+import model.functionality.ShortestPathFinder
 
+@Serializable
 open class UndirectedWeightedGraph<T, NUMBER_TYPE : Number> : Graph<Pair<Vertex<T>, NUMBER_TYPE>, T> {
-	var adjList: HashMap<Vertex<T>, HashSet<Pair<Vertex<T>, NUMBER_TYPE>>> = HashMap()
+	@SerialName("UndirectedWeightedGraph")
+	open var adjList: HashMap<Vertex<T>, HashSet<Pair<Vertex<T>, NUMBER_TYPE>>> = HashMap()
 		private set
 
 	private var _size: Int = 0
@@ -72,6 +78,11 @@ open class UndirectedWeightedGraph<T, NUMBER_TYPE : Number> : Graph<Pair<Vertex<
 		}
 	}
 
+	fun findShortestDistance(start: Vertex<T>): Map<Vertex<T>, Double> {
+		val output = ShortestPathFinder(this).bellmanFord(start)
+		return output
+	}
+
 	override fun vertices(): Set<Vertex<T>> {
 		return adjList.keys
 	}
@@ -91,10 +102,21 @@ open class UndirectedWeightedGraph<T, NUMBER_TYPE : Number> : Graph<Pair<Vertex<
 		return BridgeFinder<Pair<Vertex<T>, NUMBER_TYPE>, T>().findBridges(this)
 	}
 
+	override fun findSCC(): Set<Set<Vertex<T>>> {
+		return emptySet()//StrConCompFinder(this as UndirectedGraph<T>).sccSearch()
+	}
+
+	override fun findMinSpanTree(): Set<GraphEdge<T>>? {
+		return MinSpanTreeFinder(this).mstSearch()
+	}
+
+	override fun iterator(): Iterator<Vertex<T>> {
+		return this.adjList.keys.iterator()
+	}
+
 	override fun getNeighbors(vertex: Vertex<T>): HashSet<Pair<Vertex<T>, NUMBER_TYPE>> {
 		return adjList[vertex] ?: throw IllegalArgumentException(
 			"Can't get neighbors for vertex $vertex that is not in the graph"
 		)
 	}
-
 }

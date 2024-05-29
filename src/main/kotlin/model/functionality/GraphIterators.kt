@@ -3,7 +3,7 @@ package model.functionality
 import model.graphs.UndirectedGraph
 import model.graphs.Vertex
 
-class GraphIterators<K>(graph: UndirectedGraph<K>) : Iterator<Vertex<K>> {
+class GraphIterator<K>(graph: UndirectedGraph<K>) : Iterator<Vertex<K>> {
 	private val graphIterator = graph.adjList.keys.iterator()
 
 	override fun hasNext() = graphIterator.hasNext()
