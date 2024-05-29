@@ -63,7 +63,7 @@ open class UndirectedWeightedGraph<T, NUMBER_TYPE : Number> : Graph<Pair<Vertex<
 	}
 
 	open fun addEdge(edge: WeightedEdge<T, NUMBER_TYPE>) {
-		addEdge(edge.from, edge.to, edge. weight)
+		addEdge(edge.from, edge.to, edge.weight)
 	}
 
 	open fun addEdges(vararg edges: WeightedEdge<T, NUMBER_TYPE>) {
@@ -89,10 +89,6 @@ open class UndirectedWeightedGraph<T, NUMBER_TYPE : Number> : Graph<Pair<Vertex<
 
 	override fun findBridges(): Set<Pair<Vertex<T>, Vertex<T>>> {
 		return BridgeFinder<Pair<Vertex<T>, NUMBER_TYPE>, T>().findBridges(this)
-	}
-
-	override fun iterator(): Iterator<Vertex<T>> {
-		return this.adjList.keys.iterator()
 	}
 
 	override fun getNeighbors(vertex: Vertex<T>): HashSet<Pair<Vertex<T>, NUMBER_TYPE>> {

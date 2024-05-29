@@ -91,10 +91,6 @@ open class UndirectedGraph<T> : Graph<Vertex<T>, T> {
 		return edges
 	}
 
-	override fun iterator(): Iterator<Vertex<T>> {
-		return this.adjList.keys.iterator()
-	}
-
 	override fun getNeighbors(vertex: Vertex<T>): HashSet<Vertex<T>> {
 		return adjList[vertex] ?: throw IllegalArgumentException(
 			"Can't get neighbors for vertex $vertex that is not in the graph"

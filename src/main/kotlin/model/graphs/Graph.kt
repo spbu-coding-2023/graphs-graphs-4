@@ -24,7 +24,9 @@ interface Graph<GRAPH_TYPE, T> : Iterable<Vertex<T>> {
 		return output
 	}
 
-	override fun iterator(): Iterator<Vertex<T>>
+	override fun iterator(): Iterator<Vertex<T>> {
+		return this.vertices().iterator()
+	}
 
 	fun getNeighbors(vertex: Vertex<T>): HashSet<GRAPH_TYPE>
 }
