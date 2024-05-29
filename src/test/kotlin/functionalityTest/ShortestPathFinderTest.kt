@@ -45,7 +45,7 @@ class ShortestPathFinderTest {
 				nodes[2] to 3.0,
 			)
 
-			val actualOutput = graph.findShortestDistance(nodes[0]).minus(nodes[3])
+			val actualOutput = graph.findDistancesBellman(nodes[0]).minus(nodes[3])
 
 			assertEquals(answer, actualOutput)
 		}
@@ -65,8 +65,8 @@ class ShortestPathFinderTest {
 				nodes[1] to POSITIVE_INFINITY,
 			)
 
-			val actualOutputA = graph.findShortestDistance(nodes[0]).minus(nodes[0])
-			val actualOutputB = graph.findShortestDistance(nodes[1]).minus(nodes[1])
+			val actualOutputA = graph.findDistancesBellman(nodes[0]).minus(nodes[0])
+			val actualOutputB = graph.findDistancesBellman(nodes[1]).minus(nodes[1])
 
 			assertEquals(answer, actualOutputA.plus(actualOutputB))
 		}
@@ -106,7 +106,7 @@ class ShortestPathFinderTest {
 				nodes[3] to -5.0
 			)
 
-			val actualAnswer = graph.findShortestDistance(nodes[0])
+			val actualAnswer = graph.findDistancesBellman(nodes[0])
 
 			for (i in 0..3) {
 				assertEquals(answer[nodes[i]], actualAnswer[nodes[i]])
@@ -137,7 +137,7 @@ class ShortestPathFinderTest {
 				nodes[2] to NEGATIVE_INFINITY,
 			)
 
-			val actualAnswer = graph.findShortestDistance(nodes[0])
+			val actualAnswer = graph.findDistancesBellman(nodes[0])
 
 			for (i in 0..2) {
 				assertEquals(answer[nodes[i]], actualAnswer[nodes[i]])
@@ -167,7 +167,7 @@ class ShortestPathFinderTest {
 				nodes[3] to 555.0
 			)
 
-			val actualAnswer = graph.findShortestDistance(nodes[0])
+			val actualAnswer = graph.findDistancesBellman(nodes[0])
 
 			for (i in 0..3) {
 				assertEquals(answer[nodes[i]], actualAnswer[nodes[i]])
@@ -224,7 +224,7 @@ class ShortestPathFinderTest {
 				nodes[7] to 50.0
 			)
 
-			val actualAnswer = graph.findShortestDistance(nodes[0])
+			val actualAnswer = graph.findDistancesBellman(nodes[0])
 
 			for (i in 0..7) {
 				assertEquals(answer[nodes[i]], actualAnswer[nodes[i]])
@@ -269,7 +269,7 @@ class ShortestPathFinderTest {
 				nodes[4] to NEGATIVE_INFINITY
 			)
 
-			val actualAnswer = graph.findShortestDistance(nodes[0])
+			val actualAnswer = graph.findDistancesBellman(nodes[0])
 
 			for (i in 0..3) {
 				assertEquals(answer[nodes[i]], actualAnswer[nodes[i]])
@@ -312,7 +312,7 @@ class ShortestPathFinderTest {
 				nodes[5] to 9.0,
 			)
 
-			val actualAnswer = graph.findShortestDistance(nodes[0])
+			val actualAnswer = graph.findDistancesBellman(nodes[0])
 
 			for (i in 0..5) {
 				assertEquals(answer[nodes[i]], actualAnswer[nodes[i]])
@@ -367,7 +367,7 @@ class ShortestPathFinderTest {
 			graph.addEdge(nodes[6], nodes[5], 30)
 			graph.addEdge(nodes[6], nodes[1], 5)
 
-			val actualAnswer = graph.findShortestDistance(nodes[0])
+			val actualAnswer = graph.findDistancesBellman(nodes[0])
 
 			for (i in 0..7) {
 				assertEquals(answer[nodes[i]], actualAnswer[nodes[i]])
@@ -397,7 +397,7 @@ class ShortestPathFinderTest {
 			graph.addEdge(nodes[6], nodes[5], 30)
 			graph.addEdge(nodes[6], nodes[1], 5)
 
-			val actualAnswer = graph.findShortestDistance(nodes[0])
+			val actualAnswer = graph.findDistancesBellman(nodes[0])
 
 			for (i in 0..7) {
 				assertEquals(answer[nodes[i]], actualAnswer[nodes[i]])
@@ -427,7 +427,7 @@ class ShortestPathFinderTest {
 			graph.addEdge(nodes[6], nodes[5], 30)
 			graph.addEdge(nodes[6], nodes[1], 5)
 
-			val actualAnswer = graph.findShortestDistance(nodes[0])
+			val actualAnswer = graph.findDistancesBellman(nodes[0])
 
 			for (i in 0..7) {
 				assertEquals(answer[nodes[i]], actualAnswer[nodes[i]])
@@ -457,7 +457,7 @@ class ShortestPathFinderTest {
 			graph.addEdge(nodes[6], nodes[5], 30.toFloat())
 			graph.addEdge(nodes[6], nodes[1], 5.toFloat())
 
-			val actualAnswer = graph.findShortestDistance(nodes[0])
+			val actualAnswer = graph.findDistancesBellman(nodes[0])
 
 			for (i in 0..7) {
 				assertEquals(answer[nodes[i]], actualAnswer[nodes[i]])
@@ -487,7 +487,7 @@ class ShortestPathFinderTest {
 			graph.addEdge(nodes[6], nodes[5], 30.0)
 			graph.addEdge(nodes[6], nodes[1], 5.0)
 
-			val actualAnswer = graph.findShortestDistance(nodes[0])
+			val actualAnswer = graph.findDistancesBellman(nodes[0])
 
 			for (i in 0..7) {
 				assertEquals(answer[nodes[i]], actualAnswer[nodes[i]])

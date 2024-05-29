@@ -1,5 +1,5 @@
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import io.gitlab.arturbosch.detekt.Detekt
+import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
 plugins {
 	kotlin("jvm") version "1.9.23"
@@ -52,18 +52,29 @@ tasks.test {
 
 tasks.withType<Detekt>().configureEach {
 	reports {
-		html.required.set(true) // observe findings in your browser with structure and code snippets
-		sarif.required.set(true) // standardized SARIF format (https://sarifweb.azurewebsites.net/) to support integrations with GitHub Code Scanning
+		html.required.set(true)
+		sarif.required.set(true) // SARIF to support integrations with GitHub Code Scanning
 	}
 }
 
 tasks.jacocoTestReport {
 	dependsOn(tasks.test)
+
+	classDirectories.setFrom(
+		files(classDirectories.files.map {
+			fileTree(it) {
+				exclude("**/view/**", "**/viewmodel/**", "**/app/**")
+			}
+		})
+	)
+
 	reports {
 		xml.required = false
 		csv.required = true
 		html.required = true
 	}
+
+
 }
 
 compose.desktop {
