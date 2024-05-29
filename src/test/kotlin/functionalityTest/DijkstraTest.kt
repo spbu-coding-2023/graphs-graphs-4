@@ -36,7 +36,7 @@ class DijkstraTest {
         graph.addEdge(3, 5, 3.0)
         graph.addEdge(6, 8, 2.0)
 
-        val result = ShortestPathFinder<Int, Double>(graph).Dijkstra(nodes[0])
+        val result = ShortestPathFinder(graph).dijkstra(nodes[0])
         assertEquals(8.0, result[nodes[4]])
         assertEquals(1.0, result[nodes[3]])
         assertEquals(13.0, result[nodes[9]])
@@ -74,7 +74,7 @@ class DijkstraTest {
         graph.addEdge(13, 14, 2.0)
         graph.addEdge(14, 15, 3.0)
 
-        val result = ShortestPathFinder<Int, Double>(graph).Dijkstra(nodes[0])
+        val result = ShortestPathFinder(graph).dijkstra(nodes[0])
         assertEquals(3.0, result[nodes[1]])
         assertEquals(7.0, result[nodes[4]])
         assertEquals(9.0, result[nodes[8]])
@@ -98,7 +98,7 @@ class DijkstraTest {
         graph.addEdge(7, 8, 2.0)
         graph.addEdge(9, 10, 4.0)
 
-        val result = ShortestPathFinder<Int, Double>(graph).Dijkstra(nodes[0])
+        val result = ShortestPathFinder(graph).dijkstra(nodes[0])
         assertEquals(Double.POSITIVE_INFINITY, result[nodes[5]])
         assertEquals(Double.POSITIVE_INFINITY, result[nodes[7]])
         assertEquals(Double.POSITIVE_INFINITY, result[nodes[3]])
@@ -124,7 +124,7 @@ class DijkstraTest {
         graph.addEdge(6, 7, 1.0)
         graph.addEdge(6, 3, 7.0)
 
-        val result = ShortestPathFinder<Int, Double>(graph).Dijkstra(nodes[0])
+        val result = ShortestPathFinder(graph).dijkstra(nodes[0])
 
         assertEquals(8.0, result[nodes[4]])
         assertEquals(7.0, result[nodes[6]])

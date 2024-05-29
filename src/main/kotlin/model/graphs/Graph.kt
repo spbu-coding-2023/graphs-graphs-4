@@ -24,6 +24,10 @@ interface Graph<GRAPH_TYPE, T> : Iterable<Vertex<T>> {
 		return output
 	}
 
+	fun findDistancesDijkstra(start: Vertex<T>): Map<Vertex<T>, Double> {
+		return ShortestPathFinder(this).dijkstra(start)
+	}
+
 	override fun iterator(): Iterator<Vertex<T>> {
 		return this.vertices().iterator()
 	}
