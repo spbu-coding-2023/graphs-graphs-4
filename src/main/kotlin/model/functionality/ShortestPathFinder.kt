@@ -1,12 +1,10 @@
 package model.functionality
 
 import model.graphs.Graph
-import model.graphs.UndirectedGraph
-import model.graphs.UndirectedWeightedGraph
 import model.graphs.Vertex
+import java.util.*
 import kotlin.Double.Companion.NEGATIVE_INFINITY
 import kotlin.Double.Companion.POSITIVE_INFINITY
-import java.util.PriorityQueue
 
 @Suppress("CyclomaticComplexMethod")
 class ShortestPathFinder<GRAPH_TYPE, T>(private val graph: Graph<GRAPH_TYPE, T>) {
@@ -98,6 +96,7 @@ class ShortestPathFinder<GRAPH_TYPE, T>(private val graph: Graph<GRAPH_TYPE, T>)
 		return dist
 	}
 
+	@Suppress("NestedBlockDepth")
 	fun dijkstra(start: Vertex<T>): Map<Vertex<T>, Double> {
 		val dist: MutableMap<Vertex<T>, Double> = mutableMapOf()
 		graph.vertices().forEach {
@@ -116,6 +115,7 @@ class ShortestPathFinder<GRAPH_TYPE, T>(private val graph: Graph<GRAPH_TYPE, T>)
 
 			for(child in graph.getNeighbors(current)) {
 
+				@Suppress("DuplicatedCode")
 				if (child is Pair<*, *>) {
 					weight = child.second as Number
 					neighbor = child.first as Vertex<T>

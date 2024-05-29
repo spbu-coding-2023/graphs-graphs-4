@@ -3,10 +3,8 @@ package functionalityTest
 import model.functionality.JohnsonAlg
 import model.graphs.DirectedGraph
 import model.graphs.Vertex
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-
-import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.BeforeEach
 
 class JohnsonAlgTest {
     private val graph = DirectedGraph<Int>()
@@ -133,7 +131,7 @@ class JohnsonAlgTest {
         for (i in 1..7) {
             graph.addVertex(i)
         }
-        var nodes = graph.adjList.keys.toList().sortedBy { it.key }
+        val nodes = graph.adjList.keys.toList().sortedBy { it.key }
 
         val result = JohnsonAlg<Int>(graph).findCycles(nodes[0])
         assertEquals(setOf<Vertex<Int>>(), result)
