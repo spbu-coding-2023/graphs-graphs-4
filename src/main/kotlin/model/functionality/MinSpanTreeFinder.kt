@@ -2,9 +2,9 @@ package model.functionality
 
 import model.graphs.Vertex
 import model.graphs.WeightedEdge
-import model.graphs.UndirectedWeightedGraph
+import model.graphs.interfaces.Graph
 
-class MinSpanTreeFinder<K, W: Number>(private val graph: UndirectedWeightedGraph<K, W>) {
+class MinSpanTreeFinder<K, W: Comparable<W>>(private val graph: Graph<WeightedEdge<K, W>, K>) {
     private val spanningTree = mutableSetOf<WeightedEdge<K, W>>()
 
 
@@ -41,17 +41,23 @@ class MinSpanTreeFinder<K, W: Number>(private val graph: UndirectedWeightedGraph
     }
 
     private fun findAdjEdgeWithMinWeight(vertex: Vertex<K>, banList: Set<Vertex<K>>): WeightedEdge<K, W>? {
-        val neighbors = graph.getNeighbors(vertex)
-        neighbors.removeIf { banList.contains(it.first) }
+        val adjEdges = graph.getAdjEdges(vertex)
+        val availableEdges = hashSetOf<WeightedEdge<K, W>>()
+        for (edges in adjEdges) {
+            if (!(banList.contains(edges.to) || banList.contains(edges.from))) {
+                availableEdges.add(edges)
+            }
+        }
 
-        val vertexWithMinWeight = neighbors.minByOrNull {
+        val minEdge = availableEdges.minOrNull()
+        /*val vertexWithMinWeight = adjEdges.minByOrNull {
             WeightedEdge(vertex, it.first, it.second)
         } ?: return null
 
         val neighbor = vertexWithMinWeight.first
         val weight = vertexWithMinWeight.second
-        val edge = WeightedEdge(vertex, neighbor, weight)
+        val edge = WeightedEdge(vertex, neighbor, weight)*/
 
-        return edge
+        return minEdge
     }
 }

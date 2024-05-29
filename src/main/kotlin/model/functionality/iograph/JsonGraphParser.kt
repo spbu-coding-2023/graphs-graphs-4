@@ -4,19 +4,19 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
 import kotlinx.serialization.json.encodeToStream
-import model.graphs.Graph
+import model.graphs.interfaces.Graph
+import model.graphs.interfaces.GraphEdge
 import java.io.File
 
-class ReadWriteGraph {
+class JsonGraphParser {
     private val format = Json {
         isLenient = true
         prettyPrint = true
-        ignoreUnknownKeys = true
         allowStructuredMapKeys = true
     }
 
     @OptIn(ExperimentalSerializationApi::class)
-    fun <GRAPH_T, K>write(file: File, graph: Graph<GRAPH_T, K>) {
+    fun <E: GraphEdge<T>, T>write(file: File, graph: Graph<E, T>) {
         val output = file.outputStream()
         format.encodeToStream(graph, output)
         output.close()
@@ -35,10 +35,10 @@ class ReadWriteGraph {
     }
 
     @OptIn(ExperimentalSerializationApi::class)
-    fun <GRAPH_T, K>read(file: File): Graph<GRAPH_T, K> {
+    fun <E: GraphEdge<T>, T>read(file: File): Graph<E, T> {
         val input =  file.inputStream()
         println("stream: ${input}")
-        val graph = format.decodeFromStream<Graph<GRAPH_T, K>>(input)
+        val graph = format.decodeFromStream<Graph<E, T>>(input)
         input.close()
 
         return graph

@@ -5,15 +5,18 @@ import kotlinx.serialization.Serializable
 import model.functionality.BridgeFinder
 import model.functionality.MinSpanTreeFinder
 import model.functionality.ShortestPathFinder
+import model.graphs.interfaces.Graph
+import model.graphs.interfaces.UndirectedGraphAlgorithms
+import model.graphs.interfaces.WeightedGraphAlgorithms
 
 @Serializable
-open class UndirectedWeightedGraph<T, NUMBER_TYPE : Number> : Graph<Pair<Vertex<T>, NUMBER_TYPE>, T> {
+open class UndirectedWeightedGraph<T, W : Comparable<W>> :
+	Graph<WeightedEdge<T, W>, T>, UndirectedGraphAlgorithms<T>, WeightedGraphAlgorithms<T, W> {
 	@SerialName("UndirectedWeightedGraph")
-	open var adjList: HashMap<Vertex<T>, HashSet<Pair<Vertex<T>, NUMBER_TYPE>>> = HashMap()
+	open var adjList: HashMap<Vertex<T>, HashSet<Pair<Vertex<T>, W>>> = HashMap()
 		internal set
 
-	var size: Int = 0
-		private set
+	override var size: Int = 0
 
 	@Suppress("DuplicatedCode")
 	override fun addVertex(key: T): Vertex<T> {
@@ -55,7 +58,7 @@ open class UndirectedWeightedGraph<T, NUMBER_TYPE : Number> : Graph<Pair<Vertex<
 		}
 	}
 
-	open fun addEdge(vertex1: Vertex<T>, vertex2: Vertex<T>, weight: NUMBER_TYPE) {
+	open fun addEdge(vertex1: Vertex<T>, vertex2: Vertex<T>, weight: W) {
 		require(adjList.containsKey(vertex1))
 		require(adjList.containsKey(vertex2))
 
@@ -63,22 +66,22 @@ open class UndirectedWeightedGraph<T, NUMBER_TYPE : Number> : Graph<Pair<Vertex<
 		adjList.getOrPut(vertex2) { HashSet() }.add(Pair(vertex1, weight))
 	}
 
-	open fun addEdge(key1: T, key2: T, weight: NUMBER_TYPE) {
+	open fun addEdge(key1: T, key2: T, weight: W) {
 		addEdge(Vertex(key1), Vertex(key2), weight)
 	}
 
-	open fun addEdge(edge: WeightedEdge<T, NUMBER_TYPE>) {
+	open fun addEdge(edge: WeightedEdge<T, W>) {
 		addEdge(edge.from, edge.to, edge. weight)
 	}
 
-	open fun addEdges(vararg edges: WeightedEdge<T, NUMBER_TYPE>) {
+	open fun addEdges(vararg edges: WeightedEdge<T, W>) {
 		for (edge in edges) {
 			addEdge(edge)
 		}
 	}
 
-	fun findShortestDistance(start: Vertex<T>): Map<Vertex<T>, Double> {
-		val output = ShortestPathFinder(this).bellmanFord(start)
+	override fun findShortestDistance(vertex: Vertex<T>): Map<Vertex<T>, Double> {
+		val output = ShortestPathFinder(this).bellmanFord(vertex)
 		return output
 	}
 
@@ -86,8 +89,8 @@ open class UndirectedWeightedGraph<T, NUMBER_TYPE : Number> : Graph<Pair<Vertex<
 		return adjList.keys
 	}
 
-	override fun edges(): Set<WeightedEdge<T, NUMBER_TYPE>> {
-		val edges = HashSet<WeightedEdge<T, NUMBER_TYPE>>()
+	override fun edges(): Set<WeightedEdge<T, W>> {
+		val edges = HashSet<WeightedEdge<T, W>>()
 		for (vertex in adjList.keys) {
 			for (neighbour in adjList[vertex] ?: continue) {
 				edges.add(WeightedEdge(vertex, neighbour.first, neighbour.second))
@@ -97,25 +100,30 @@ open class UndirectedWeightedGraph<T, NUMBER_TYPE : Number> : Graph<Pair<Vertex<
 		return edges
 	}
 
-	override fun findBridges(): Set<Pair<Vertex<T>, Vertex<T>>> {
-		return BridgeFinder<Pair<Vertex<T>, NUMBER_TYPE>, T>().findBridges(this)
-	}
-
-	override fun findSCC(): Set<Set<Vertex<T>>> {
-		return emptySet()//StrConCompFinder(this as UndirectedGraph<T>).sccSearch()
-	}
-
-	override fun findMinSpanTree(): Set<GraphEdge<T>>? {
+	override fun findMinSpanTree(): Set<WeightedEdge<T, W>>? {
 		return MinSpanTreeFinder(this).mstSearch()
+	}
+
+	override fun findBridges(): Set<Pair<Vertex<T>, Vertex<T>>> {
+		return BridgeFinder<WeightedEdge<T, W>, T>().findBridges(this)
 	}
 
 	override fun iterator(): Iterator<Vertex<T>> {
 		return this.adjList.keys.iterator()
 	}
 
-	override fun getNeighbors(vertex: Vertex<T>): HashSet<Pair<Vertex<T>, NUMBER_TYPE>> {
-		return adjList[vertex] ?: throw IllegalArgumentException(
+	override fun getAdjEdges(vertex: Vertex<T>): Set<WeightedEdge<T, W>> {
+		val adjEdges = adjList[vertex] ?: throw IllegalArgumentException(
 			"Can't get neighbors for vertex $vertex that is not in the graph"
 		)
+
+		val edges = HashSet<WeightedEdge<T, W>>()
+		for (pairVertexWeight in adjEdges) {
+			val neighbor = pairVertexWeight.first
+			val weight = pairVertexWeight.second
+			edges.add(WeightedEdge(vertex, neighbor, weight))
+		}
+
+		return edges
 	}
 }

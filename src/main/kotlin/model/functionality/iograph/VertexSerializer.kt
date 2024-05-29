@@ -1,7 +1,6 @@
 package model.functionality.iograph
 
 import kotlinx.serialization.KSerializer
-import kotlinx.serialization.SerializationException
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.descriptors.SerialDescriptor
@@ -9,30 +8,38 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import model.graphs.Vertex
 
-class VertexSerializer<T> : KSerializer<Vertex<T>> {
-    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("Vertex", PrimitiveKind.STRING)
+class VertexSerializer : KSerializer<Vertex<String>> {
+    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor(
+        "kotlinx.serialization.VertexStringSerializer",
+        PrimitiveKind.STRING,
+    )
 
-    override fun serialize(encoder: Encoder, value: Vertex<T>) {
-        when (val key = value.key) {
-            is String ->encoder.encodeString(key)
-            is Int ->encoder.encodeInt(key)
-            is Float ->encoder.encodeFloat(key)
-            is Double ->encoder.encodeDouble(key)
-            is Long ->encoder.encodeLong(key)
-            is Short ->encoder.encodeShort(key)
-            is Boolean ->encoder.encodeBoolean(key)
-            is Byte ->encoder.encodeByte(key)
+    override fun serialize(encoder: Encoder, value: Vertex<String>) {
+        encoder.encodeString(value.key)
+
+        /*when (val key = value.key) {
+            is String -> encoder.encodeString(key)
+            is Int -> encoder.encodeInt(key)
+            is Float -> encoder.encodeFloat(key)
+            is Double -> encoder.encodeDouble(key)
+            is Long -> encoder.encodeLong(key)
+            is Short -> encoder.encodeShort(key)
+            is Boolean -> encoder.encodeBoolean(key)
+            is Byte -> encoder.encodeByte(key)
             else -> throw SerializationException("Unknown key $key")
-        }
+        }*/
     }
 
-    override fun deserialize(decoder: Decoder): Vertex<T> {
+    override fun deserialize(decoder: Decoder): Vertex<String> {
         val key = decoder.decodeString()
+        return Vertex(key)
+
+        /*decoder.serializersModule.
         return when {
-            null != key.toLongOrNull() -> Vertex(key.toLong() as T)
-            null != key.toDoubleOrNull() -> Vertex(key.toDouble() as T)
-            else -> Vertex(key.toString() as T)
-        }
+            //null != key.toLongOrNull() -> Vertex(key as T)
+            //null != key.toDoubleOrNull() -> Vertex(key as T)
+            else -> Vertex(key as T )
+        }*/
     }
 
     /*inline fun <reified T> test(decoder: Decoder) : T {

@@ -4,7 +4,10 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
 import kotlinx.serialization.json.encodeToStream
-import model.graphs.*
+import model.graphs.DirectedGraph
+import model.graphs.Edge
+import model.graphs.UndirectedGraph
+import model.graphs.Vertex
 import org.junit.jupiter.api.Test
 import java.io.File
 
@@ -12,17 +15,17 @@ class JsonConverterTest {
     @OptIn(ExperimentalSerializationApi::class)
     @Test
     fun jsonTest() {
-        val vertices = Array(5) {Vertex(it)}
+        val vertices = Array(5) {Vertex("$it")}
         val edges = arrayOf(
-            Edge(Vertex(0), Vertex(1)),
-            Edge(vertices[1], vertices[2]),
-            Edge(vertices[2], vertices[3]),
-            Edge(vertices[3], vertices[4]),
-            Edge(vertices[0], vertices[3]),
-            Edge(vertices[0], vertices[4]),
+            Edge(Vertex("0"), Vertex("1")),
+            Edge(Vertex("1"), Vertex("2")),
+            Edge(Vertex("2"), Vertex("3")),
+            Edge(Vertex("3"), Vertex("4")),
+            Edge(Vertex("0"), Vertex("3")),
+            Edge(Vertex("0"), Vertex("4")),
         )
 
-        val graph = UndirectedGraph<Int>()
+        val graph = UndirectedGraph<String>()
         graph.addVertices(*vertices)
         graph.addEdges(*edges)
 

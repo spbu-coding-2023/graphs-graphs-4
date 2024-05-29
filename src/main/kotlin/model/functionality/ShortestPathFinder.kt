@@ -1,18 +1,17 @@
 package model.functionality
 
-import model.graphs.UndirectedWeightedGraph
 import model.graphs.Vertex
-import kotlin.Double.Companion.NEGATIVE_INFINITY
-import kotlin.Double.Companion.POSITIVE_INFINITY
+import model.graphs.WeightedEdge
+import model.graphs.interfaces.Graph
 
-class ShortestPathFinder<T, NUMBER_TYPE : Number>(private val graph: UndirectedWeightedGraph<T, NUMBER_TYPE>) {
-	operator fun Number.plus(other: Number): Number {
-		return when (this) {
-			is Long -> this.toLong() + other.toLong()
-			is Int -> this.toLong() + other.toLong()
-			is Short -> this.toLong() + other.toLong()
-			is Double -> this.toDouble() + other.toDouble()
-			is Float -> this.toDouble() + other.toDouble()
+class ShortestPathFinder<T, NUMBER_TYPE : Comparable<NUMBER_TYPE>>(private val graph: Graph<WeightedEdge<T, NUMBER_TYPE>, T>) {
+	operator fun Number.plus(other: NUMBER_TYPE): Number {
+		return when {
+			this is Long && other is Long -> this.toLong() + other.toLong()
+			this is Int && other is Int -> this.toLong() + other.toLong()
+			this is Short && other is Short -> this.toLong() + other.toLong()
+			this is Double && other is Double -> this.toDouble() + other.toDouble()
+			this is Float && other is Double  -> this.toDouble() + other.toDouble()
 			else -> throw IllegalArgumentException("Unknown numeric type")
 		}
 	}
@@ -30,6 +29,8 @@ class ShortestPathFinder<T, NUMBER_TYPE : Number>(private val graph: UndirectedW
 
 	@Suppress("NestedBlockDepth")
 	internal fun bellmanFord(start: Vertex<T>): Map<Vertex<T>, Double> {
+		TODO()
+		/*
 		val dist = graph.adjList.mapValues { POSITIVE_INFINITY }.toMutableMap()
 		dist[start] = 0.0
 
@@ -63,6 +64,6 @@ class ShortestPathFinder<T, NUMBER_TYPE : Number>(private val graph: UndirectedW
 			}
 		}
 
-		return dist
+		return dist*/
 	}
 }

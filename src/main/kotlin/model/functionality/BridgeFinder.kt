@@ -1,16 +1,18 @@
 package model.functionality
 
 import model.graphs.*
+import model.graphs.interfaces.Graph
+import model.graphs.interfaces.GraphEdge
 import kotlin.math.min
 
-class BridgeFinder<GRAPH_TYPE, T> {
+class BridgeFinder<E: GraphEdge<T>, T> {
 	private var discoveryTime = hashMapOf<Vertex<T>, Int>()
 	private var bridges: Set<Pair<Vertex<T>, Vertex<T>>> = emptySet()
 	private var parent = hashMapOf<Vertex<T>, Vertex<T>?>()
 	private var low = hashMapOf<Vertex<T>, Int>()
 	private var timer: Int = 0
 
-	fun findBridges(graph: Graph<GRAPH_TYPE, T>): Set<Pair<Vertex<T>, Vertex<T>>> {
+	fun findBridges(graph: Graph<E, T>): Set<Pair<Vertex<T>, Vertex<T>>> {
 		when (graph) {
 			is DirectedGraph -> {
 				throw IllegalArgumentException("Directed graphs are not supported")
@@ -37,31 +39,32 @@ class BridgeFinder<GRAPH_TYPE, T> {
 		return bridges
 	}
 
-	private fun dfsRecursive(graph: Graph<GRAPH_TYPE, T>, vertex: Vertex<T>) {
+	private fun dfsRecursive(graph: Graph<E, T>, vertex: Vertex<T>) {
 		discoveryTime[vertex] = timer
 		low[vertex] = timer
 		timer += 1
 
 		when (graph) {
 			is UndirectedGraph -> {
-				graph.getNeighbors(vertex).forEach {
-					if (discoveryTime[it] == -1) {
-						parent[it] = vertex
-						dfsRecursive(graph, it)
+				graph.getAdjEdges(vertex).forEach { edge ->
+					val neighbor = edge.to
+					if (discoveryTime[neighbor] == -1) {
+						parent[neighbor] = vertex
+						dfsRecursive(graph, neighbor)
 
 						val lowVertex: Int = low[vertex] ?: -1
-						val lowIt: Int = low[it] ?: -1
+						val lowIt: Int = low[neighbor] ?: -1
 						val discVertex: Int = discoveryTime[vertex] ?: -1
 
 						low[vertex] = min(lowVertex, lowIt)
 
 						if (lowIt > discVertex) {
-							bridges = bridges.plus(Pair(vertex, it))
+							bridges = bridges.plus(Pair(vertex, neighbor))
 						}
 					} else {
-						if (parent[vertex] != it) {
+						if (parent[vertex] != neighbor) {
 							val lowVertex: Int = low[vertex] ?: -1
-							val discTimeIt: Int = discoveryTime[it] ?: -1
+							val discTimeIt: Int = discoveryTime[neighbor] ?: -1
 
 							low[vertex] = min(lowVertex, discTimeIt)
 						}
@@ -70,24 +73,25 @@ class BridgeFinder<GRAPH_TYPE, T> {
 			}
 
 			is UndirectedWeightedGraph<T, *> -> {
-				graph.getNeighbors(vertex).forEach {
-					if (discoveryTime[it.first] == -1) {
-						parent[it.first] = vertex
-						dfsRecursive(graph, it.first)
+				graph.getAdjEdges(vertex).forEach { edge ->
+					val neighbor = edge.from
+					if (discoveryTime[neighbor] == -1) {
+						parent[neighbor] = vertex
+						dfsRecursive(graph, neighbor)
 
 						val lowVertex: Int = low[vertex] ?: -1
-						val lowIt: Int = low[it.first] ?: -1
+						val lowIt: Int = low[neighbor] ?: -1
 						val discVertex: Int = discoveryTime[vertex] ?: -1
 
 						low[vertex] = min(lowVertex, lowIt)
 
 						if (lowIt > discVertex) {
-							bridges = bridges.plus(Pair(vertex, it.first))
+							bridges = bridges.plus(Pair(vertex, neighbor))
 						}
 					} else {
-						if (parent[vertex] != it.first) {
+						if (parent[vertex] != neighbor) {
 							val lowVertex: Int = low[vertex] ?: -1
-							val discTimeIt: Int = discoveryTime[it.first] ?: -1
+							val discTimeIt: Int = discoveryTime[neighbor] ?: -1
 
 							low[vertex] = min(lowVertex, discTimeIt)
 						}
@@ -97,4 +101,3 @@ class BridgeFinder<GRAPH_TYPE, T> {
 		}
 	}
 }
-

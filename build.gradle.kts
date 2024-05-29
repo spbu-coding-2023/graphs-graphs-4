@@ -1,5 +1,5 @@
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import io.gitlab.arturbosch.detekt.Detekt
+import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
 plugins {
 	kotlin("plugin.serialization") version "1.9.23"

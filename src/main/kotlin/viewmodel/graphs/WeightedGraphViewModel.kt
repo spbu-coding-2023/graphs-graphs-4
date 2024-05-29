@@ -1,0 +1,33 @@
+package viewmodel.graphs
+
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
+import model.graphs.WeightedEdge
+import model.graphs.interfaces.Graph
+
+class WeightedGraphViewModel<T, W: Comparable<W>> (
+    graph: Graph<WeightedEdge<T, W>, T>,
+    showVerticesLabels: State<Boolean> = mutableStateOf(true),
+    showEdgesLabels: State<Boolean> = mutableStateOf(true),
+) {
+    private val _vertices = graph.vertices().associateWith { v ->
+        VertexViewModel(0.dp, 0.dp, Color.Gray, v, showVerticesLabels)
+    }
+
+    private val _edges = graph.edges().associateWith { e ->
+        val fst = _vertices[e.from]
+            ?: throw IllegalStateException("VertexView for ${e.from} not found")
+        val snd = _vertices[e.to]
+            ?: throw IllegalStateException("VertexView for ${e.to} not found")
+
+        WeightedEdgeViewModel(fst, snd, Color.Black, 3.toFloat(), e, showEdgesLabels)
+    }
+
+    val vertices: Collection<VertexViewModel<T>>
+        get() = _vertices.values
+
+    val edges: Collection<WeightedEdgeViewModel<T, W>>
+        get() = _edges.values
+}

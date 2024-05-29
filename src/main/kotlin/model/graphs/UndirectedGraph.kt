@@ -3,19 +3,21 @@ package model.graphs
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import model.functionality.BridgeFinder
-import model.functionality.StrConCompFinder
+import model.graphs.interfaces.Graph
+import model.graphs.interfaces.UndirectedGraphAlgorithms
 
 @Serializable
-open class UndirectedGraph<T> : Graph<Vertex<T>, T> {
+open class UndirectedGraph<T> :
+	Graph<Edge<T>, T>, UndirectedGraphAlgorithms<T> {
 	@SerialName("UndirectedGraph")
 	open var adjList: HashMap<Vertex<T>, HashSet<Vertex<T>>> = HashMap()
 		internal set
 
-	private var size: Int = 0
+	override var size: Int = 0
 
-	@Suppress("DuplicatedCode")
 	override fun addVertex(key: T): Vertex<T> {
-		for (v in adjList.keys) {
+		return addVertex(Vertex(key))
+		/*for (v in adjList.keys) {
 			if (v.key == key) {
 				return v
 			}
@@ -26,7 +28,7 @@ open class UndirectedGraph<T> : Graph<Vertex<T>, T> {
 
 		size += 1
 
-		return vertex
+		return vertex*/
 	}
 
 	override fun addVertex(vertex: Vertex<T>): Vertex<T> {
@@ -76,15 +78,7 @@ open class UndirectedGraph<T> : Graph<Vertex<T>, T> {
 	}
 
 	override fun findBridges(): Set<Pair<Vertex<T>, Vertex<T>>> {
-		return BridgeFinder<Vertex<T>, T>().findBridges(this)
-	}
-
-	override fun findSCC(): Set<Set<Vertex<T>>> {
-		return StrConCompFinder(this).sccSearch()
-	}
-
-	override fun findMinSpanTree(): Set<GraphEdge<T>>? {
-		return null
+		return BridgeFinder<Edge<T>, T>().findBridges(this)
 	}
 
 	override fun vertices(): Set<Vertex<T>> {
@@ -95,7 +89,7 @@ open class UndirectedGraph<T> : Graph<Vertex<T>, T> {
 		val edges = HashSet<Edge<T>>()
 		for (vertex in adjList.keys) {
 			for (neighbour in adjList[vertex] ?: continue) {
-				edges.add(Edge(vertex, neighbour, null))
+				edges.add(Edge(vertex, neighbour))
 			}
 		}
 
@@ -106,10 +100,16 @@ open class UndirectedGraph<T> : Graph<Vertex<T>, T> {
 		return this.adjList.keys.iterator()
 	}
 
-	override fun getNeighbors(vertex: Vertex<T>): HashSet<Vertex<T>> {
-		return adjList[vertex] ?: throw IllegalArgumentException(
+	override fun getAdjEdges(vertex: Vertex<T>): Set<Edge<T>> {
+		val neighbors = adjList[vertex] ?: throw IllegalArgumentException(
 			"Can't get neighbors for vertex $vertex that is not in the graph"
 		)
-	}
 
+		val edges = HashSet<Edge<T>>()
+		for (neighbour in neighbors) {
+			edges.add(Edge(vertex, neighbour))
+		}
+
+		return edges
+	}
 }

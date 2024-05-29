@@ -1,9 +1,8 @@
 package viewmodel.graphs
 
-import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
-import model.graphs.GraphEdge
+import model.graphs.interfaces.GraphEdge
 
 class EdgeViewModel<T>(
 	val u: VertexViewModel<T>,
@@ -11,7 +10,6 @@ class EdgeViewModel<T>(
 	color: Color,
 	width: Float,
 	private val e: GraphEdge<T>,
-	private val _labelVisible: State<Boolean>,
 ) {
 	private var _width = mutableStateOf(width)
 	var width: Float
@@ -27,10 +25,4 @@ class EdgeViewModel<T>(
 		set(value) {
 			_color.value = value
 		}
-
-	val label
-		get() = e.weight.toString()
-
-	val labelVisible
-		get() = _labelVisible.value
 }

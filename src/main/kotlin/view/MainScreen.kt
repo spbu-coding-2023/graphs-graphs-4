@@ -8,11 +8,12 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import model.graphs.interfaces.GraphEdge
 import view.graphs.GraphView
 import viewmodel.MainScreenViewModel
 
 @Composable
-fun <GRAPH_TYPE, T> MainScreen(viewModel: MainScreenViewModel<GRAPH_TYPE, T>) {
+fun <GRAPH_TYPE: GraphEdge<T>, T> MainScreen(viewModel: MainScreenViewModel<GRAPH_TYPE, T>) {
 	var showMenu by remember { mutableStateOf(false) }
 	var showGraph by remember { mutableStateOf(false) }
 
@@ -75,7 +76,7 @@ fun <GRAPH_TYPE, T> MainScreen(viewModel: MainScreenViewModel<GRAPH_TYPE, T>) {
 
 
 @Composable
-fun <GRAPH_TYPE, T> ToolsPanel(
+fun <GRAPH_TYPE: GraphEdge<T>, T> ToolsPanel(
 	viewModel: MainScreenViewModel<GRAPH_TYPE, T>,
 	modifier: Modifier = Modifier
 ) {

@@ -1,14 +1,16 @@
 package viewmodel.graphs
 
 import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import model.graphs.Graph
+import model.graphs.interfaces.Graph
+import model.graphs.interfaces.GraphEdge
 
-class GraphViewModel<GRAPH_TYPE, T>(
-	graph: Graph<GRAPH_TYPE, T>,
-	showVerticesLabels: State<Boolean>,
-	showEdgesLabels: State<Boolean>,
+class GraphViewModel<E: GraphEdge<T>, T>(
+	graph: Graph<E, T>,
+	showVerticesLabels: State<Boolean> = mutableStateOf(true),
+	showEdgesLabels: State<Boolean> = mutableStateOf(true),
 ) {
 	private val _vertices = graph.vertices().associateWith { v ->
 		VertexViewModel(0.dp, 0.dp, Color.Gray, v, showVerticesLabels)
@@ -20,7 +22,7 @@ class GraphViewModel<GRAPH_TYPE, T>(
 		val snd = _vertices[e.to]
 			?: throw IllegalStateException("VertexView for ${e.to} not found")
 
-		EdgeViewModel(fst, snd, Color.Black, 3.toFloat(), e, showEdgesLabels)
+		EdgeViewModel(fst, snd, Color.Black, 3.toFloat(), e)
 	}
 
 	val vertices: Collection<VertexViewModel<T>>

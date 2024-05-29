@@ -2,8 +2,8 @@ package viewmodel.graphs
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import model.graphs.GraphEdge
 import model.graphs.Vertex
+import model.graphs.WeightedEdge
 import kotlin.math.cos
 import kotlin.math.min
 import kotlin.math.sin
@@ -42,16 +42,6 @@ class CircularPlacementStrategy : RepresentationStrategy {
 			}
 	}
 
-	override fun <T> highlightBridges(edges: Collection<EdgeViewModel<T>>, bridges: Set<Pair<Vertex<T>, Vertex<T>>>) {
-		for (edge in edges) {
-			if (bridges.contains(Pair(edge.u.v, edge.v.v)) || bridges.contains(Pair(edge.v.v, edge.u.v))) {
-				edge.color = Color.Red
-				edge.width = 6.toFloat()
-			}
-		}
-	}
-
-
 	override fun <T> colorVertices(vararg vertices: VertexViewModel<T>, color: Color) {
 		for (vertex in vertices) {
 			vertex.color = color
@@ -61,6 +51,34 @@ class CircularPlacementStrategy : RepresentationStrategy {
 	override fun <T> colorEdges(vararg edges: EdgeViewModel<T>, color: Color) {
 		for (edge in edges) {
 			edge.color = color
+		}
+	}
+
+	private fun getRandomColor(): Color {
+		val red = (0..255).random()
+		val green = (0..255).random()
+		val blue = (0..255).random()
+		return Color(red / 255f, green / 255f, blue / 255f)
+	}
+
+	override fun highlightSCCStrType(scc: Set<Set<Vertex<String>>>, vertices: Collection<VertexViewModel<String>>?) {
+		if (vertices == null) return
+		for (component in scc) {
+			val color = getRandomColor()
+			for (vertex in vertices) {
+				if (component.contains(vertex.v)) {
+					vertex.color = color
+				}
+			}
+		}
+	}
+
+	override fun <T> highlightBridges(edges: Collection<EdgeViewModel<T>>, bridges: Set<Pair<Vertex<T>, Vertex<T>>>) {
+		for (edge in edges) {
+			if (bridges.contains(Pair(edge.u.v, edge.v.v)) || bridges.contains(Pair(edge.v.v, edge.u.v))) {
+				edge.color = Color.Red
+				edge.width = 6.toFloat()
+			}
 		}
 	}
 
@@ -77,7 +95,7 @@ class CircularPlacementStrategy : RepresentationStrategy {
 		}
 	}
 
-	override fun <T> highlightMinSpanTree(minSpanTree: Set<GraphEdge<T>>, vararg edges: EdgeViewModel<T>) {
+	override fun <T, W: Comparable<W>> highlightMinSpanTree(minSpanTree: Set<WeightedEdge<T, W>>, vararg edges: EdgeViewModel<T>) {
 		val color = Color.Blue
 		for (edge in minSpanTree) {
 			val u = edge.from

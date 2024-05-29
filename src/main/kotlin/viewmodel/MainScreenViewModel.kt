@@ -2,16 +2,17 @@ package viewmodel
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
-import model.functionality.iograph.ReadWriteGraph
-import model.graphs.Graph
+import model.functionality.iograph.JsonGraphParser
+import model.graphs.interfaces.Graph
+import model.graphs.interfaces.GraphEdge
 import viewmodel.graphs.GraphViewModel
 import viewmodel.graphs.RepresentationStrategy
 import java.awt.FileDialog
 import java.awt.Frame
 import java.io.File
 
-class MainScreenViewModel<GRAPH_TYPE, T>(
-	var graph: Graph<GRAPH_TYPE, T>,
+class MainScreenViewModel<E: GraphEdge<T>, T>(
+	var graph: Graph<E, T>,
 	private val representationStrategy: RepresentationStrategy
 ) {
 	private val showVerticesLabels = mutableStateOf(false)
@@ -41,30 +42,30 @@ class MainScreenViewModel<GRAPH_TYPE, T>(
 		dialog.isVisible = true
 		if (dialog.file != null) {
 			file = File("${dialog.directory}${dialog.file}")
-			val graphType = ReadWriteGraph().findType(file!!) ?: return
-			graph = ReadWriteGraph().read(file!!)
+			val graphType = JsonGraphParser().findType(file!!) ?: return
+			graph = JsonGraphParser().read(file!!)
 			graphViewModel = GraphViewModel(graph, showVerticesLabels, showEdgesLabels)
 		}
 
 	}
 
 	fun highlightSCC() {
-		val scc = graph.findSCC()
-		representationStrategy.highlightSCC(scc, *graphViewModel.vertices.toTypedArray())
+		/*val scc = graph.findSCC()
+		representationStrategy.highlightSCC(scc, *graphViewModel.vertices.toTypedArray())*/
 	}
 
 	fun highlightMinSpanTree() {
-		val minSpanTree = graph.findMinSpanTree()
+		/*val minSpanTree = graph.findMinSpanTree()
 		if (minSpanTree == null) {
 			return
 		} else {
 			representationStrategy.highlightMinSpanTree(minSpanTree, *graphViewModel.edges.toTypedArray())
-		}
+		}*/
 	}
 
 	fun highlightBridges() {
-		val bridges = graph.findBridges()
+		/*val bridges = graph.findBridges()
 
-		representationStrategy.highlightBridges(graphViewModel.edges, bridges)
+		representationStrategy.highlightBridges(graphViewModel.edges, bridges)*/
 	}
 }

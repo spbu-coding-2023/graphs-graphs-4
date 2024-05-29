@@ -4,11 +4,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import model.graphs.interfaces.GraphEdge
 import viewmodel.graphs.GraphViewModel
 
 @Composable
-fun <V, E> GraphView(
-	viewModel: GraphViewModel<V, E>,
+fun <E: GraphEdge<T>, T> GraphView(
+	viewModel: GraphViewModel<E, T>,
 ) {
 	Box(
 		modifier = Modifier

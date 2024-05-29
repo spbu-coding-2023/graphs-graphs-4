@@ -1,13 +1,14 @@
 package model.graphs
 
 import kotlinx.serialization.Serializable
+import model.graphs.interfaces.GraphEdge
 import java.util.*
 
 @Serializable
 class Edge<T>(
-    override val from: Vertex<T>, override val to: Vertex<T>, override val weight: Nothing? = null
+    override val from: Vertex<T>,
+    override val to: Vertex<T>,
 ) : Comparable<Edge<T>>, GraphEdge<T> {
-
     override fun toString(): String {
         return "($from, $to)"
     }

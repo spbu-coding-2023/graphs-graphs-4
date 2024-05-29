@@ -1,11 +1,12 @@
 package model.graphs
 
+import model.graphs.interfaces.GraphEdge
 import java.util.*
 
-data class WeightedEdge<T, W : Number>(
+data class WeightedEdge<T, W : Comparable<W>>(
 	override val from: Vertex<T>,
 	override val to: Vertex<T>,
-	override val weight: W,
+	val weight: W,
 ) : Comparable<WeightedEdge<T, W>>, GraphEdge<T> {
 	operator fun Number.minus(other: Number): Number {
 		return when (this) {
@@ -18,7 +19,7 @@ data class WeightedEdge<T, W : Number>(
 		}
 	}
 
-	operator fun Number.compareTo(other: Number): Int {
+	/*operator fun Number.compareTo(other: Number): Int {
 		return when (this) {
 			is Long -> this.compareTo(other.toLong())
 			is Int -> this.compareTo(other.toLong())
@@ -27,7 +28,7 @@ data class WeightedEdge<T, W : Number>(
 			is Float -> this.compareTo(other.toDouble())
 			else -> throw IllegalArgumentException("Unknown numeric type")
 		}
-	}
+	}*/
 
 	override fun toString(): String {
 		return "($from,$to|$weight)"

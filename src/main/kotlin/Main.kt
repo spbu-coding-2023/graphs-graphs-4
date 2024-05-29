@@ -1,17 +1,17 @@
+
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
-import model.graphs.Graph
+import model.graphs.Edge
 import model.graphs.UndirectedGraph
-import model.graphs.Vertex
-import view.MainScreen
-import viewmodel.MainScreenViewModel
-import viewmodel.graphs.CircularPlacementStrategy
+import model.graphs.interfaces.Graph
+import view.screens.InitialScreen
+import viewmodel.InitialScreenViewModel
 
 
-val sampleGraph: Graph<Vertex<Int>, Int> = UndirectedGraph<Int>().apply {
+val sampleGraph: Graph<Edge<Int>, Int> = UndirectedGraph<Int>().apply {
 	for (i in 1..12) {
 		addVertex(i)
 	}
@@ -34,7 +34,8 @@ val sampleGraph: Graph<Vertex<Int>, Int> = UndirectedGraph<Int>().apply {
 @Preview
 fun App() {
 	MaterialTheme {
-		MainScreen(MainScreenViewModel(sampleGraph, CircularPlacementStrategy()))
+		InitialScreen(InitialScreenViewModel())
+		//MainScreen(MainScreenViewModel(sampleGraph, CircularPlacementStrategy()))
 	}
 }
 
