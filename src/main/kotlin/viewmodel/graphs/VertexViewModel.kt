@@ -8,12 +8,14 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import model.graphs.Vertex
 
+@Suppress("LongParameterList")
 class VertexViewModel<V>(
 	x: Dp = 0.dp,
 	y: Dp = 0.dp,
 	color: Color,
 	internal val v: Vertex<V>,
-	private val _labelVisible: State<Boolean>,
+	private val keyLabelVisibility: State<Boolean>,
+	private val distanceLabelVisibility: State<Boolean>,
 	val radius: Dp = 25.dp
 ) {
 	private var _x = mutableStateOf(x)
@@ -40,8 +42,13 @@ class VertexViewModel<V>(
 	val label
 		get() = v.key.toString()
 
-	val labelVisible
-		get() = _labelVisible.value
+	val isKeyLabelVisible
+		get() = keyLabelVisibility.value
+
+	var distanceLabel: String = ""
+
+	val isDistLabelVisible
+		get() = distanceLabelVisibility.value
 
 	fun onDrag(offset: Offset) {
 		_x.value += offset.x.dp

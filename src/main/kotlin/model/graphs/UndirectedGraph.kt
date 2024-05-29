@@ -6,7 +6,9 @@ open class UndirectedGraph<T> : Graph<Vertex<T>, T> {
 	var adjList: HashMap<Vertex<T>, HashSet<Vertex<T>>> = HashMap()
 		private set
 
-	private var size: Int = 0
+	private var _size: Int = 0
+	override val size: Int
+		get() = _size
 
 	@Suppress("DuplicatedCode")
 	override fun addVertex(key: T): Vertex<T> {
@@ -19,7 +21,7 @@ open class UndirectedGraph<T> : Graph<Vertex<T>, T> {
 		val vertex = Vertex(key)
 		adjList[vertex] = HashSet()
 
-		size += 1
+		_size += 1
 
 		return vertex
 	}
@@ -31,7 +33,7 @@ open class UndirectedGraph<T> : Graph<Vertex<T>, T> {
 
 		adjList[vertex] = HashSet()
 
-		size += 1
+		_size += 1
 
 		return vertex
 	}
@@ -87,10 +89,6 @@ open class UndirectedGraph<T> : Graph<Vertex<T>, T> {
 		}
 
 		return edges
-	}
-
-	override fun iterator(): Iterator<Vertex<T>> {
-		return this.adjList.keys.iterator()
 	}
 
 	override fun getNeighbors(vertex: Vertex<T>): HashSet<Vertex<T>> {

@@ -2,7 +2,9 @@ package graphsTest
 
 import model.graphs.UndirectedGraph
 import model.graphs.Vertex
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertDoesNotThrow
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -100,30 +102,6 @@ class GraphTest {
 
 			assertEquals(1, graph.adjList[vertex1]?.count { it == vertex2 })
 			assertEquals(1, graph.adjList[vertex2]?.count { it == vertex1 })
-		}
-	}
-
-	// мб стоит вынести в отдельный класс
-	@Nested
-	inner class TraverseTests {
-		private var vertices: Array<Vertex<Int>> = emptyArray()
-
-		@BeforeEach
-		fun setup() {
-			for (i in 0..9) {
-				vertices = vertices.plus(graph.addVertex(i))
-			}
-			// cool graph I saw in a video
-			graph.addEdge(vertices[0], vertices[1])
-			graph.addEdge(vertices[0], vertices[2])
-			graph.addEdge(vertices[1], vertices[2])
-			graph.addEdge(vertices[1], vertices[3])
-			graph.addEdge(vertices[1], vertices[4])
-			graph.addEdge(vertices[3], vertices[5])
-			graph.addEdge(vertices[5], vertices[6])
-			graph.addEdge(vertices[5], vertices[7])
-			graph.addEdge(vertices[5], vertices[8])
-			graph.addEdge(vertices[8], vertices[9])
 		}
 	}
 }
