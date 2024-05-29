@@ -104,28 +104,4 @@ class GraphTest {
 			assertEquals(1, graph.adjList[vertex2]?.count { it == vertex1 })
 		}
 	}
-
-	// мб стоит вынести в отдельный класс
-	@Nested
-	inner class TraverseTests {
-		private var vertices: Array<Vertex<Int>> = emptyArray()
-
-		@BeforeEach
-		fun setup() {
-			for (i in 0..9) {
-				vertices = vertices.plus(graph.addVertex(i))
-			}
-			// cool graph I saw in a video
-			graph.addEdge(vertices[0], vertices[1])
-			graph.addEdge(vertices[0], vertices[2])
-			graph.addEdge(vertices[1], vertices[2])
-			graph.addEdge(vertices[1], vertices[3])
-			graph.addEdge(vertices[1], vertices[4])
-			graph.addEdge(vertices[3], vertices[5])
-			graph.addEdge(vertices[5], vertices[6])
-			graph.addEdge(vertices[5], vertices[7])
-			graph.addEdge(vertices[5], vertices[8])
-			graph.addEdge(vertices[8], vertices[9])
-		}
-	}
 }
