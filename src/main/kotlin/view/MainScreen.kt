@@ -85,17 +85,17 @@ fun <GRAPH_TYPE, T> ToolsPanel(
 			.padding(16.dp)
 	) {
 		Button(
+			onClick = viewModel::highlightBridges,
+			enabled = true,
+		) {
+			Text(text = "Find bridges")
+		}
+
+		Button(
 			onClick = viewModel::resetGraphView,
 			enabled = true,
 		) {
 			Text(text = "Reset default settings")
-		}
-
-		Button(
-			onClick = viewModel::setVerticesColor,
-			enabled = true,
-		) {
-			Text(text = "Set colors")
 		}
 	}
 }

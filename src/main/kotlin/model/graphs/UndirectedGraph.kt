@@ -70,12 +70,23 @@ open class UndirectedGraph<T> : Graph<Vertex<T>, T> {
 		}
 	}
 
-	fun findBridges(): Set<Pair<Vertex<T>, Vertex<T>>> {
-		return BridgeFinder<T>().findBridges(this)
+	override fun findBridges(): Set<Pair<Vertex<T>, Vertex<T>>> {
+		return BridgeFinder<Vertex<T>, T>().findBridges(this)
 	}
 
 	override fun vertices(): Set<Vertex<T>> {
 		return adjList.keys
+	}
+
+	override fun edges(): Set<Edge<T>> {
+		val edges = HashSet<Edge<T>>()
+		for (vertex in adjList.keys) {
+			for (neighbour in adjList[vertex] ?: continue) {
+				edges.add(Edge(vertex, neighbour, null))
+			}
+		}
+
+		return edges
 	}
 
 	override fun iterator(): Iterator<Vertex<T>> {
