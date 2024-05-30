@@ -26,7 +26,6 @@ open class UndirectedGraph<T> : Graph<Vertex<T>, T> {
 		val vertex = Vertex(key)
 		adjList[vertex] = HashSet()
 
-		size += 1
 		_size += 1
 
 		return vertex

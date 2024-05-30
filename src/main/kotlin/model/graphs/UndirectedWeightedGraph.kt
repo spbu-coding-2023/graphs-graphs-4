@@ -10,7 +10,7 @@ import model.functionality.ShortestPathFinder
 open class UndirectedWeightedGraph<T, NUMBER_TYPE : Number> : Graph<Pair<Vertex<T>, NUMBER_TYPE>, T> {
 	@SerialName("UndirectedWeightedGraph")
 	open var adjList: HashMap<Vertex<T>, HashSet<Pair<Vertex<T>, NUMBER_TYPE>>> = HashMap()
-		private set
+		internal set
 
 	private var _size: Int = 0
 	override val size: Int

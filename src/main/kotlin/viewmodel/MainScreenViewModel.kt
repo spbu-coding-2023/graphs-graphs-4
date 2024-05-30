@@ -10,15 +10,16 @@ import viewmodel.graphs.RepresentationStrategy
 import java.awt.FileDialog
 import java.awt.Frame
 import java.io.File
+import kotlin.system.exitProcess
 
 class MainScreenViewModel<GRAPH_TYPE, T>(
-	val graph: Graph<GRAPH_TYPE, T>,
+	var graph: Graph<GRAPH_TYPE, T>,
 	private val representationStrategy: RepresentationStrategy
 ) {
 	internal val showVerticesLabels = mutableStateOf(false)
 	internal val showVerticesDistanceLabels = mutableStateOf(false)
 	internal val showEdgesLabels = mutableStateOf(false)
-	val graphViewModel = GraphViewModel(graph, showVerticesLabels, showEdgesLabels, showVerticesDistanceLabels)
+	var graphViewModel = GraphViewModel(graph, showVerticesLabels, showEdgesLabels, showVerticesDistanceLabels)
     var file: File? = null
 
 	@Suppress("MagicNumber")
@@ -51,7 +52,7 @@ class MainScreenViewModel<GRAPH_TYPE, T>(
 			file = File("${dialog.directory}${dialog.file}")
 			val graphType = ReadWriteGraph().findType(file!!) ?: return
 			graph = ReadWriteGraph().read(file!!)
-			graphViewModel = GraphViewModel(graph, showVerticesLabels, showEdgesLabels)
+			graphViewModel = GraphViewModel(graph, showVerticesLabels, showEdgesLabels, showVerticesDistanceLabels)
 		}
 
 	}
@@ -68,6 +69,10 @@ class MainScreenViewModel<GRAPH_TYPE, T>(
 		} else {
 			representationStrategy.highlightMinSpanTree(minSpanTree, *graphViewModel.edges.toTypedArray())
 		}
+	}
+
+	fun closeApp() {
+		exitProcess(0)
 	}
 
 	fun highlightBridges() {

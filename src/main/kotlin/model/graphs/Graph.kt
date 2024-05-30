@@ -1,7 +1,5 @@
 package model.graphs
 
-import kotlinx.serialization.Serializable
-import model.functionality.iograph.GraphSerializer
 import model.functionality.ShortestPathFinder
 
 interface Graph<GRAPH_TYPE, T> : Iterable<Vertex<T>> {
