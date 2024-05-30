@@ -19,11 +19,13 @@ interface Graph<GRAPH_TYPE, T> : Iterable<Vertex<T>> {
 
 	fun findBridges(): Set<Pair<Vertex<T>, Vertex<T>>>
 
+	fun findSCC(): Set<Set<Vertex<T>>>
 	fun findDistancesBellman(start: Vertex<T>): Map<Vertex<T>, Double> {
 		val output = ShortestPathFinder(this).bellmanFord(start)
 		return output
 	}
 
+	fun findMinSpanTree(): Set<GraphEdge<T>>?
 	fun findDistancesDijkstra(start: Vertex<T>): Map<Vertex<T>, Double> {
 		return ShortestPathFinder(this).dijkstra(start)
 	}

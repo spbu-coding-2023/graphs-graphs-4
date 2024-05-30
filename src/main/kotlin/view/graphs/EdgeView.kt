@@ -30,10 +30,10 @@ fun <T> EdgeView(
 					viewModel.u.y.toPx() + viewModel.u.radius.toPx(),
 				),
 
-				end = Offset(
-					viewModel.v.x.toPx() + viewModel.v.radius.toPx(),
-					viewModel.v.y.toPx() + viewModel.v.radius.toPx(),
-				),
+			end = Offset(
+				viewModel.v.x.toPx() + viewModel.v.radius.toPx(),
+				viewModel.v.y.toPx() + viewModel.v.radius.toPx(),
+			),
 
 				color = viewModel.color,
 				strokeWidth = viewModel.width,

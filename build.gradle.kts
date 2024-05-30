@@ -1,7 +1,8 @@
-import io.gitlab.arturbosch.detekt.Detekt
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
+import io.gitlab.arturbosch.detekt.Detekt
 
 plugins {
+	kotlin("plugin.serialization") version "1.9.23"
 	kotlin("jvm") version "1.9.23"
 	id("io.gitlab.arturbosch.detekt").version("1.23.6")
 	id("org.jetbrains.compose") version "1.6.1"
@@ -18,6 +19,7 @@ repositories {
 }
 
 dependencies {
+	implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
 	implementation(compose.desktop.currentOs)
 	testImplementation(kotlin("test"))
 }

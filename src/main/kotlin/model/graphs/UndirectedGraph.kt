@@ -1,10 +1,15 @@
 package model.graphs
 
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 import model.functionality.BridgeFinder
+import model.functionality.StrConCompFinder
 
+@Serializable
 open class UndirectedGraph<T> : Graph<Vertex<T>, T> {
-	var adjList: HashMap<Vertex<T>, HashSet<Vertex<T>>> = HashMap()
-		private set
+	@SerialName("UndirectedGraph")
+	open var adjList: HashMap<Vertex<T>, HashSet<Vertex<T>>> = HashMap()
+		internal set
 
 	private var _size: Int = 0
 	override val size: Int
@@ -76,6 +81,14 @@ open class UndirectedGraph<T> : Graph<Vertex<T>, T> {
 		return BridgeFinder<Vertex<T>, T>().findBridges(this)
 	}
 
+	override fun findSCC(): Set<Set<Vertex<T>>> {
+		return StrConCompFinder(this).sccSearch()
+	}
+
+	override fun findMinSpanTree(): Set<GraphEdge<T>>? {
+		return null
+	}
+
 	override fun vertices(): Set<Vertex<T>> {
 		return adjList.keys
 	}
@@ -89,6 +102,10 @@ open class UndirectedGraph<T> : Graph<Vertex<T>, T> {
 		}
 
 		return edges
+	}
+
+	override fun iterator(): Iterator<Vertex<T>> {
+		return this.adjList.keys.iterator()
 	}
 
 	override fun getNeighbors(vertex: Vertex<T>): HashSet<Vertex<T>> {

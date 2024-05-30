@@ -2,19 +2,25 @@ package viewmodel
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
+import model.functionality.iograph.ReadWriteGraph
 import model.graphs.Graph
 import model.graphs.Vertex
 import viewmodel.graphs.GraphViewModel
 import viewmodel.graphs.RepresentationStrategy
+import java.awt.FileDialog
+import java.awt.Frame
+import java.io.File
+import kotlin.system.exitProcess
 
 class MainScreenViewModel<GRAPH_TYPE, T>(
-	val graph: Graph<GRAPH_TYPE, T>,
+	var graph: Graph<GRAPH_TYPE, T>,
 	private val representationStrategy: RepresentationStrategy
 ) {
 	internal val showVerticesLabels = mutableStateOf(false)
 	internal val showVerticesDistanceLabels = mutableStateOf(false)
 	internal val showEdgesLabels = mutableStateOf(false)
-	val graphViewModel = GraphViewModel(graph, showVerticesLabels, showEdgesLabels, showVerticesDistanceLabels)
+	var graphViewModel = GraphViewModel(graph, showVerticesLabels, showEdgesLabels, showVerticesDistanceLabels)
+    var file: File? = null
 
 	@Suppress("MagicNumber")
 	private val width = 800.0
@@ -33,6 +39,40 @@ class MainScreenViewModel<GRAPH_TYPE, T>(
 			it.color = Color.Black
 			it.width = 3.toFloat()
 		}
+	}
+
+	fun setVerticesColor() {
+		representationStrategy.highlight(graphViewModel.vertices)
+	}
+
+	fun openFile() {
+		val dialog = FileDialog(Frame(), "Select Graph File", FileDialog.LOAD)
+		dialog.isVisible = true
+		if (dialog.file != null) {
+			file = File("${dialog.directory}${dialog.file}")
+			val graphType = ReadWriteGraph().findType(file!!) ?: return
+			graph = ReadWriteGraph().read(file!!)
+			graphViewModel = GraphViewModel(graph, showVerticesLabels, showEdgesLabels, showVerticesDistanceLabels)
+		}
+
+	}
+
+	fun highlightSCC() {
+		val scc = graph.findSCC()
+		representationStrategy.highlightSCC(scc, *graphViewModel.vertices.toTypedArray())
+	}
+
+	fun highlightMinSpanTree() {
+		val minSpanTree = graph.findMinSpanTree()
+		if (minSpanTree == null) {
+			return
+		} else {
+			representationStrategy.highlightMinSpanTree(minSpanTree, *graphViewModel.edges.toTypedArray())
+		}
+	}
+
+	fun closeApp() {
+		exitProcess(0)
 	}
 
 	fun highlightBridges() {
@@ -60,5 +100,4 @@ class MainScreenViewModel<GRAPH_TYPE, T>(
 			}
 		}
 	}
-
 }
