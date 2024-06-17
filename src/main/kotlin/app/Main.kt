@@ -8,6 +8,7 @@ import model.graphs.Graph
 import model.graphs.UndirectedWeightedGraph
 import model.graphs.Vertex
 import view.MainScreen
+import view.StartingScreen
 import viewmodel.MainScreenViewModel
 import viewmodel.graphs.CircularPlacementStrategy
 
@@ -32,6 +33,7 @@ val sampleGraph: Graph<Pair<Vertex<Int>, Int>, Int> = UndirectedWeightedGraph<In
 @Preview
 @Suppress("FunctionNaming")
 fun App() {
+    StartingScreen()
     MainScreen(MainScreenViewModel(sampleGraph, CircularPlacementStrategy()))
 }
 
