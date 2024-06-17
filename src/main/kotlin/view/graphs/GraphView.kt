@@ -14,24 +14,24 @@ import viewmodel.graphs.GraphViewModel
 @Suppress("FunctionNaming")
 @Composable
 fun <V, E> GraphView(
-	viewModel: GraphViewModel<V, E>,
-	onVertexClick: (Vertex<E>) -> Unit,
+    viewModel: GraphViewModel<V, E>,
+    onVertexClick: (Vertex<E>) -> Unit,
 ) {
-	Box(
-		modifier = Modifier
-			.fillMaxSize()
-			.background(MaterialTheme.colors.background)
-			.padding(16.dp)
-	) {
-		viewModel.edges.forEach { edge ->
-			EdgeView(edge)
-		}
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colors.background)
+            .padding(16.dp)
+    ) {
+        viewModel.edges.forEach { edge ->
+            EdgeView(edge)
+        }
 
-		viewModel.vertices.forEach { vertex ->
-			VertexView(
-				viewModel = vertex,
-				onClick = onVertexClick
-			)
-		}
-	}
+        viewModel.vertices.forEach { vertex ->
+            VertexView(
+                viewModel = vertex,
+                onClick = onVertexClick
+            )
+        }
+    }
 }

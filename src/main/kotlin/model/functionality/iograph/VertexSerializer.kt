@@ -14,14 +14,14 @@ class VertexSerializer<T> : KSerializer<Vertex<T>> {
 
     override fun serialize(encoder: Encoder, value: Vertex<T>) {
         when (val key = value.key) {
-            is String ->encoder.encodeString(key)
-            is Int ->encoder.encodeInt(key)
-            is Float ->encoder.encodeFloat(key)
-            is Double ->encoder.encodeDouble(key)
-            is Long ->encoder.encodeLong(key)
-            is Short ->encoder.encodeShort(key)
-            is Boolean ->encoder.encodeBoolean(key)
-            is Byte ->encoder.encodeByte(key)
+            is String -> encoder.encodeString(key)
+            is Int -> encoder.encodeInt(key)
+            is Float -> encoder.encodeFloat(key)
+            is Double -> encoder.encodeDouble(key)
+            is Long -> encoder.encodeLong(key)
+            is Short -> encoder.encodeShort(key)
+            is Boolean -> encoder.encodeBoolean(key)
+            is Byte -> encoder.encodeByte(key)
             else -> throw SerializationException("Unknown key $key")
         }
     }

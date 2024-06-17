@@ -11,7 +11,7 @@ class JohnsonAlgTest {
 
     @Test
     fun findCyclesEin() { //Simple case(Graph 1)
-        for(i in 1..13){
+        for (i in 1..13) {
             graph.addVertex(i)
         }
         val nodes = graph.adjList.keys.toList().sortedBy { it.key }
@@ -31,11 +31,11 @@ class JohnsonAlgTest {
         graph.addEdge(13, 10)
 
         val resultEin = JohnsonAlg<Int>(graph).findCycles(nodes[11])
-        val expectedResultEin = setOf(listOf(nodes[11],nodes[12],nodes[9], nodes[10]))
+        val expectedResultEin = setOf(listOf(nodes[11], nodes[12], nodes[9], nodes[10]))
         assertEquals(expectedResultEin, resultEin)
 
         val resultZwei = JohnsonAlg<Int>(graph).findCycles(nodes[4])
-        val expectedResultZwei = setOf(listOf(nodes[4],nodes[5],nodes[3]))
+        val expectedResultZwei = setOf(listOf(nodes[4], nodes[5], nodes[3]))
         assertEquals(expectedResultZwei, resultZwei)
     }
 
@@ -63,7 +63,7 @@ class JohnsonAlgTest {
         graph.addEdge(13, 11)
 
         val result = JohnsonAlg<Int>(graph).findCycles(nodes[3])
-        val expectedResult = setOf(listOf(nodes[3],nodes[4],nodes[5], nodes[2]))
+        val expectedResult = setOf(listOf(nodes[3], nodes[4], nodes[5], nodes[2]))
         assertEquals(expectedResult, result)
     }
 
@@ -74,21 +74,21 @@ class JohnsonAlgTest {
         }
         val nodes = graph.adjList.keys.toList().sortedBy { it.key }
 
-        graph.addEdge(8,9)
-        graph.addEdge(9,8)
-        graph.addEdge(1,2)
-        graph.addEdge(2,7)
-        graph.addEdge(1,8)
-        graph.addEdge(2,9)
-        graph.addEdge(2,3)
-        graph.addEdge(3,2)
-        graph.addEdge(3,1)
-        graph.addEdge(3,4)
-        graph.addEdge(3,6)
-        graph.addEdge(4,5)
-        graph.addEdge(5,2)
-        graph.addEdge(1,5)
-        graph.addEdge(6,4)
+        graph.addEdge(8, 9)
+        graph.addEdge(9, 8)
+        graph.addEdge(1, 2)
+        graph.addEdge(2, 7)
+        graph.addEdge(1, 8)
+        graph.addEdge(2, 9)
+        graph.addEdge(2, 3)
+        graph.addEdge(3, 2)
+        graph.addEdge(3, 1)
+        graph.addEdge(3, 4)
+        graph.addEdge(3, 6)
+        graph.addEdge(4, 5)
+        graph.addEdge(5, 2)
+        graph.addEdge(1, 5)
+        graph.addEdge(6, 4)
 
         val result = JohnsonAlg<Int>(graph).findCycles(nodes[0])
         val first = listOf(nodes[0], nodes[1], nodes[2])
@@ -104,17 +104,17 @@ class JohnsonAlgTest {
         }
         val nodes = graph.adjList.keys.toList().sortedBy { it.key }
 
-        graph.addEdge(1,3)
-        graph.addEdge(3,2)
-        graph.addEdge(3,6)
-        graph.addEdge(6,2)
-        graph.addEdge(6,4)
-        graph.addEdge(7,4)
-        graph.addEdge(7,5)
-        graph.addEdge(5,4)
-        graph.addEdge(4,2)
-        graph.addEdge(2,1)
-        graph.addEdge(6,7)
+        graph.addEdge(1, 3)
+        graph.addEdge(3, 2)
+        graph.addEdge(3, 6)
+        graph.addEdge(6, 2)
+        graph.addEdge(6, 4)
+        graph.addEdge(7, 4)
+        graph.addEdge(7, 5)
+        graph.addEdge(5, 4)
+        graph.addEdge(4, 2)
+        graph.addEdge(2, 1)
+        graph.addEdge(6, 7)
 
         val result = JohnsonAlg<Int>(graph).findCycles(nodes[0])
         val first = listOf(nodes[0], nodes[2], nodes[1])

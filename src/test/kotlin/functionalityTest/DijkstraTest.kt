@@ -12,7 +12,7 @@ class DijkstraTest {
 
     @Test
     fun graphEin() {
-        for(i in 1..12){
+        for (i in 1..12) {
             graph.addVertex(i)
         }
 
@@ -45,7 +45,7 @@ class DijkstraTest {
     }
 
     @Test
-    fun graphZwei(){
+    fun graphZwei() {
         for (i in 1..15) {
             graph.addVertex(i)
         }

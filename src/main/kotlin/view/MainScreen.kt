@@ -25,164 +25,164 @@ import viewmodel.MainScreenViewModel
 @Suppress("FunctionNaming")
 @Composable
 fun <GRAPH_TYPE, T> MainScreen(viewModel: MainScreenViewModel<GRAPH_TYPE, T>) {
-	var showMenu by remember { mutableStateOf(false) }
-	var showGraph by remember { mutableStateOf(false) }
-	var currentVertex: Vertex<T>? by remember { mutableStateOf(null) }
-	val darkTheme = remember { mutableStateOf(false) }
+    var showMenu by remember { mutableStateOf(false) }
+    var showGraph by remember { mutableStateOf(false) }
+    var currentVertex: Vertex<T>? by remember { mutableStateOf(null) }
+    val darkTheme = remember { mutableStateOf(false) }
 
-	GraphAppTheme(darkTheme.value) {
-		Scaffold(
-			topBar = {
-				TopAppBar(
-					title = { Text("Graph the Graph") },
+    GraphAppTheme(darkTheme.value) {
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = { Text("Graph the Graph") },
 
-					navigationIcon = {
-						IconButton(onClick = { showMenu = true }) {
-							Icon(Icons.Filled.Menu, contentDescription = "Main Menu")
-						}
+                    navigationIcon = {
+                        IconButton(onClick = { showMenu = true }) {
+                            Icon(Icons.Filled.Menu, contentDescription = "Main Menu")
+                        }
 
-						AppDropdownMenu(showMenu, onDismiss = { showMenu = false }) {
-							DropdownMenuItem(onClick = { showGraph = true }) {
-								Text("New Graph")
-							}
+                        AppDropdownMenu(showMenu, onDismiss = { showMenu = false }) {
+                            DropdownMenuItem(onClick = { showGraph = true }) {
+                                Text("New Graph")
+                            }
 
-							DropdownMenuItem(onClick = { viewModel.openFile() }) {
-								Text("Open Graph")
-							}
+                            DropdownMenuItem(onClick = { viewModel.openFile() }) {
+                                Text("Open Graph")
+                            }
 
-							DropdownMenuItem(onClick = { /* код */ }) {
-								Text("Save Graph")
-							}
+                            DropdownMenuItem(onClick = { /* код */ }) {
+                                Text("Save Graph")
+                            }
 
-							DropdownMenuItem(onClick = { darkTheme.value = !darkTheme.value }) {
-								Text("Toggle Theme")
-							}
+                            DropdownMenuItem(onClick = { darkTheme.value = !darkTheme.value }) {
+                                Text("Toggle Theme")
+                            }
 
-							Divider()
+                            Divider()
 
-							DropdownMenuItem(onClick = { viewModel.closeApp() }) {
-								Text("Exit")
-							}
-						}
-					}
-				)
-			}
-		) {
-			MainContent(viewModel, showGraph, currentVertex, onVertexClick = { currentVertex = it })
-		}
-	}
+                            DropdownMenuItem(onClick = { viewModel.closeApp() }) {
+                                Text("Exit")
+                            }
+                        }
+                    }
+                )
+            }
+        ) {
+            MainContent(viewModel, showGraph, currentVertex, onVertexClick = { currentVertex = it })
+        }
+    }
 }
 
 @Suppress("FunctionNaming")
 @Composable
 fun GraphAppTheme(darkTheme: Boolean, content: @Composable () -> Unit) {
-	val darkThemeColors = darkColors(
-		background = Color.White
-	)
+    val darkThemeColors = darkColors(
+        background = Color.White
+    )
 
-	MaterialTheme(
-		colors = if (darkTheme) darkThemeColors else lightColors(),
+    MaterialTheme(
+        colors = if (darkTheme) darkThemeColors else lightColors(),
 
-		typography = Typography(
-			defaultFontFamily = FontFamily.SansSerif,
-			h1 = TextStyle(fontWeight = FontWeight.Bold, fontSize = 30.sp),
-			body1 = TextStyle(fontSize = 16.sp)
-		),
+        typography = Typography(
+            defaultFontFamily = FontFamily.SansSerif,
+            h1 = TextStyle(fontWeight = FontWeight.Bold, fontSize = 30.sp),
+            body1 = TextStyle(fontSize = 16.sp)
+        ),
 
-		shapes = Shapes(
-			small = RoundedCornerShape(4.dp),
-			medium = RoundedCornerShape(8.dp),
-			large = RoundedCornerShape(16.dp)
-		),
+        shapes = Shapes(
+            small = RoundedCornerShape(4.dp),
+            medium = RoundedCornerShape(8.dp),
+            large = RoundedCornerShape(16.dp)
+        ),
 
-		content = content
-	)
+        content = content
+    )
 }
 
 @Suppress("FunctionNaming")
 @Composable
 fun AppDropdownMenu(expanded: Boolean, onDismiss: () -> Unit, content: @Composable ColumnScope.() -> Unit) {
-	DropdownMenu(
-		expanded = expanded,
-		onDismissRequest = onDismiss,
-		content = content
-	)
+    DropdownMenu(
+        expanded = expanded,
+        onDismissRequest = onDismiss,
+        content = content
+    )
 }
 
 @Suppress("FunctionNaming")
 @Composable
 fun <GRAPH_TYPE, T> MainContent(
-	viewModel: MainScreenViewModel<GRAPH_TYPE, T>,
-	showGraph: Boolean,
-	currentVertex: Vertex<T>?,
-	onVertexClick: (Vertex<T>) -> Unit
+    viewModel: MainScreenViewModel<GRAPH_TYPE, T>,
+    showGraph: Boolean,
+    currentVertex: Vertex<T>?,
+    onVertexClick: (Vertex<T>) -> Unit
 ) {
-	Row(horizontalArrangement = Arrangement.spacedBy(20.dp)) {
-		Surface(
-			modifier = Modifier
-				.weight(1f)
-				.fillMaxSize(),
-			color = MaterialTheme.colors.surface
-		) {
-			if (showGraph) {
-				GraphView(viewModel.graphViewModel, onVertexClick)
-			}
-		}
+    Row(horizontalArrangement = Arrangement.spacedBy(20.dp)) {
+        Surface(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxSize(),
+            color = MaterialTheme.colors.surface
+        ) {
+            if (showGraph) {
+                GraphView(viewModel.graphViewModel, onVertexClick)
+            }
+        }
 
-		Column(modifier = Modifier.width(370.dp)) {
-			ToolsPanel(
-				modifier = Modifier
-					.weight(1f)
-					.fillMaxHeight()
-					.background(MaterialTheme.colors.secondary),
+        Column(modifier = Modifier.width(370.dp)) {
+            ToolsPanel(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight()
+                    .background(MaterialTheme.colors.secondary),
 
-				viewModel = viewModel,
-				selectedVertex = currentVertex
-			)
-		}
-	}
+                viewModel = viewModel,
+                selectedVertex = currentVertex
+            )
+        }
+    }
 }
 
 @Suppress("FunctionNaming")
 @Composable
 fun <GRAPH_TYPE, T> ToolsPanel(
-	viewModel: MainScreenViewModel<GRAPH_TYPE, T>,
-	modifier: Modifier = Modifier,
-	selectedVertex: Vertex<T>?
+    viewModel: MainScreenViewModel<GRAPH_TYPE, T>,
+    modifier: Modifier = Modifier,
+    selectedVertex: Vertex<T>?
 ) {
-	Column(
-		modifier = modifier
-			.fillMaxHeight()
-			.padding(16.dp)
-			.background(MaterialTheme.colors.surface)
-			.clip(RoundedCornerShape(8.dp))
-			.padding(16.dp)
-	) {
-		Text(
-			text = "Tools",
-			style = MaterialTheme.typography.h6,
-			modifier = Modifier.padding(bottom = 16.dp)
-		)
+    Column(
+        modifier = modifier
+            .fillMaxHeight()
+            .padding(16.dp)
+            .background(MaterialTheme.colors.surface)
+            .clip(RoundedCornerShape(8.dp))
+            .padding(16.dp)
+    ) {
+        Text(
+            text = "Tools",
+            style = MaterialTheme.typography.h6,
+            modifier = Modifier.padding(bottom = 16.dp)
+        )
 
-		Button(
-			onClick = viewModel::highlightBridges,
-			enabled = true,
-			modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
-		) {
-			Icon(Icons.Default.Search, contentDescription = "Find bridges")
-			Spacer(modifier = Modifier.width(8.dp))
-			Text(text = "Find Bridges")
-		}
+        Button(
+            onClick = viewModel::highlightBridges,
+            enabled = true,
+            modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
+        ) {
+            Icon(Icons.Default.Search, contentDescription = "Find bridges")
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(text = "Find Bridges")
+        }
 
-		Button(
-			onClick = { (viewModel::findDistanceBellman)(selectedVertex) },
-			enabled = true,
-			modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
-		) {
-			Icon(Icons.Default.Search, contentDescription = "Find the shortest distance")
-			Spacer(modifier = Modifier.width(8.dp))
-			Text(text = "Find Shortest Distance")
-		}
+        Button(
+            onClick = { (viewModel::findDistanceBellman)(selectedVertex) },
+            enabled = true,
+            modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
+        ) {
+            Icon(Icons.Default.Search, contentDescription = "Find the shortest distance")
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(text = "Find Shortest Distance")
+        }
 
         Button(
             onClick = viewModel::highlightMinSpanTree,
@@ -204,52 +204,52 @@ fun <GRAPH_TYPE, T> ToolsPanel(
             Text(text = "Find SCC")
         }
 
-		ToggleRow(
-			label = "Show Vertices Labels",
-			checked = viewModel.showVerticesLabels.value,
-			onCheckedChange = { viewModel.showVerticesLabels.value = it }
-		)
+        ToggleRow(
+            label = "Show Vertices Labels",
+            checked = viewModel.showVerticesLabels.value,
+            onCheckedChange = { viewModel.showVerticesLabels.value = it }
+        )
 
-		ToggleRow(
-			label = "Show Edges Labels",
-			checked = viewModel.showEdgesLabels.value,
-			onCheckedChange = { viewModel.showEdgesLabels.value = it }
-		)
+        ToggleRow(
+            label = "Show Edges Labels",
+            checked = viewModel.showEdgesLabels.value,
+            onCheckedChange = { viewModel.showEdgesLabels.value = it }
+        )
 
-		ToggleRow(
-			label = "Show Distance Labels",
-			checked = viewModel.showVerticesDistanceLabels.value,
-			onCheckedChange = { viewModel.showVerticesDistanceLabels.value = it }
-		)
+        ToggleRow(
+            label = "Show Distance Labels",
+            checked = viewModel.showVerticesDistanceLabels.value,
+            onCheckedChange = { viewModel.showVerticesDistanceLabels.value = it }
+        )
 
-		Button(
-			onClick = viewModel::resetGraphView,
-			enabled = true,
-			modifier = Modifier.fillMaxWidth().padding(top = 16.dp)
-		) {
-			Icon(Icons.Default.Refresh, contentDescription = "Reset default settings")
-			Spacer(modifier = Modifier.width(8.dp))
-			Text(text = "Reset Default Settings")
-		}
-	}
+        Button(
+            onClick = viewModel::resetGraphView,
+            enabled = true,
+            modifier = Modifier.fillMaxWidth().padding(top = 16.dp)
+        ) {
+            Icon(Icons.Default.Refresh, contentDescription = "Reset default settings")
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(text = "Reset Default Settings")
+        }
+    }
 }
 
 @Suppress("FunctionNaming")
 @Composable
 fun ToggleRow(label: String, checked: Boolean, onCheckedChange: (Boolean) -> Unit) {
-	Row(
-		verticalAlignment = Alignment.CenterVertically,
-		modifier = Modifier.padding(vertical = 8.dp)
-	) {
-		Checkbox(
-			checked = checked,
-			onCheckedChange = onCheckedChange,
-			colors = CheckboxDefaults.colors(MaterialTheme.colors.primary)
-		)
-		Text(
-			text = label,
-			style = MaterialTheme.typography.body1,
-			modifier = Modifier.padding(start = 8.dp)
-		)
-	}
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.padding(vertical = 8.dp)
+    ) {
+        Checkbox(
+            checked = checked,
+            onCheckedChange = onCheckedChange,
+            colors = CheckboxDefaults.colors(MaterialTheme.colors.primary)
+        )
+        Text(
+            text = label,
+            style = MaterialTheme.typography.body1,
+            modifier = Modifier.padding(start = 8.dp)
+        )
+    }
 }

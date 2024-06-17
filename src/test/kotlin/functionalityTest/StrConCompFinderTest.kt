@@ -68,7 +68,7 @@ class StrConCompFinderTest {
             Edge(vertices[6], vertices[7]),
             Edge(vertices[7], vertices[6]),
             Edge(vertices[7], vertices[5]),
-            )
+        )
 
         graphInt.addVertices(*vertices)
         graphInt.addEdges(*edges)
@@ -76,7 +76,7 @@ class StrConCompFinderTest {
             setOf(Vertex(0), Vertex(1)),
             setOf(Vertex(2), Vertex(3), Vertex(4)),
             setOf(Vertex(5), Vertex(6), Vertex(7)),
-            )
+        )
 
         assertEquals(expectedSCC, graphInt.findSCC())
     }

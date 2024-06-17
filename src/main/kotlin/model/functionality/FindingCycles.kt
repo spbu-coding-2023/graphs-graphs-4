@@ -44,8 +44,8 @@ class JohnsonAlg<T>(val graph: DirectedGraph<T>) {
             }
         }
 
-        if(foundCycle) unblock(current)
-        else{
+        if (foundCycle) unblock(current)
+        else {
             for (neighbor in subGraph[current] ?: emptyList()) {
                 if (!blockedMap[neighbor]!!.contains(current)) {
                     blockedMap[neighbor]!!.add(current)
@@ -74,11 +74,11 @@ class JohnsonAlg<T>(val graph: DirectedGraph<T>) {
             blockedMap[vertex]?.clear()
         }*/
 
-    private fun unblock(vertex: Vertex<T>){
+    private fun unblock(vertex: Vertex<T>) {
         blocked[vertex] = false
-        if(blockedMap[vertex]?.size != 0){
-            blockedMap[vertex]?.forEach{
-                if(blocked[it] == true) unblock(it)
+        if (blockedMap[vertex]?.size != 0) {
+            blockedMap[vertex]?.forEach {
+                if (blocked[it] == true) unblock(it)
             }
         }
         blockedMap[vertex]?.clear()
@@ -95,40 +95,39 @@ class TarjanSCC<T> {
     val processed = hashSetOf<Vertex<T>>()
     var curIndex = 1
 
-    fun findSCC(vertex: Vertex<T>, graph: DirectedGraph<T>): HashSet<Vertex<T>>{
+    fun findSCC(vertex: Vertex<T>, graph: DirectedGraph<T>): HashSet<Vertex<T>> {
         return dfsTarjan(vertex, graph)
     }
 
-    fun containsInAnySCC(allSCCs: HashSet<HashSet<Vertex<T>>>, v: Vertex<T>):Boolean {
-        for(scc in allSCCs){
-            if(scc.contains(v)) return false
+    fun containsInAnySCC(allSCCs: HashSet<HashSet<Vertex<T>>>, v: Vertex<T>): Boolean {
+        for (scc in allSCCs) {
+            if (scc.contains(v)) return false
         }
         return true
     }
 
-    fun findSCCs(graph: DirectedGraph<T>): HashSet<HashSet<Vertex<T>>>{
+    fun findSCCs(graph: DirectedGraph<T>): HashSet<HashSet<Vertex<T>>> {
         val allSCCs: HashSet<HashSet<Vertex<T>>> = HashSet<HashSet<Vertex<T>>>()
-        for(v in graph.adjList.keys){
-            if(containsInAnySCC(allSCCs, v)) allSCCs.add(dfsTarjan(v, graph))
+        for (v in graph.adjList.keys) {
+            if (containsInAnySCC(allSCCs, v)) allSCCs.add(dfsTarjan(v, graph))
         }
         return allSCCs
     }
 
 
-    fun dfsTarjan(vertex: Vertex<T>, graph: DirectedGraph<T>): HashSet<Vertex<T>>{
+    fun dfsTarjan(vertex: Vertex<T>, graph: DirectedGraph<T>): HashSet<Vertex<T>> {
         num[vertex] = curIndex
         lowest[vertex] = curIndex
         curIndex++
         stack.add(vertex)
         visited.add(vertex)
 
-        graph.adjList[vertex]?.forEach{
-            if(!stack.contains(it)){
+        graph.adjList[vertex]?.forEach {
+            if (!stack.contains(it)) {
                 dfsTarjan(it, graph)
                 lowest[vertex] = min(lowest[vertex]!!, lowest[it]!!)
                 //Говорят что это крайне желательно
-            }
-            else if(stack.contains(it)){
+            } else if (stack.contains(it)) {
                 lowest[vertex] = min(lowest[vertex]!!, num[it]!!)
                 //И здесь то же самое
             }
@@ -136,12 +135,12 @@ class TarjanSCC<T> {
         processed.add(vertex)
 
         val scc: HashSet<Vertex<T>> = HashSet<Vertex<T>>()
-        if(lowest[vertex] == num[vertex]){
+        if (lowest[vertex] == num[vertex]) {
             var sccVertex: Vertex<T>
-            do{
+            do {
                 sccVertex = stack.pop()
                 scc.add(sccVertex)
-            }while(sccVertex != vertex)
+            } while (sccVertex != vertex)
         }
 
         return scc

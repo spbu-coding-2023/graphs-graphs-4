@@ -1,10 +1,10 @@
 package model.functionality
 
+import model.graphs.UndirectedWeightedGraph
 import model.graphs.Vertex
 import model.graphs.WeightedEdge
-import model.graphs.UndirectedWeightedGraph
 
-class MinSpanTreeFinder<K, W: Number>(private val graph: UndirectedWeightedGraph<K, W>) {
+class MinSpanTreeFinder<K, W : Number>(private val graph: UndirectedWeightedGraph<K, W>) {
     private val spanningTree = mutableSetOf<WeightedEdge<K, W>>()
 
 

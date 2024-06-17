@@ -81,7 +81,7 @@ class MinSpanTreeFinderTest {
             WeightedEdge(vertices[1], vertices[2], 1),
             WeightedEdge(vertices[3], vertices[4], 2),
 
-        )
+            )
 
         //assertEquals(expectedTree.sorted(), graphInt.findMinSpanTree())
     }

@@ -13,91 +13,91 @@ import java.io.File
 import kotlin.system.exitProcess
 
 class MainScreenViewModel<GRAPH_TYPE, T>(
-	var graph: Graph<GRAPH_TYPE, T>,
-	private val representationStrategy: RepresentationStrategy
+    var graph: Graph<GRAPH_TYPE, T>,
+    private val representationStrategy: RepresentationStrategy
 ) {
-	internal val showVerticesLabels = mutableStateOf(false)
-	internal val showVerticesDistanceLabels = mutableStateOf(false)
-	internal val showEdgesLabels = mutableStateOf(false)
-	var graphViewModel = GraphViewModel(graph, showVerticesLabels, showEdgesLabels, showVerticesDistanceLabels)
+    internal val showVerticesLabels = mutableStateOf(false)
+    internal val showVerticesDistanceLabels = mutableStateOf(false)
+    internal val showEdgesLabels = mutableStateOf(false)
+    var graphViewModel = GraphViewModel(graph, showVerticesLabels, showEdgesLabels, showVerticesDistanceLabels)
     var file: File? = null
 
-	@Suppress("MagicNumber")
-	private val width = 800.0
+    @Suppress("MagicNumber")
+    private val width = 800.0
 
-	@Suppress("MagicNumber")
-	private val height = 600.0
+    @Suppress("MagicNumber")
+    private val height = 600.0
 
-	init {
-		representationStrategy.place(width, height, graphViewModel.vertices)
-	}
+    init {
+        representationStrategy.place(width, height, graphViewModel.vertices)
+    }
 
-	fun resetGraphView() {
-		representationStrategy.place(width, height, graphViewModel.vertices)
-		graphViewModel.vertices.forEach { v -> v.color = Color.DarkGray }
-		graphViewModel.edges.forEach {
-			it.color = Color.Black
-			it.width = 3.toFloat()
-		}
-	}
+    fun resetGraphView() {
+        representationStrategy.place(width, height, graphViewModel.vertices)
+        graphViewModel.vertices.forEach { v -> v.color = Color.DarkGray }
+        graphViewModel.edges.forEach {
+            it.color = Color.Black
+            it.width = 3.toFloat()
+        }
+    }
 
-	fun setVerticesColor() {
-		representationStrategy.highlight(graphViewModel.vertices)
-	}
+    fun setVerticesColor() {
+        representationStrategy.highlight(graphViewModel.vertices)
+    }
 
-	fun openFile() {
-		val dialog = FileDialog(Frame(), "Select Graph File", FileDialog.LOAD)
-		dialog.isVisible = true
-		if (dialog.file != null) {
-			file = File("${dialog.directory}${dialog.file}")
-			val graphType = ReadWriteGraph().findType(file!!) ?: return
-			graph = ReadWriteGraph().read(file!!)
-			graphViewModel = GraphViewModel(graph, showVerticesLabels, showEdgesLabels, showVerticesDistanceLabels)
-		}
+    fun openFile() {
+        val dialog = FileDialog(Frame(), "Select Graph File", FileDialog.LOAD)
+        dialog.isVisible = true
+        if (dialog.file != null) {
+            file = File("${dialog.directory}${dialog.file}")
+            val graphType = ReadWriteGraph().findType(file!!) ?: return
+            graph = ReadWriteGraph().read(file!!)
+            graphViewModel = GraphViewModel(graph, showVerticesLabels, showEdgesLabels, showVerticesDistanceLabels)
+        }
 
-	}
+    }
 
-	fun highlightSCC() {
-		val scc = graph.findSCC()
-		representationStrategy.highlightSCC(scc, *graphViewModel.vertices.toTypedArray())
-	}
+    fun highlightSCC() {
+        val scc = graph.findSCC()
+        representationStrategy.highlightSCC(scc, *graphViewModel.vertices.toTypedArray())
+    }
 
-	fun highlightMinSpanTree() {
-		val minSpanTree = graph.findMinSpanTree()
-		if (minSpanTree == null) {
-			return
-		} else {
-			representationStrategy.highlightMinSpanTree(minSpanTree, *graphViewModel.edges.toTypedArray())
-		}
-	}
+    fun highlightMinSpanTree() {
+        val minSpanTree = graph.findMinSpanTree()
+        if (minSpanTree == null) {
+            return
+        } else {
+            representationStrategy.highlightMinSpanTree(minSpanTree, *graphViewModel.edges.toTypedArray())
+        }
+    }
 
-	fun closeApp() {
-		exitProcess(0)
-	}
+    fun closeApp() {
+        exitProcess(0)
+    }
 
-	fun highlightBridges() {
-		val bridges = graph.findBridges()
+    fun highlightBridges() {
+        val bridges = graph.findBridges()
 
-		representationStrategy.highlightBridges(graphViewModel.edges, bridges)
-	}
+        representationStrategy.highlightBridges(graphViewModel.edges, bridges)
+    }
 
-	private fun colorNotSelected(currV: Vertex<T>) {
-		graphViewModel.vertices.forEach { v ->
-			if (v.v != currV) {
-				v.color = Color.DarkGray
-			}
-		}
-	}
+    private fun colorNotSelected(currV: Vertex<T>) {
+        graphViewModel.vertices.forEach { v ->
+            if (v.v != currV) {
+                v.color = Color.DarkGray
+            }
+        }
+    }
 
-	fun findDistanceBellman(startVertex: Vertex<T>?) {
-		if (startVertex != null) {
-			colorNotSelected(startVertex)
+    fun findDistanceBellman(startVertex: Vertex<T>?) {
+        if (startVertex != null) {
+            colorNotSelected(startVertex)
 
-			val labels = graph.findDistancesBellman(startVertex)
+            val labels = graph.findDistancesBellman(startVertex)
 
-			graphViewModel.vertices.forEach {
-				it.distanceLabel = (labels[it.v]).toString()
-			}
-		}
-	}
+            graphViewModel.vertices.forEach {
+                it.distanceLabel = (labels[it.v]).toString()
+            }
+        }
+    }
 }

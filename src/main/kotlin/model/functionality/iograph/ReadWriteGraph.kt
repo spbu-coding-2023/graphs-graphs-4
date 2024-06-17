@@ -16,7 +16,7 @@ class ReadWriteGraph {
     }
 
     @OptIn(ExperimentalSerializationApi::class)
-    fun <GRAPH_T, K>write(file: File, graph: Graph<GRAPH_T, K>) {
+    fun <GRAPH_T, K> write(file: File, graph: Graph<GRAPH_T, K>) {
         val output = file.outputStream()
         format.encodeToStream(graph, output)
         output.close()
@@ -35,8 +35,8 @@ class ReadWriteGraph {
     }
 
     @OptIn(ExperimentalSerializationApi::class)
-    fun <GRAPH_T, K>read(file: File): Graph<GRAPH_T, K> {
-        val input =  file.inputStream()
+    fun <GRAPH_T, K> read(file: File): Graph<GRAPH_T, K> {
+        val input = file.inputStream()
         println("stream: ${input}")
         val graph = format.decodeFromStream<Graph<GRAPH_T, K>>(input)
         input.close()

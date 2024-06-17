@@ -27,55 +27,55 @@ import viewmodel.graphs.VertexViewModel
 @Suppress("FunctionNaming")
 @Composable
 fun <V> VertexView(
-	viewModel: VertexViewModel<V>,
-	modifier: Modifier = Modifier,
-	onClick: (Vertex<V>) -> Unit
+    viewModel: VertexViewModel<V>,
+    modifier: Modifier = Modifier,
+    onClick: (Vertex<V>) -> Unit
 ) {
-	Box(
-		contentAlignment = Alignment.Center,
-		modifier = modifier
-			.offset(viewModel.x, viewModel.y)
-			.size(viewModel.radius * 2, viewModel.radius * 2)
-			.background(viewModel.color, CircleShape)
-			.clickable {
-				viewModel.color = Color.Red
-				onClick(viewModel.v)
-			}
-			.pointerInput(viewModel) {
-				detectDragGestures { change, dragAmount ->
-					change.consume()
-					viewModel.onDrag(dragAmount)
-				}
-			}
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = modifier
+            .offset(viewModel.x, viewModel.y)
+            .size(viewModel.radius * 2, viewModel.radius * 2)
+            .background(viewModel.color, CircleShape)
+            .clickable {
+                viewModel.color = Color.Red
+                onClick(viewModel.v)
+            }
+            .pointerInput(viewModel) {
+                detectDragGestures { change, dragAmount ->
+                    change.consume()
+                    viewModel.onDrag(dragAmount)
+                }
+            }
 
-	) {
-		if (viewModel.isKeyLabelVisible) {
-			Text(
-				text = viewModel.label,
-				overflow = TextOverflow.Visible,
-				style = MaterialTheme.typography.body1.copy(color = MaterialTheme.colors.onPrimary),
-				modifier = Modifier.padding(8.dp)
-			)
-		}
+    ) {
+        if (viewModel.isKeyLabelVisible) {
+            Text(
+                text = viewModel.label,
+                overflow = TextOverflow.Visible,
+                style = MaterialTheme.typography.body1.copy(color = MaterialTheme.colors.onPrimary),
+                modifier = Modifier.padding(8.dp)
+            )
+        }
 
-		@Suppress("MagicNumber")
-		if (viewModel.isDistLabelVisible) {
-			Text(
-				modifier = Modifier
-					.offset(
-						1.dp,
-						(48).dp // Twice the size of the font.
-					),
-				softWrap = false,
-				text = viewModel.distanceLabel,
-				overflow = TextOverflow.Visible,
-				style = TextStyle(
-					color = MaterialTheme.colors.onBackground,
-					fontSize = 24.sp,
-					fontFamily = FontFamily.SansSerif,
-					textAlign = TextAlign.Left
-				)
-			)
-		}
-	}
+        @Suppress("MagicNumber")
+        if (viewModel.isDistLabelVisible) {
+            Text(
+                modifier = Modifier
+                    .offset(
+                        1.dp,
+                        (48).dp // Twice the size of the font.
+                    ),
+                softWrap = false,
+                text = viewModel.distanceLabel,
+                overflow = TextOverflow.Visible,
+                style = TextStyle(
+                    color = MaterialTheme.colors.onBackground,
+                    fontSize = 24.sp,
+                    fontFamily = FontFamily.SansSerif,
+                    textAlign = TextAlign.Left
+                )
+            )
+        }
+    }
 }
