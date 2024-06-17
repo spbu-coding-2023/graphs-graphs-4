@@ -8,13 +8,12 @@ import model.functionality.MinSpanTreeFinder
 class DirectedWeightedGraph<T, NUMBER_TYPE : Number> : UndirectedWeightedGraph<T, NUMBER_TYPE>() {
     @SerialName("DirectedWeightedGraph")
     override var adjList: HashMap<Vertex<T>, HashSet<Pair<Vertex<T>, NUMBER_TYPE>>> = HashMap()
-        set
 
     override fun findSCC(): Set<Set<Vertex<T>>> {
         return emptySet()//StrConCompFinder(this as DirectedGraph<T>).sccSearch()
     }
 
-    override fun findMinSpanTree(): Set<GraphEdge<T>>? {
+    override fun findMinSpanTree(): Set<Edge<T>>? {
         return MinSpanTreeFinder(this).mstSearch()
     }
 

@@ -22,11 +22,11 @@ class DirectedGraph<T> : UndirectedGraph<T>() {
         addEdge(Vertex(key1), Vertex(key2))
     }
 
-    override fun addEdge(edge: Edge<T>) {
+    override fun addEdge(edge: UnweightedEdge<T>) {
         addEdge(edge.from, edge.to)
     }
 
-    override fun addEdges(vararg edges: Edge<T>) {
+    override fun addEdges(vararg edges: UnweightedEdge<T>) {
         for (edge in edges) {
             addEdge(edge)
         }
@@ -44,7 +44,7 @@ class DirectedGraph<T> : UndirectedGraph<T>() {
         return DistanceRank<T>(this).rank()
     }
 
-    override fun findMinSpanTree(): Set<GraphEdge<T>>? {
+    override fun findMinSpanTree(): Set<Edge<T>>? {
         return null
     }
 }

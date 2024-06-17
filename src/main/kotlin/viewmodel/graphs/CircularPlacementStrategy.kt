@@ -2,7 +2,7 @@ package viewmodel.graphs
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import model.graphs.GraphEdge
+import model.graphs.Edge
 import model.graphs.Vertex
 import kotlin.math.cos
 import kotlin.math.min
@@ -77,7 +77,7 @@ class CircularPlacementStrategy : RepresentationStrategy {
         }
     }
 
-    override fun <T> highlightMinSpanTree(minSpanTree: Set<GraphEdge<T>>, vararg edges: EdgeViewModel<T>) {
+    override fun <T> highlightMinSpanTree(minSpanTree: Set<Edge<T>>, vararg edges: EdgeViewModel<T>) {
         val color = Color.Blue
         for (edge in minSpanTree) {
             val u = edge.from

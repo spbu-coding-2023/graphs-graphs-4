@@ -67,11 +67,11 @@ open class UndirectedGraph<T> : Graph<Vertex<T>, T> {
         addEdge(Vertex(key1), Vertex(key2))
     }
 
-    open fun addEdge(edge: Edge<T>) {
+    open fun addEdge(edge: UnweightedEdge<T>) {
         addEdge(edge.from, edge.to)
     }
 
-    open fun addEdges(vararg edges: Edge<T>) {
+    open fun addEdges(vararg edges: UnweightedEdge<T>) {
         for (edge in edges) {
             addEdge(edge)
         }
@@ -85,7 +85,7 @@ open class UndirectedGraph<T> : Graph<Vertex<T>, T> {
         return StrConCompFinder(this).sccSearch()
     }
 
-    override fun findMinSpanTree(): Set<GraphEdge<T>>? {
+    override fun findMinSpanTree(): Set<Edge<T>>? {
         return null
     }
 
@@ -93,11 +93,11 @@ open class UndirectedGraph<T> : Graph<Vertex<T>, T> {
         return adjList.keys
     }
 
-    override fun edges(): Set<Edge<T>> {
-        val edges = HashSet<Edge<T>>()
+    override fun edges(): Set<UnweightedEdge<T>> {
+        val edges = HashSet<UnweightedEdge<T>>()
         for (vertex in adjList.keys) {
             for (neighbour in adjList[vertex] ?: continue) {
-                edges.add(Edge(vertex, neighbour, null))
+                edges.add(UnweightedEdge(vertex, neighbour, null))
             }
         }
 

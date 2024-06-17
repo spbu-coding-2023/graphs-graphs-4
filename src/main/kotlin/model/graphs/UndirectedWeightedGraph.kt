@@ -106,7 +106,7 @@ open class UndirectedWeightedGraph<T, NUMBER_TYPE : Number> : Graph<Pair<Vertex<
         return emptySet()//StrConCompFinder(this as UndirectedGraph<T>).sccSearch()
     }
 
-    override fun findMinSpanTree(): Set<GraphEdge<T>>? {
+    override fun findMinSpanTree(): Set<Edge<T>>? {
         return MinSpanTreeFinder(this).mstSearch()
     }
 
