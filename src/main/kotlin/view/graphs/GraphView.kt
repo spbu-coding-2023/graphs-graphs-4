@@ -13,8 +13,8 @@ import viewmodel.graphs.GraphViewModel
 
 @Suppress("FunctionNaming")
 @Composable
-fun <V, E> GraphView(
-    viewModel: GraphViewModel<V, E>,
+fun <E> GraphView(
+    viewModel: GraphViewModel<E>,
     onVertexClick: (Vertex<E>) -> Unit,
 ) {
     Box(

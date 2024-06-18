@@ -9,8 +9,8 @@ open class UndirectedGraph<T> : AbstractGraph<T>(), GraphUndirected<T> {
         require(adjList.containsKey(vertex1))
         require(adjList.containsKey(vertex2))
 
-        adjList.getOrPut(vertex1) { HashSet() }.add(UnweightedEdge(vertex2))
-        adjList.getOrPut(vertex2) { HashSet() }.add(UnweightedEdge(vertex1))
+        adjList.getOrPut(vertex1) { HashSet() }.add(UnweightedEdge(vertex1, vertex2))
+        adjList.getOrPut(vertex2) { HashSet() }.add(UnweightedEdge(vertex2, vertex1))
     }
 
     override fun findBridges(): Set<Pair<Vertex<T>, Vertex<T>>> {
@@ -28,17 +28,6 @@ open class UndirectedGraph<T> : AbstractGraph<T>(), GraphUndirected<T> {
 //        for (edge in edges) {
 //            addEdge(edge)
 //        }
-//    }
-
-//    override fun edges(): Set<UnweightedEdge<T>> {
-//        val edges = HashSet<UnweightedEdge<T>>()
-//        for (vertex in adjList.keys) {
-//            for (neighbour in adjList[vertex] ?: continue) {
-//                edges.add(UnweightedEdge(vertex, neighbour, null))
-//            }
-//        }
-//
-//        return edges
 //    }
 
     override fun findMinSpanTree(): Set<Edge<T>>? {

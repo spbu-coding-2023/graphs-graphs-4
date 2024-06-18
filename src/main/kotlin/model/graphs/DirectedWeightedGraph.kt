@@ -8,9 +8,8 @@ class DirectedWeightedGraph<T> : AbstractGraph<T>(), GraphDirected<T> {
         require(adjList.containsKey(vertex1))
         require(adjList.containsKey(vertex2))
 
-        adjList.getOrPut(vertex1) { HashSet() }.add(WeightedEdge(vertex2, weight))
+        adjList.getOrPut(vertex1) { HashSet() }.add(WeightedEdge(vertex1, vertex2, weight))
     }
-
 
     override fun findSCC(): Set<Set<Vertex<T>>> {
         return emptySet()//StrConCompFinder(this as DirectedGraph<T>).sccSearch()

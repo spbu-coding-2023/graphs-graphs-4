@@ -3,7 +3,7 @@ package model.graphs
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class UnweightedEdge<T>(override val to: Vertex<T>) : Edge<T> {
+data class UnweightedEdge<T>(override val from: Vertex<T>, override val to: Vertex<T>) : Edge<T> {
 
     override fun compareTo(other: Edge<T>): Int {
         TODO("Not yet implemented")

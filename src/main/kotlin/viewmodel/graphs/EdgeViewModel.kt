@@ -28,7 +28,8 @@ class EdgeViewModel<T>(
         }
 
     val label
-        get() = e.weight.toString()
+        get() = 0
+//        get() = e.weight.toString()
 
     val islWeightLabelVisible
         get() = labelVisibility.value

@@ -60,4 +60,15 @@ abstract class AbstractGraph<T> : Graph<T> {
 
         return output
     }
+
+    override fun edges(): Set<Edge<T>> {
+        val edges = HashSet<Edge<T>>()
+        for (vertex in adjList.keys) {
+            for (edge in adjList[vertex] ?: HashSet()) {
+                edges.add(edge)
+            }
+        }
+
+        return edges
+    }
 }

@@ -5,8 +5,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import model.graphs.Graph
 
-class GraphViewModel<GRAPH_TYPE, T>(
-    graph: Graph<GRAPH_TYPE, T>,
+class GraphViewModel<T>(
+    graph: Graph<T>,
     showVerticesLabels: State<Boolean>,
     showEdgesLabels: State<Boolean>,
     showVerticesDistanceLabels: State<Boolean>,

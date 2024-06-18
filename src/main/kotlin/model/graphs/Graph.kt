@@ -13,6 +13,8 @@ interface Graph<T> : Iterable<Vertex<T>> {
 
     fun vertices(): Set<Vertex<T>>
 
+    fun edges(): Set<Edge<T>>
+
     override fun iterator(): Iterator<Vertex<T>> {
         return this.vertices().iterator()
     }
@@ -22,8 +24,6 @@ interface Graph<T> : Iterable<Vertex<T>> {
 //    fun cyclesForVertex(vertex: Vertex<T>): HashSet<List<Vertex<T>>> {
 //        return JohnsonAlg(this).findCycles(vertex)
 //    }
-
-//    fun edges(): Set<Edge<T>>
 
 //    fun findDistancesBellman(start: Vertex<T>): Map<Vertex<T>, Double> {
 //        val output = ShortestPathFinder(this).bellmanFord(start)

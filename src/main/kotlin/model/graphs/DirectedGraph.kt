@@ -8,7 +8,7 @@ class DirectedGraph<T> : AbstractGraph<T>(), GraphDirected<T> {
         require(adjList.containsKey(vertex1))
         require(adjList.containsKey(vertex2))
 
-        adjList.getOrPut(vertex1) { HashSet() }.add(UnweightedEdge(vertex2))
+        adjList.getOrPut(vertex1) { HashSet() }.add(UnweightedEdge(vertex1, vertex2))
     }
 
 //    fun addEdge(key1: T, key2: T) {
