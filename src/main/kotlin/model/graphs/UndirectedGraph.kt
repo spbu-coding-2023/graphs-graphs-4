@@ -1,7 +1,6 @@
 package model.graphs
 
 import kotlinx.serialization.Serializable
-import model.functionality.BridgeFinder
 
 @Serializable
 open class UndirectedGraph<T> : AbstractGraph<T>(), GraphUndirected<T> {
@@ -11,10 +10,6 @@ open class UndirectedGraph<T> : AbstractGraph<T>(), GraphUndirected<T> {
 
         adjList.getOrPut(vertex1) { HashSet() }.add(UnweightedEdge(vertex1, vertex2))
         adjList.getOrPut(vertex2) { HashSet() }.add(UnweightedEdge(vertex2, vertex1))
-    }
-
-    override fun findBridges(): Set<Pair<Vertex<T>, Vertex<T>>> {
-        return BridgeFinder<Vertex<T>, T>().findBridges(this)
     }
 //    open fun addEdge(key1: T, key2: T) {
 //        addEdge(Vertex(key1), Vertex(key2))

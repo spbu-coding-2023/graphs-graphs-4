@@ -19,7 +19,7 @@ interface Graph<T> : Iterable<Vertex<T>> {
         return this.vertices().iterator()
     }
 
-    fun getNeighbors(vertex: Vertex<T>): HashSet<Vertex<T>>
+    fun getNeighbors(vertex: Vertex<T>): HashSet<Edge<T>>
 
 //    fun cyclesForVertex(vertex: Vertex<T>): HashSet<List<Vertex<T>>> {
 //        return JohnsonAlg(this).findCycles(vertex)

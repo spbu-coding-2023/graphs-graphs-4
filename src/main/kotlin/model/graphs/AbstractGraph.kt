@@ -51,14 +51,8 @@ abstract class AbstractGraph<T> : Graph<T> {
         return adjList.keys
     }
 
-    override fun getNeighbors(vertex: Vertex<T>): HashSet<Vertex<T>> {
-        val output = HashSet<Vertex<T>>()
-
-        for (edge in adjList[vertex] ?: HashSet()) {
-            output.add(edge.to)
-        }
-
-        return output
+    override fun getNeighbors(vertex: Vertex<T>): HashSet<Edge<T>> {
+        return adjList[vertex] ?: HashSet()
     }
 
     override fun edges(): Set<Edge<T>> {

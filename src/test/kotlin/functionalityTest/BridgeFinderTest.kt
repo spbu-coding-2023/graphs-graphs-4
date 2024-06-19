@@ -2,6 +2,8 @@ package functionalityTest
 
 import model.graphs.UndirectedGraph
 import model.graphs.UndirectedWeightedGraph
+import model.graphs.UnweightedEdge
+import model.graphs.WeightedEdge
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import kotlin.test.Test
@@ -27,8 +29,8 @@ class BridgeFinderTest {
             graphInt.addEdge(nodes[0][1], nodes[0][2])
 
             val answer = setOf(
-                Pair(nodes[0][1], nodes[0][2]),
-                Pair(nodes[0][0], nodes[0][1])
+                UnweightedEdge(nodes[0][1], nodes[0][2]),
+                UnweightedEdge(nodes[0][0], nodes[0][1])
             )
 
             assertEquals(answer, graphInt.findBridges())
@@ -78,8 +80,8 @@ class BridgeFinderTest {
             graphInt.addEdge(nodes[0][4], nodes[0][5])
 
             val answer = setOf(
-                Pair(nodes[0][4], nodes[0][5]),
-                Pair(nodes[0][2], nodes[0][3])
+                UnweightedEdge(nodes[0][4], nodes[0][5]),
+                UnweightedEdge(nodes[0][2], nodes[0][3])
             )
 
             assertEquals(answer, graphInt.findBridges())
@@ -109,10 +111,10 @@ class BridgeFinderTest {
             graphInt.addEdge(nodes[0][4], nodes[0][9])
 
             val answer = setOf(
-                Pair(nodes[0][4], nodes[0][9]),
-                Pair(nodes[0][4], nodes[0][5]),
-                Pair(nodes[0][3], nodes[0][4]),
-                Pair(nodes[0][2], nodes[0][3])
+                UnweightedEdge(nodes[0][4], nodes[0][9]),
+                UnweightedEdge(nodes[0][4], nodes[0][5]),
+                UnweightedEdge(nodes[0][3], nodes[0][4]),
+                UnweightedEdge(nodes[0][2], nodes[0][3])
             )
 
             assertEquals(answer, graphInt.findBridges())
@@ -142,7 +144,7 @@ class BridgeFinderTest {
 
     @Nested
     inner class WeightedGraphs {
-        private val graphInt = UndirectedWeightedGraph<Int, Int>()
+        private val graphInt = UndirectedWeightedGraph<Int>()
 
         @Test
         @DisplayName("Algorithm runs on weighted graphs.")
@@ -156,22 +158,22 @@ class BridgeFinderTest {
 
             val nodes = arrayListOf(graphInt.adjList.keys.toList())
 
-            graphInt.addEdge(nodes[0][0], nodes[0][1], 78)
-            graphInt.addEdge(nodes[0][1], nodes[0][2], 78)
-            graphInt.addEdge(nodes[0][2], nodes[0][3], 78)
-            graphInt.addEdge(nodes[0][0], nodes[0][6], 78)
-            graphInt.addEdge(nodes[0][6], nodes[0][7], 78)
-            graphInt.addEdge(nodes[0][7], nodes[0][8], 78)
-            graphInt.addEdge(nodes[0][2], nodes[0][8], 78)
-            graphInt.addEdge(nodes[0][3], nodes[0][4], 78)
-            graphInt.addEdge(nodes[0][4], nodes[0][5], 78)
-            graphInt.addEdge(nodes[0][4], nodes[0][9], 78)
+            graphInt.addEdge(nodes[0][0], nodes[0][1], 78.0)
+            graphInt.addEdge(nodes[0][1], nodes[0][2], 78.0)
+            graphInt.addEdge(nodes[0][2], nodes[0][3], 78.0)
+            graphInt.addEdge(nodes[0][0], nodes[0][6], 78.0)
+            graphInt.addEdge(nodes[0][6], nodes[0][7], 78.0)
+            graphInt.addEdge(nodes[0][7], nodes[0][8], 78.0)
+            graphInt.addEdge(nodes[0][2], nodes[0][8], 78.0)
+            graphInt.addEdge(nodes[0][3], nodes[0][4], 78.0)
+            graphInt.addEdge(nodes[0][4], nodes[0][5], 78.0)
+            graphInt.addEdge(nodes[0][4], nodes[0][9], 78.0)
 
             val answer = setOf(
-                Pair(nodes[0][4], nodes[0][9]),
-                Pair(nodes[0][4], nodes[0][5]),
-                Pair(nodes[0][3], nodes[0][4]),
-                Pair(nodes[0][2], nodes[0][3])
+                WeightedEdge(nodes[0][4], nodes[0][9], 78.0),
+                WeightedEdge(nodes[0][4], nodes[0][5], 78.0),
+                WeightedEdge(nodes[0][3], nodes[0][4], 78.0),
+                WeightedEdge(nodes[0][2], nodes[0][3], 78.0)
             )
 
             assertEquals(answer, graphInt.findBridges())
