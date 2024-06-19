@@ -29,7 +29,6 @@ class BridgeFinder<T> {
         return bridges
     }
 
-    @Suppress("CyclomaticComplexMethod", "NestedBlockDepth")
     private fun dfsRecursive(graph: GraphUndirected<T>, vertex: Vertex<T>) {
         discoveryTime[vertex] = timer
         low[vertex] = timer

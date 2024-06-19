@@ -51,11 +51,21 @@ fun App() {
 @Composable
 fun GraphAppTheme(darkTheme: Boolean, content: @Composable () -> Unit) {
     val darkThemeColors = darkColors(
-        background = Color.White
+        primary = Color(120, 160, 131),
+        secondary = Color(80, 114, 123),
+        secondaryVariant = Color(52, 73, 85),
+        background = Color(53, 55, 75)
+    )
+
+    val lightThemeColors = lightColors(
+        primary = Color(122, 162, 227),
+        secondary = Color(106, 212, 221),
+        secondaryVariant = Color(151, 231, 225),
+        background = Color(248, 246, 227)
     )
 
     MaterialTheme(
-        colors = if (darkTheme) darkThemeColors else lightColors(),
+        colors = if (darkTheme) darkThemeColors else lightThemeColors,
 
         typography = Typography(
             defaultFontFamily = FontFamily.SansSerif,
