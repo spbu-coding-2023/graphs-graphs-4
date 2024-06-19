@@ -17,10 +17,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import model.graphs.Graph
+import model.graphs.UndirectedWeightedGraph
 
 @Suppress("FunctionNaming")
 @Composable
-fun StartingScreen() {
+fun StartingScreen(): Graph<*> {
     val openExistingGraph = remember { mutableStateOf(false) }
     val createNewGraph = remember { mutableStateOf(false) }
 
@@ -64,4 +66,22 @@ fun StartingScreen() {
 
     if (createNewGraph.value) {
     }
+
+    val sampleGraph = UndirectedWeightedGraph<Int>().apply {
+        for (i in 1..25) {
+            addVertex(i)
+        }
+
+        val nodes = arrayListOf(adjList.keys.toList())
+
+        for (i in 0..24) {
+            val v1 = (0..24).random()
+            val v2 = (0..24).random()
+            val weight = (1..50).random()
+
+            addEdge(nodes[0][v1], nodes[0][v2], weight.toDouble())
+        }
+    }
+
+    return sampleGraph
 }

@@ -22,17 +22,14 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Shapes
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
-import androidx.compose.material.Typography
-import androidx.compose.material.darkColors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,92 +37,60 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import model.graphs.Vertex
 import view.graphs.GraphView
 import viewmodel.MainScreenViewModel
 
 @Suppress("FunctionNaming")
 @Composable
-fun <T> MainScreen(viewModel: MainScreenViewModel<T>) {
+fun <T> MainScreen(viewModel: MainScreenViewModel<T>, darkTheme: MutableState<Boolean>) {
     var showMenu by remember { mutableStateOf(false) }
     var showGraph by remember { mutableStateOf(false) }
     var currentVertex: Vertex<T>? by remember { mutableStateOf(null) }
-    val darkTheme = remember { mutableStateOf(false) }
 
-    GraphAppTheme(darkTheme.value) {
-        Scaffold(
-            topBar = {
-                TopAppBar(
-                    title = { Text("Graph the Graph") },
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("Graph the Graph") },
 
-                    navigationIcon = {
-                        IconButton(onClick = { showMenu = true }) {
-                            Icon(Icons.Filled.Menu, contentDescription = "Main Menu")
+                navigationIcon = {
+                    IconButton(onClick = { showMenu = true }) {
+                        Icon(Icons.Filled.Menu, contentDescription = "Main Menu")
+                    }
+
+                    AppDropdownMenu(showMenu, onDismiss = { showMenu = false }) {
+                        DropdownMenuItem(onClick = { showGraph = true }) {
+                            Text("New Graph")
                         }
-
-                        AppDropdownMenu(showMenu, onDismiss = { showMenu = false }) {
-                            DropdownMenuItem(onClick = { showGraph = true }) {
-                                Text("New Graph")
-                            }
 
 //                            DropdownMenuItem(onClick = { viewModel.openFile() }) {
 //                                Text("Open Graph")
 //                            }
 
-                            DropdownMenuItem(onClick = { /* код */ }) {
-                                Text("Save Graph")
-                            }
+                        DropdownMenuItem(onClick = { /* код */ }) {
+                            Text("Save Graph")
+                        }
 
-                            DropdownMenuItem(onClick = { darkTheme.value = !darkTheme.value }) {
-                                Text("Toggle Theme")
-                            }
+                        DropdownMenuItem(onClick = { darkTheme.value = !darkTheme.value }) {
+                            Text("Toggle Theme")
+                        }
 
-                            Divider()
+                        Divider()
 
-                            DropdownMenuItem(onClick = { viewModel.closeApp() }) {
-                                Text("Exit")
-                            }
+                        DropdownMenuItem(onClick = { viewModel.closeApp() }) {
+                            Text("Exit")
                         }
                     }
-                )
-            }
-        ) {
-            MainContent(viewModel, showGraph, currentVertex, onVertexClick = { currentVertex = it })
+                }
+            )
         }
+    ) {
+        MainContent(viewModel, showGraph, currentVertex, onVertexClick = { currentVertex = it })
     }
 }
 
-@Suppress("FunctionNaming")
-@Composable
-fun GraphAppTheme(darkTheme: Boolean, content: @Composable () -> Unit) {
-    val darkThemeColors = darkColors(
-        background = Color.White
-    )
 
-    MaterialTheme(
-        colors = if (darkTheme) darkThemeColors else lightColors(),
-
-        typography = Typography(
-            defaultFontFamily = FontFamily.SansSerif,
-            h1 = TextStyle(fontWeight = FontWeight.Bold, fontSize = 30.sp),
-            body1 = TextStyle(fontSize = 16.sp)
-        ),
-
-        shapes = Shapes(
-            small = RoundedCornerShape(4.dp),
-            medium = RoundedCornerShape(8.dp),
-            large = RoundedCornerShape(16.dp)
-        ),
-
-        content = content
-    )
-}
 
 @Suppress("FunctionNaming")
 @Composable

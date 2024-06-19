@@ -2,7 +2,11 @@ package app
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Shapes
+import androidx.compose.material.Typography
+import androidx.compose.material.darkColors
+import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -14,28 +18,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
-import model.graphs.UndirectedWeightedGraph
 import view.MainScreen
 import view.StartingScreen
 import viewmodel.MainScreenViewModel
 import viewmodel.graphs.CircularPlacementStrategy
-
-@Suppress("MagicNumber")
-val sampleGraph = UndirectedWeightedGraph<Int>().apply {
-    for (i in 1..25) {
-        addVertex(i)
-    }
-
-    val nodes = arrayListOf(adjList.keys.toList())
-
-    for (i in 0..24) {
-        val v1 = (0..24).random()
-        val v2 = (0..24).random()
-        val weight = (1..50).random()
-
-        addEdge(nodes[0][v1], nodes[0][v2], weight.toDouble())
-    }
-}
 
 @Composable
 @Preview
@@ -44,8 +30,7 @@ fun App() {
     val darkTheme = remember { mutableStateOf(false) }
 
     GraphAppTheme(darkTheme.value) {
-        StartingScreen()
-        MainScreen(MainScreenViewModel(sampleGraph, CircularPlacementStrategy()), darkTheme)
+        MainScreen(MainScreenViewModel(StartingScreen(), CircularPlacementStrategy()), darkTheme)
     }
 }
 
