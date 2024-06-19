@@ -1,5 +1,6 @@
 package app
 
+import StartingScreen
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
@@ -18,8 +19,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
+import model.graphs.Graph
 import view.MainScreen
-import view.StartingScreen
 import viewmodel.MainScreenViewModel
 import viewmodel.graphs.CircularPlacementStrategy
 
@@ -28,9 +29,21 @@ import viewmodel.graphs.CircularPlacementStrategy
 @Suppress("FunctionNaming")
 fun App() {
     val darkTheme = remember { mutableStateOf(false) }
+    val currentGraph = remember { mutableStateOf<Graph<*>?>(null) }
+    val mainScreenViewModel = remember(currentGraph.value) {
+        currentGraph.value?.let { MainScreenViewModel(it, CircularPlacementStrategy()) }
+    }
 
     GraphAppTheme(darkTheme.value) {
-        MainScreen(MainScreenViewModel(StartingScreen(), CircularPlacementStrategy()), darkTheme)
+        if (currentGraph.value == null) {
+            StartingScreen { createdGraph ->
+                currentGraph.value = createdGraph
+            }
+        } else {
+            mainScreenViewModel?.let {
+                MainScreen(viewModel = it, darkTheme = darkTheme)
+            }
+        }
     }
 }
 
@@ -59,7 +72,6 @@ fun GraphAppTheme(darkTheme: Boolean, content: @Composable () -> Unit) {
         content = content
     )
 }
-
 
 fun main() = application {
     Window(

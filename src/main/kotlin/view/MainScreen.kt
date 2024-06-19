@@ -117,9 +117,7 @@ fun <T> MainContent(
                 .fillMaxSize(),
             color = MaterialTheme.colors.surface
         ) {
-            if (showGraph) {
-                GraphView(viewModel.graphViewModel, onVertexClick)
-            }
+            GraphView(viewModel.graphViewModel, onVertexClick)
         }
 
         Column(modifier = Modifier.width(370.dp)) {
