@@ -51,10 +51,10 @@ class CircularPlacementStrategy : RepresentationStrategy {
             val toColorSecond = edges.find { ((it.u.value == bridge.to) && (it.v.value == bridge.from)) }
 
             if (toColor != null) {
-                toColor.color = MaterialTheme.colors.secondary
+                toColor.color = MaterialTheme.colors.secondaryVariant
                 toColor.width = 10.toFloat()
 
-                toColorSecond?.color = MaterialTheme.colors.secondary
+                toColorSecond?.color = MaterialTheme.colors.secondaryVariant
                 toColorSecond?.width = 10.toFloat()
             } else throw NoSuchElementException("WE LOST AN EDGE!!!")
         }

@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Checkbox
 import androidx.compose.material.CheckboxDefaults
 import androidx.compose.material.Divider
@@ -39,6 +40,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import model.graphs.GraphUndirected
+import model.graphs.GraphWeighted
 import model.graphs.Vertex
 import view.graphs.GraphView
 import viewmodel.MainScreenViewModel
@@ -54,7 +56,8 @@ fun <T> MainScreen(viewModel: MainScreenViewModel<T>, darkTheme: MutableState<Bo
         topBar = {
             TopAppBar(
                 title = { Text("Graph the Graph") },
-
+                backgroundColor = MaterialTheme.colors.primary,
+                contentColor = MaterialTheme.colors.onPrimary,
                 navigationIcon = {
                     IconButton(onClick = { showMenu = true }) {
                         Icon(Icons.Filled.Menu, contentDescription = "Main Menu")
@@ -92,7 +95,6 @@ fun <T> MainScreen(viewModel: MainScreenViewModel<T>, darkTheme: MutableState<Bo
 }
 
 
-
 @Suppress("FunctionNaming")
 @Composable
 fun AppDropdownMenu(expanded: Boolean, onDismiss: () -> Unit, content: @Composable ColumnScope.() -> Unit) {
@@ -121,13 +123,14 @@ fun <T> MainContent(
             GraphView(viewModel.graphViewModel, onVertexClick)
         }
 
-        Column(modifier = Modifier.width(370.dp)) {
+        Column(
+            modifier = Modifier.width(370.dp),
+        ) {
             ToolPanel(
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxHeight()
                     .background(MaterialTheme.colors.secondary),
-
                 viewModel = viewModel,
                 selectedVertex = currentVertex,
             )
@@ -145,7 +148,6 @@ fun <T> ToolPanel(
     Column(
         modifier = modifier
             .fillMaxHeight()
-            .padding(16.dp)
             .background(MaterialTheme.colors.surface)
             .clip(RoundedCornerShape(8.dp))
             .padding(16.dp)
@@ -161,6 +163,9 @@ fun <T> ToolPanel(
 
             Button(
                 onClick = { needBridges = true },
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = MaterialTheme.colors.secondary,
+                ),
                 enabled = true,
                 modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
             ) {
@@ -177,17 +182,22 @@ fun <T> ToolPanel(
 
         }
 
-//
+        if (viewModel.graph is GraphWeighted<*>) {
+            Button(
+                // (viewModel::findDistanceBellman)(selectedVertex)
+                onClick = { },
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = MaterialTheme.colors.secondary,
+                ),
+                enabled = true,
+                modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
+            ) {
+                Icon(Icons.Default.Search, contentDescription = "Find the shortest distance")
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(text = "Find Shortest Distance")
+            }
+        }
 
-//        Button(
-//            onClick = { (viewModel::findDistanceBellman)(selectedVertex) },
-//            enabled = true,
-//            modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
-//        ) {
-//            Icon(Icons.Default.Search, contentDescription = "Find the shortest distance")
-//            Spacer(modifier = Modifier.width(8.dp))
-//            Text(text = "Find Shortest Distance")
-//        }
 
 //        Button(
 //            onClick = viewModel::highlightMinSpanTree,

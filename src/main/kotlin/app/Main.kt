@@ -47,21 +47,24 @@ fun App() {
     }
 }
 
+@Preview
 @Suppress("FunctionNaming")
 @Composable
 fun GraphAppTheme(darkTheme: Boolean, content: @Composable () -> Unit) {
     val darkThemeColors = darkColors(
-        primary = Color(120, 160, 131),
-        secondary = Color(80, 114, 123),
-        secondaryVariant = Color(52, 73, 85),
-        background = Color(53, 55, 75)
+        primary = Color(80, 60, 60),
+        secondary = Color(126, 99, 99),
+        secondaryVariant = Color(134, 182, 246),
+        background = Color(62, 50, 50),
+        surface = Color(84, 72, 72),
     )
 
     val lightThemeColors = lightColors(
-        primary = Color(122, 162, 227),
-        secondary = Color(106, 212, 221),
-        secondaryVariant = Color(151, 231, 225),
-        background = Color(248, 246, 227)
+        primary = Color(23, 107, 135),
+        secondary = Color(180, 212, 255),
+        secondaryVariant = Color(237, 142, 38),
+        background = Color(238, 245, 255),
+        surface = Color.White
     )
 
     MaterialTheme(
