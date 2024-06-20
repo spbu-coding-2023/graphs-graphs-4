@@ -1,5 +1,7 @@
 package viewmodel.graphs
 
+import androidx.compose.material.MaterialTheme
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import model.graphs.Edge
@@ -42,12 +44,19 @@ class CircularPlacementStrategy : RepresentationStrategy {
             }
     }
 
-    override fun <T> highlightBridges(edges: Collection<EdgeViewModel<T>>, bridges: Set<Pair<Vertex<T>, Vertex<T>>>) {
-        for (edge in edges) {
-            if (bridges.contains(Pair(edge.u.v, edge.v.v)) || bridges.contains(Pair(edge.v.v, edge.u.v))) {
-                edge.color = Color.Red
-                edge.width = 6.toFloat()
-            }
+    @Composable
+    override fun <T> highlightBridges(edges: Collection<EdgeViewModel<T>>, bridges: Set<Edge<T>>) {
+        for (bridge in bridges) {
+            val toColor = edges.find { ((it.v.value == bridge.to) && (it.u.value == bridge.from)) }
+            val toColorSecond = edges.find { ((it.u.value == bridge.to) && (it.v.value == bridge.from)) }
+
+            if (toColor != null) {
+                toColor.color = MaterialTheme.colors.secondary
+                toColor.width = 10.toFloat()
+
+                toColorSecond?.color = MaterialTheme.colors.secondary
+                toColorSecond?.width = 10.toFloat()
+            } else throw NoSuchElementException("WE LOST AN EDGE!!!")
         }
     }
 
@@ -70,7 +79,7 @@ class CircularPlacementStrategy : RepresentationStrategy {
             val color = Color(array.random(), array.random(), array.random())
 
             for (vertex in vertices) {
-                if (component.contains(vertex.v)) {
+                if (component.contains(vertex.value)) {
                     vertex.color = color
                 }
             }
@@ -83,7 +92,7 @@ class CircularPlacementStrategy : RepresentationStrategy {
             val u = edge.from
             val v = edge.to
             for (edgeVM in edges) {
-                if (edgeVM.u.v == u && edgeVM.v.v == v) {
+                if (edgeVM.u.value == u && edgeVM.v.value == v) {
                     edgeVM.color = color
                     edgeVM.width = 6.toFloat()
                 }

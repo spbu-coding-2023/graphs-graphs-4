@@ -1,9 +1,10 @@
 package viewmodel
 
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
 import model.graphs.Graph
-import model.graphs.Vertex
+import model.graphs.GraphUndirected
 import viewmodel.graphs.GraphViewModel
 import viewmodel.graphs.RepresentationStrategy
 import java.io.File
@@ -13,9 +14,9 @@ class MainScreenViewModel<T>(
     var graph: Graph<T>,
     private val representationStrategy: RepresentationStrategy
 ) {
-    internal val showVerticesLabels = mutableStateOf(false)
-    internal val showVerticesDistanceLabels = mutableStateOf(false)
-    internal val showEdgesLabels = mutableStateOf(false)
+    private val showVerticesLabels = mutableStateOf(false)
+    private val showVerticesDistanceLabels = mutableStateOf(false)
+    private val showEdgesLabels = mutableStateOf(false)
     var graphViewModel = GraphViewModel(graph, showVerticesLabels, showEdgesLabels, showVerticesDistanceLabels)
     var file: File? = null
 
@@ -72,29 +73,22 @@ class MainScreenViewModel<T>(
         exitProcess(0)
     }
 
-//    fun highlightBridges() {
-//        val bridges = graph.findBridges()
-//
-//        representationStrategy.highlightBridges(graphViewModel.edges, bridges)
-//    }
+    @Composable
+    fun showBridges() {
+        if (graph is GraphUndirected) {
+            val bridges = (graph as GraphUndirected<T>).findBridges()
 
-    private fun colorNotSelected(currV: Vertex<T>) {
-        graphViewModel.vertices.forEach { v ->
-            if (v.v != currV) {
-                v.color = Color.DarkGray
-            }
-        }
+            representationStrategy.highlightBridges(graphViewModel.edges, bridges)
+
+        } else throw IllegalArgumentException("graph is directed!")
     }
-//
-//    fun findDistanceBellman(startVertex: Vertex<T>?) {
-//        if (startVertex != null) {
-//            colorNotSelected(startVertex)
-//
-//            val labels = graph.findDistancesBellman(startVertex)
-//
-//            graphViewModel.vertices.forEach {
-//                it.distanceLabel = (labels[it.v]).toString()
+
+//    private fun colorNotSelected(currV: Vertex<T>) {
+//        graphViewModel.vertices.forEach { v ->
+//            if (v.v != currV) {
+//                v.color = Color.DarkGray
 //            }
 //        }
 //    }
+
 }

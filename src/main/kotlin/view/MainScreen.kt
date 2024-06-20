@@ -27,7 +27,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -38,6 +38,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import model.graphs.GraphUndirected
 import model.graphs.Vertex
 import view.graphs.GraphView
 import viewmodel.MainScreenViewModel
@@ -121,14 +122,14 @@ fun <T> MainContent(
         }
 
         Column(modifier = Modifier.width(370.dp)) {
-            ToolsPanel(
+            ToolPanel(
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxHeight()
                     .background(MaterialTheme.colors.secondary),
 
                 viewModel = viewModel,
-                selectedVertex = currentVertex
+                selectedVertex = currentVertex,
             )
         }
     }
@@ -136,10 +137,10 @@ fun <T> MainContent(
 
 @Suppress("FunctionNaming")
 @Composable
-fun <T> ToolsPanel(
+fun <T> ToolPanel(
     viewModel: MainScreenViewModel<T>,
     modifier: Modifier = Modifier,
-    selectedVertex: Vertex<T>?
+    selectedVertex: Vertex<T>?,
 ) {
     Column(
         modifier = modifier
@@ -155,15 +156,28 @@ fun <T> ToolsPanel(
             modifier = Modifier.padding(bottom = 16.dp)
         )
 
-//        Button(
-//            onClick = viewModel::highlightBridges,
-//            enabled = true,
-//            modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
-//        ) {
-//            Icon(Icons.Default.Search, contentDescription = "Find bridges")
-//            Spacer(modifier = Modifier.width(8.dp))
-//            Text(text = "Find Bridges")
-//        }
+        if (viewModel.graph is GraphUndirected<*>) {
+            var needBridges by remember { mutableStateOf(false) }
+
+            Button(
+                onClick = { needBridges = true },
+                enabled = true,
+                modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
+            ) {
+                Icon(Icons.Default.Search, contentDescription = "Find bridges")
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(text = "Find Bridges")
+            }
+
+            if (needBridges) {
+                needBridges = false
+
+                viewModel.showBridges()
+            }
+
+        }
+
+//
 
 //        Button(
 //            onClick = { (viewModel::findDistanceBellman)(selectedVertex) },
@@ -195,33 +209,33 @@ fun <T> ToolsPanel(
 //            Text(text = "Find SCC")
 //        }
 
-        ToggleRow(
-            label = "Show Vertices Labels",
-            checked = viewModel.showVerticesLabels.value,
-            onCheckedChange = { viewModel.showVerticesLabels.value = it }
-        )
-
-        ToggleRow(
-            label = "Show Edges Labels",
-            checked = viewModel.showEdgesLabels.value,
-            onCheckedChange = { viewModel.showEdgesLabels.value = it }
-        )
-
-        ToggleRow(
-            label = "Show Distance Labels",
-            checked = viewModel.showVerticesDistanceLabels.value,
-            onCheckedChange = { viewModel.showVerticesDistanceLabels.value = it }
-        )
-
-        Button(
-            onClick = viewModel::resetGraphView,
-            enabled = true,
-            modifier = Modifier.fillMaxWidth().padding(top = 16.dp)
-        ) {
-            Icon(Icons.Default.Refresh, contentDescription = "Reset default settings")
-            Spacer(modifier = Modifier.width(8.dp))
-            Text(text = "Reset Default Settings")
-        }
+//        ToggleRow(
+//            label = "Show Vertices Labels",
+//            checked = viewModel.showVerticesLabels.value,
+//            onCheckedChange = { viewModel.showVerticesLabels.value = it }
+//        )
+//
+//        ToggleRow(
+//            label = "Show Edges Labels",
+//            checked = viewModel.showEdgesLabels.value,
+//            onCheckedChange = { viewModel.showEdgesLabels.value = it }
+//        )
+//
+//        ToggleRow(
+//            label = "Show Distance Labels",
+//            checked = viewModel.showVerticesDistanceLabels.value,
+//            onCheckedChange = { viewModel.showVerticesDistanceLabels.value = it }
+//        )
+//
+//        Button(
+//            onClick = viewModel::resetGraphView,
+//            enabled = true,
+//            modifier = Modifier.fillMaxWidth().padding(top = 16.dp)
+//        ) {
+//            Icon(Icons.Default.Refresh, contentDescription = "Reset default settings")
+//            Spacer(modifier = Modifier.width(8.dp))
+//            Text(text = "Reset Default Settings")
+//        }
     }
 }
 
