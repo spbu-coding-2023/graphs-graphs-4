@@ -24,13 +24,4 @@ interface Graph<T> : Iterable<Vertex<T>> {
 //    fun cyclesForVertex(vertex: Vertex<T>): HashSet<List<Vertex<T>>> {
 //        return JohnsonAlg(this).findCycles(vertex)
 //    }
-
-//    fun findDistancesBellman(start: Vertex<T>): Map<Vertex<T>, Double> {
-//        val output = ShortestPathFinder(this).bellmanFord(start)
-//        return output
-//    }
-
-//    fun findDistancesDijkstra(start: Vertex<T>): Map<Vertex<T>, Double> {
-//      return ShortestPathFinder(this).dijkstra(start)
-//    }
 }

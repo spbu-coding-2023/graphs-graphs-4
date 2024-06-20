@@ -33,8 +33,4 @@ class DirectedGraph<T> : AbstractGraph<T>(), GraphDirected<T> {
 //    fun distanceRank(): Map<Vertex<T>, Double> {
 //        return DistanceRank<T>(this).rank()
 //    }
-
-//    override fun findMinSpanTree(): Set<Edge<T>>? {
-//        return null
-//    }
 }

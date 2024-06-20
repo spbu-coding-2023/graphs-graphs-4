@@ -3,7 +3,7 @@ package model.graphs
 import kotlinx.serialization.Serializable
 
 @Serializable
-open class UndirectedWeightedGraph<T> : AbstractGraph<T>(), GraphUndirected<T> {
+open class UndirectedWeightedGraph<T> : AbstractGraph<T>(), GraphUndirected<T>, GraphWeighted<T> {
     fun addEdge(vertex1: Vertex<T>, vertex2: Vertex<T>, weight: Double) {
         require(adjList.containsKey(vertex1))
         require(adjList.containsKey(vertex2))

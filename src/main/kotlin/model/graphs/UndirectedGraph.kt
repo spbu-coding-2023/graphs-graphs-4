@@ -11,6 +11,7 @@ open class UndirectedGraph<T> : AbstractGraph<T>(), GraphUndirected<T> {
         adjList.getOrPut(vertex1) { HashSet() }.add(UnweightedEdge(vertex1, vertex2))
         adjList.getOrPut(vertex2) { HashSet() }.add(UnweightedEdge(vertex2, vertex1))
     }
+
 //    open fun addEdge(key1: T, key2: T) {
 //        addEdge(Vertex(key1), Vertex(key2))
 //    }
