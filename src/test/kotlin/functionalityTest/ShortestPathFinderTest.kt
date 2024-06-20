@@ -14,7 +14,7 @@ import kotlin.test.assertEquals
 class ShortestPathFinderTest {
     @Nested
     inner class DisconnectedPartsTest {
-        private val graph = UndirectedWeightedGraph<Int, Double>()
+        private val graph = UndirectedWeightedGraph<Int>()
         private var nodes: List<Vertex<Int>> = emptyList()
 
         private fun setup(end: Int) {
@@ -74,7 +74,7 @@ class ShortestPathFinderTest {
 
     @Nested
     inner class DirectedGraphTest {
-        private val graph = DirectedWeightedGraph<Int, Double>()
+        private val graph = DirectedWeightedGraph<Int>()
         private var nodes: List<Vertex<Int>> = emptyList()
 
         private fun setup(end: Int) {
@@ -113,7 +113,6 @@ class ShortestPathFinderTest {
             }
         }
 
-        /*@Test
         @DisplayName("Directed graph with a negative self-loop that affect entire graph.")
         // 0 -> 1 (weight 50)
         // 0 -> 2 (weight 5000)
@@ -142,7 +141,7 @@ class ShortestPathFinderTest {
             for (i in 0..2) {
                 assertEquals(answer[nodes[i]], actualAnswer[nodes[i]])
             }
-        }*/
+        }
 
         @Test
         @DisplayName("Directed graph with a negative self-loop that doesn't affect entire graph.")
@@ -234,7 +233,7 @@ class ShortestPathFinderTest {
 
     @Nested
     inner class UndirectedGraphTest {
-        private val graph = UndirectedWeightedGraph<Int, Double>()
+        private val graph = UndirectedWeightedGraph<Int>()
         private var nodes: List<Vertex<Int>> = emptyList()
 
         private fun setup(end: Int) {
@@ -315,181 +314,6 @@ class ShortestPathFinderTest {
             val actualAnswer = graph.findDistancesBellman(nodes[0])
 
             for (i in 0..5) {
-                assertEquals(answer[nodes[i]], actualAnswer[nodes[i]])
-            }
-        }
-    }
-
-    @Nested
-    inner class EdgesTypesTest {
-        private var nodes: List<Vertex<Int>> = emptyList()
-        private var answer: Map<Vertex<Int>, Double> = emptyMap()
-
-        private fun <T : Number> setup(graph: DirectedWeightedGraph<Int, T>) {
-            for (i in 0..7) {
-                graph.addVertex(i)
-            }
-
-            nodes = graph.adjList.keys.toList().sortedBy { it.key }
-
-            answer = mapOf(
-                nodes[0] to 0.0,
-                nodes[1] to 15.0,
-                nodes[2] to 9.0,
-                nodes[3] to 32.0,
-                nodes[4] to 45.0,
-                nodes[5] to 34.0,
-                nodes[6] to 14.0,
-                nodes[7] to 50.0
-            )
-        }
-
-        @Test
-        @DisplayName("Graph with weights of type Long")
-        fun longWeights() {
-            val graph = DirectedWeightedGraph<Int, Long>()
-
-            setup(graph)
-
-            graph.addEdge(nodes[0], nodes[2], 9)
-            graph.addEdge(nodes[0], nodes[6], 14)
-            graph.addEdge(nodes[0], nodes[1], 15)
-            graph.addEdge(nodes[1], nodes[5], 20)
-            graph.addEdge(nodes[1], nodes[7], 44)
-            graph.addEdge(nodes[2], nodes[3], 24)
-            graph.addEdge(nodes[3], nodes[5], 2)
-            graph.addEdge(nodes[3], nodes[7], 19)
-            graph.addEdge(nodes[4], nodes[3], 6)
-            graph.addEdge(nodes[4], nodes[7], 6)
-            graph.addEdge(nodes[5], nodes[4], 11)
-            graph.addEdge(nodes[5], nodes[7], 16)
-            graph.addEdge(nodes[6], nodes[3], 18)
-            graph.addEdge(nodes[6], nodes[5], 30)
-            graph.addEdge(nodes[6], nodes[1], 5)
-
-            val actualAnswer = graph.findDistancesBellman(nodes[0])
-
-            for (i in 0..7) {
-                assertEquals(answer[nodes[i]], actualAnswer[nodes[i]])
-            }
-        }
-
-        @Test
-        @DisplayName("Graph with weights of type Int")
-        fun intWeights() {
-            val graph = DirectedWeightedGraph<Int, Int>()
-
-            setup(graph)
-
-            graph.addEdge(nodes[0], nodes[2], 9)
-            graph.addEdge(nodes[0], nodes[6], 14)
-            graph.addEdge(nodes[0], nodes[1], 15)
-            graph.addEdge(nodes[1], nodes[5], 20)
-            graph.addEdge(nodes[1], nodes[7], 44)
-            graph.addEdge(nodes[2], nodes[3], 24)
-            graph.addEdge(nodes[3], nodes[5], 2)
-            graph.addEdge(nodes[3], nodes[7], 19)
-            graph.addEdge(nodes[4], nodes[3], 6)
-            graph.addEdge(nodes[4], nodes[7], 6)
-            graph.addEdge(nodes[5], nodes[4], 11)
-            graph.addEdge(nodes[5], nodes[7], 16)
-            graph.addEdge(nodes[6], nodes[3], 18)
-            graph.addEdge(nodes[6], nodes[5], 30)
-            graph.addEdge(nodes[6], nodes[1], 5)
-
-            val actualAnswer = graph.findDistancesBellman(nodes[0])
-
-            for (i in 0..7) {
-                assertEquals(answer[nodes[i]], actualAnswer[nodes[i]])
-            }
-        }
-
-        @Test
-        @DisplayName("Graph with weights of type Short")
-        fun shortWeights() {
-            val graph = DirectedWeightedGraph<Int, Short>()
-
-            setup(graph)
-
-            graph.addEdge(nodes[0], nodes[2], 9)
-            graph.addEdge(nodes[0], nodes[6], 14)
-            graph.addEdge(nodes[0], nodes[1], 15)
-            graph.addEdge(nodes[1], nodes[5], 20)
-            graph.addEdge(nodes[1], nodes[7], 44)
-            graph.addEdge(nodes[2], nodes[3], 24)
-            graph.addEdge(nodes[3], nodes[5], 2)
-            graph.addEdge(nodes[3], nodes[7], 19)
-            graph.addEdge(nodes[4], nodes[3], 6)
-            graph.addEdge(nodes[4], nodes[7], 6)
-            graph.addEdge(nodes[5], nodes[4], 11)
-            graph.addEdge(nodes[5], nodes[7], 16)
-            graph.addEdge(nodes[6], nodes[3], 18)
-            graph.addEdge(nodes[6], nodes[5], 30)
-            graph.addEdge(nodes[6], nodes[1], 5)
-
-            val actualAnswer = graph.findDistancesBellman(nodes[0])
-
-            for (i in 0..7) {
-                assertEquals(answer[nodes[i]], actualAnswer[nodes[i]])
-            }
-        }
-
-        @Test
-        @DisplayName("Graph with weights of type Float")
-        fun floatWeights() {
-            val graph = DirectedWeightedGraph<Int, Float>()
-
-            setup(graph)
-
-            graph.addEdge(nodes[0], nodes[2], 9.toFloat())
-            graph.addEdge(nodes[0], nodes[6], 14.toFloat())
-            graph.addEdge(nodes[0], nodes[1], 15.toFloat())
-            graph.addEdge(nodes[1], nodes[5], 20.toFloat())
-            graph.addEdge(nodes[1], nodes[7], 44.toFloat())
-            graph.addEdge(nodes[2], nodes[3], 24.toFloat())
-            graph.addEdge(nodes[3], nodes[5], 2.toFloat())
-            graph.addEdge(nodes[3], nodes[7], 19.toFloat())
-            graph.addEdge(nodes[4], nodes[3], 6.toFloat())
-            graph.addEdge(nodes[4], nodes[7], 6.toFloat())
-            graph.addEdge(nodes[5], nodes[4], 11.toFloat())
-            graph.addEdge(nodes[5], nodes[7], 16.toFloat())
-            graph.addEdge(nodes[6], nodes[3], 18.toFloat())
-            graph.addEdge(nodes[6], nodes[5], 30.toFloat())
-            graph.addEdge(nodes[6], nodes[1], 5.toFloat())
-
-            val actualAnswer = graph.findDistancesBellman(nodes[0])
-
-            for (i in 0..7) {
-                assertEquals(answer[nodes[i]], actualAnswer[nodes[i]])
-            }
-        }
-
-        @Test
-        @DisplayName("Graph with weights of type Double")
-        fun doubleWeights() {
-            val graph = DirectedWeightedGraph<Int, Double>()
-
-            setup(graph)
-
-            graph.addEdge(nodes[0], nodes[2], 9.0)
-            graph.addEdge(nodes[0], nodes[6], 14.0)
-            graph.addEdge(nodes[0], nodes[1], 15.0)
-            graph.addEdge(nodes[1], nodes[5], 20.0)
-            graph.addEdge(nodes[1], nodes[7], 44.0)
-            graph.addEdge(nodes[2], nodes[3], 24.0)
-            graph.addEdge(nodes[3], nodes[5], 2.0)
-            graph.addEdge(nodes[3], nodes[7], 19.0)
-            graph.addEdge(nodes[4], nodes[3], 6.0)
-            graph.addEdge(nodes[4], nodes[7], 6.0)
-            graph.addEdge(nodes[5], nodes[4], 11.0)
-            graph.addEdge(nodes[5], nodes[7], 16.0)
-            graph.addEdge(nodes[6], nodes[3], 18.0)
-            graph.addEdge(nodes[6], nodes[5], 30.0)
-            graph.addEdge(nodes[6], nodes[1], 5.0)
-
-            val actualAnswer = graph.findDistancesBellman(nodes[0])
-
-            for (i in 0..7) {
                 assertEquals(answer[nodes[i]], actualAnswer[nodes[i]])
             }
         }
