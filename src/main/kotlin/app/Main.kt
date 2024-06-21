@@ -54,7 +54,7 @@ fun GraphAppTheme(darkTheme: Boolean, content: @Composable () -> Unit) {
     val darkThemeColors = darkColors(
         primary = Color(80, 60, 60),
         secondary = Color(126, 99, 99),
-        secondaryVariant = Color(134, 182, 246),
+        secondaryVariant = Color(175, 143, 111),
         background = Color(62, 50, 50),
         surface = Color(84, 72, 72),
         onBackground = Color(174, 93, 62),
@@ -64,10 +64,10 @@ fun GraphAppTheme(darkTheme: Boolean, content: @Composable () -> Unit) {
     val lightThemeColors = lightColors(
         primary = Color(23, 107, 135),
         secondary = Color(180, 212, 255),
-        secondaryVariant = Color(72, 143, 49),
+        secondaryVariant = Color(134, 182, 246),
         background = Color(238, 245, 255),
         surface = Color.White,
-        onBackground = Color(62, 50, 50),
+        onBackground = Color(52, 76, 100),
     )
 
     MaterialTheme(
