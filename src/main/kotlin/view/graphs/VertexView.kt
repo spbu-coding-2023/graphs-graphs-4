@@ -11,6 +11,10 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -31,15 +35,22 @@ fun <V> VertexView(
     modifier: Modifier = Modifier,
     onClick: (Vertex<V>) -> Unit
 ) {
+    var color by remember { mutableStateOf(Color.Unspecified) }
+
+    color = if (viewModel.isSelected) {
+        Color(255, 166, 0)
+    } else {
+        MaterialTheme.colors.onBackground
+    }
+
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier
             .offset(viewModel.x, viewModel.y)
             .size(viewModel.radius * 2, viewModel.radius * 2)
-            .background(viewModel.color, CircleShape)
+            .background(color, CircleShape)
             .clickable {
-                viewModel.color = Color.Red
-                onClick(viewModel.v)
+                onClick(viewModel.value)
             }
             .pointerInput(viewModel) {
                 detectDragGestures { change, dragAmount ->

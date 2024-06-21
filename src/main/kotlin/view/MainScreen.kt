@@ -25,6 +25,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.TextField
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
@@ -50,7 +51,7 @@ import viewmodel.MainScreenViewModel
 fun <T> MainScreen(viewModel: MainScreenViewModel<T>, darkTheme: MutableState<Boolean>) {
     var showMenu by remember { mutableStateOf(false) }
     var showGraph by remember { mutableStateOf(false) }
-    var currentVertex: Vertex<T>? by remember { mutableStateOf(null) }
+    var currentVertex by remember { mutableStateOf(viewModel.graphViewModel.currentVertex) }
 
     Scaffold(
         topBar = {
@@ -90,7 +91,7 @@ fun <T> MainScreen(viewModel: MainScreenViewModel<T>, darkTheme: MutableState<Bo
             )
         }
     ) {
-        MainContent(viewModel, showGraph, currentVertex, onVertexClick = { currentVertex = it })
+        MainContent(viewModel, currentVertex?.value)
     }
 }
 
@@ -109,9 +110,7 @@ fun AppDropdownMenu(expanded: Boolean, onDismiss: () -> Unit, content: @Composab
 @Composable
 fun <T> MainContent(
     viewModel: MainScreenViewModel<T>,
-    showGraph: Boolean,
-    currentVertex: Vertex<T>?,
-    onVertexClick: (Vertex<T>) -> Unit
+    vertex: Vertex<T>?
 ) {
     Row(horizontalArrangement = Arrangement.spacedBy(20.dp)) {
         Surface(
@@ -120,7 +119,7 @@ fun <T> MainContent(
                 .fillMaxSize(),
             color = MaterialTheme.colors.surface
         ) {
-            GraphView(viewModel.graphViewModel, onVertexClick)
+            GraphView(viewModel.graphViewModel)
         }
 
         Column(
@@ -132,7 +131,7 @@ fun <T> MainContent(
                     .fillMaxHeight()
                     .background(MaterialTheme.colors.secondary),
                 viewModel = viewModel,
-                selectedVertex = currentVertex,
+                selectedVertex = vertex,
             )
         }
     }
@@ -145,6 +144,7 @@ fun <T> ToolPanel(
     modifier: Modifier = Modifier,
     selectedVertex: Vertex<T>?,
 ) {
+
     Column(
         modifier = modifier
             .fillMaxHeight()
@@ -155,7 +155,16 @@ fun <T> ToolPanel(
         Text(
             text = "Tools",
             style = MaterialTheme.typography.h6,
-            modifier = Modifier.padding(bottom = 16.dp)
+            modifier = Modifier.padding(bottom = 16.dp),
+            color = MaterialTheme.colors.onSurface
+        )
+
+        var text by remember { mutableStateOf(selectedVertex?.key.toString()) }
+
+        TextField(
+            value = text,
+            onValueChange = { text = it },
+            label = { Text("Label") }
         )
 
         if (viewModel.graph is GraphUndirected<*>) {
@@ -165,6 +174,7 @@ fun <T> ToolPanel(
                 onClick = { needBridges = true },
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = MaterialTheme.colors.secondary,
+                    contentColor = MaterialTheme.colors.onSurface,
                 ),
                 enabled = true,
                 modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
@@ -188,6 +198,7 @@ fun <T> ToolPanel(
                 onClick = { },
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = MaterialTheme.colors.secondary,
+                    contentColor = MaterialTheme.colors.onSurface,
                 ),
                 enabled = true,
                 modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
@@ -264,7 +275,8 @@ fun ToggleRow(label: String, checked: Boolean, onCheckedChange: (Boolean) -> Uni
         Text(
             text = label,
             style = MaterialTheme.typography.body1,
-            modifier = Modifier.padding(start = 8.dp)
+            modifier = Modifier.padding(start = 8.dp),
+            color = MaterialTheme.colors.onSurface
         )
     }
 }

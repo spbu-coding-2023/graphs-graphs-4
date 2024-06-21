@@ -32,7 +32,6 @@ class MainScreenViewModel<T>(
 
     fun resetGraphView() {
         representationStrategy.place(width, height, graphViewModel.vertices)
-        graphViewModel.vertices.forEach { v -> v.color = Color.DarkGray }
         graphViewModel.edges.forEach {
             it.color = Color.Black
             it.width = 3.toFloat()

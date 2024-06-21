@@ -5,14 +5,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import model.graphs.Graph
 
+
 class GraphViewModel<T>(
     graph: Graph<T>,
     showVerticesLabels: State<Boolean>,
     showEdgesLabels: State<Boolean>,
     showVerticesDistanceLabels: State<Boolean>,
 ) {
+    var currentVertex: VertexViewModel<T>? = null
+
     private val _vertices = graph.vertices().associateWith { v ->
-        VertexViewModel(0.dp, 0.dp, Color.DarkGray, v, showVerticesLabels, showVerticesDistanceLabels)
+        VertexViewModel(0.dp, 0.dp, v, showVerticesLabels, showVerticesDistanceLabels)
     }
 
     private val _edges = graph.edges().associateWith { e ->

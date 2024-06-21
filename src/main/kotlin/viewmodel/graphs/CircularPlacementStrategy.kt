@@ -9,7 +9,6 @@ import model.graphs.Vertex
 import kotlin.math.cos
 import kotlin.math.min
 import kotlin.math.sin
-import kotlin.random.Random
 
 class CircularPlacementStrategy : RepresentationStrategy {
     override fun <T> place(width: Double, height: Double, vertices: Collection<VertexViewModel<T>>) {
@@ -26,7 +25,6 @@ class CircularPlacementStrategy : RepresentationStrategy {
 
         first.x = point.first.dp
         first.y = point.second.dp
-        first.color = Color.Gray
 
         sorted
             .drop(1)
@@ -37,11 +35,8 @@ class CircularPlacementStrategy : RepresentationStrategy {
             }
     }
 
-    override fun <V> highlight(vertices: Collection<VertexViewModel<V>>) {
-        vertices
-            .onEach {
-                it.color = if (Random.nextBoolean()) Color.Green else Color.Blue
-            }
+    override fun <T> highlight(vertices: Collection<VertexViewModel<T>>) {
+        TODO("Not yet implemented")
     }
 
     @Composable
@@ -60,13 +55,6 @@ class CircularPlacementStrategy : RepresentationStrategy {
         }
     }
 
-
-    override fun <T> colorVertices(vararg vertices: VertexViewModel<T>, color: Color) {
-        for (vertex in vertices) {
-            vertex.color = color
-        }
-    }
-
     override fun <T> colorEdges(vararg edges: EdgeViewModel<T>, color: Color) {
         for (edge in edges) {
             edge.color = color
@@ -77,12 +65,6 @@ class CircularPlacementStrategy : RepresentationStrategy {
         for (component in scc) {
             val array = Array(256) { it }
             val color = Color(array.random(), array.random(), array.random())
-
-            for (vertex in vertices) {
-                if (component.contains(vertex.value)) {
-                    vertex.color = color
-                }
-            }
         }
     }
 
@@ -99,6 +81,10 @@ class CircularPlacementStrategy : RepresentationStrategy {
             }
         }
 
+    }
+
+    override fun <T> colorVertices(vararg vertices: VertexViewModel<T>, color: Color) {
+        TODO("Not yet implemented")
     }
 
     private fun Pair<Double, Double>.rotate(pivot: Pair<Double, Double>, angle: Double): Pair<Double, Double> {

@@ -1,19 +1,12 @@
 package view.graphs
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.unit.dp
 import viewmodel.graphs.EdgeViewModel
 
 @Suppress("FunctionNaming")
@@ -41,18 +34,18 @@ fun <T> EdgeView(
             )
         }
 
-        if (viewModel.islWeightLabelVisible) {
-            Text(
-                modifier = Modifier
-                    .offset(
-                        viewModel.u.x + (viewModel.v.x - viewModel.u.x) / 2,
-                        viewModel.u.y + (viewModel.v.y - viewModel.u.y) / 2
-                    )
-                    .background(MaterialTheme.colors.surface, RoundedCornerShape(4.dp))
-                    .padding(4.dp),
-                text = viewModel.label,
-                style = MaterialTheme.typography.caption.copy(color = MaterialTheme.colors.onSurface)
-            )
-        }
+//        if (viewModel.islWeightLabelVisible) {
+//            Text(
+//                modifier = Modifier
+//                    .offset(
+//                        viewModel.u.x + (viewModel.v.x - viewModel.u.x) / 2,
+//                        viewModel.u.y + (viewModel.v.y - viewModel.u.y) / 2
+//                    )
+//                    .background(MaterialTheme.colors.surface, RoundedCornerShape(4.dp))
+//                    .padding(4.dp),
+//                text = viewModel.label,
+//                style = MaterialTheme.typography.caption.copy(color = MaterialTheme.colors.onSurface)
+//            )
+//        }
     }
 }

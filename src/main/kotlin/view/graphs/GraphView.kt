@@ -6,6 +6,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import model.graphs.Vertex
@@ -15,8 +19,9 @@ import viewmodel.graphs.GraphViewModel
 @Composable
 fun <E> GraphView(
     viewModel: GraphViewModel<E>,
-    onVertexClick: (Vertex<E>) -> Unit,
 ) {
+    var currentVertex: Vertex<E>? by remember { mutableStateOf(null) }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -30,7 +35,12 @@ fun <E> GraphView(
         viewModel.vertices.forEach { vertex ->
             VertexView(
                 viewModel = vertex,
-                onClick = onVertexClick
+                onClick = {
+                    currentVertex = vertex.value
+                    viewModel.currentVertex?.isSelected = false
+                    viewModel.currentVertex = vertex
+                    vertex.isSelected = true
+                }
             )
         }
     }
