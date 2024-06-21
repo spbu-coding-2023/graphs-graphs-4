@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
 import model.graphs.Graph
 import model.graphs.GraphUndirected
+import model.graphs.GraphWeighted
 import viewmodel.graphs.GraphViewModel
 import viewmodel.graphs.RepresentationStrategy
 import java.io.File
@@ -15,8 +16,8 @@ class MainScreenViewModel<T>(
     private val representationStrategy: RepresentationStrategy
 ) {
     private val showVerticesLabels = mutableStateOf(false)
-    private val showVerticesDistanceLabels = mutableStateOf(false)
-    private val showEdgesLabels = mutableStateOf(false)
+    val showVerticesDistanceLabels = mutableStateOf(false)
+    val showEdgesLabels = mutableStateOf(false)
     var graphViewModel = GraphViewModel(graph, showVerticesLabels, showEdgesLabels, showVerticesDistanceLabels)
     var file: File? = null
 
@@ -82,12 +83,15 @@ class MainScreenViewModel<T>(
         } else throw IllegalArgumentException("graph is directed!")
     }
 
-//    private fun colorNotSelected(currV: Vertex<T>) {
-//        graphViewModel.vertices.forEach { v ->
-//            if (v.v != currV) {
-//                v.color = Color.DarkGray
-//            }
-//        }
-//    }
+    fun findDistanceBellman() {
+        if (graph is GraphWeighted) {
+            val labels =
+                graphViewModel.currentVertex?.let { (graph as GraphWeighted<T>).findDistancesBellman(it.value) }
+
+            graphViewModel.vertices.forEach {
+                it.distanceLabel = (labels?.get(it.value)).toString()
+            }
+        }
+    }
 
 }

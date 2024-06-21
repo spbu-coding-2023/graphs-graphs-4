@@ -25,7 +25,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.material.TextField
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
@@ -42,7 +41,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import model.graphs.GraphUndirected
 import model.graphs.GraphWeighted
-import model.graphs.Vertex
 import view.graphs.GraphView
 import viewmodel.MainScreenViewModel
 
@@ -51,7 +49,6 @@ import viewmodel.MainScreenViewModel
 fun <T> MainScreen(viewModel: MainScreenViewModel<T>, darkTheme: MutableState<Boolean>) {
     var showMenu by remember { mutableStateOf(false) }
     var showGraph by remember { mutableStateOf(false) }
-    var currentVertex by remember { mutableStateOf(viewModel.graphViewModel.currentVertex) }
 
     Scaffold(
         topBar = {
@@ -91,7 +88,7 @@ fun <T> MainScreen(viewModel: MainScreenViewModel<T>, darkTheme: MutableState<Bo
             )
         }
     ) {
-        MainContent(viewModel, currentVertex?.value)
+        MainContent(viewModel)
     }
 }
 
@@ -110,7 +107,6 @@ fun AppDropdownMenu(expanded: Boolean, onDismiss: () -> Unit, content: @Composab
 @Composable
 fun <T> MainContent(
     viewModel: MainScreenViewModel<T>,
-    vertex: Vertex<T>?
 ) {
     Row(horizontalArrangement = Arrangement.spacedBy(20.dp)) {
         Surface(
@@ -131,7 +127,6 @@ fun <T> MainContent(
                     .fillMaxHeight()
                     .background(MaterialTheme.colors.secondary),
                 viewModel = viewModel,
-                selectedVertex = vertex,
             )
         }
     }
@@ -142,7 +137,6 @@ fun <T> MainContent(
 fun <T> ToolPanel(
     viewModel: MainScreenViewModel<T>,
     modifier: Modifier = Modifier,
-    selectedVertex: Vertex<T>?,
 ) {
 
     Column(
@@ -157,14 +151,6 @@ fun <T> ToolPanel(
             style = MaterialTheme.typography.h6,
             modifier = Modifier.padding(bottom = 16.dp),
             color = MaterialTheme.colors.onSurface
-        )
-
-        var text by remember { mutableStateOf(selectedVertex?.key.toString()) }
-
-        TextField(
-            value = text,
-            onValueChange = { text = it },
-            label = { Text("Label") }
         )
 
         if (viewModel.graph is GraphUndirected<*>) {
@@ -194,8 +180,13 @@ fun <T> ToolPanel(
 
         if (viewModel.graph is GraphWeighted<*>) {
             Button(
-                // (viewModel::findDistanceBellman)(selectedVertex)
-                onClick = { },
+                onClick = {
+                    viewModel.findDistanceBellman()
+
+                    // костыль для обновления надписей
+                    viewModel.showVerticesDistanceLabels.value = !viewModel.showVerticesDistanceLabels.value
+                    viewModel.showVerticesDistanceLabels.value = !viewModel.showVerticesDistanceLabels.value
+                },
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = MaterialTheme.colors.secondary,
                     contentColor = MaterialTheme.colors.onSurface,
@@ -236,17 +227,17 @@ fun <T> ToolPanel(
 //            onCheckedChange = { viewModel.showVerticesLabels.value = it }
 //        )
 //
-//        ToggleRow(
-//            label = "Show Edges Labels",
-//            checked = viewModel.showEdgesLabels.value,
-//            onCheckedChange = { viewModel.showEdgesLabels.value = it }
-//        )
-//
-//        ToggleRow(
-//            label = "Show Distance Labels",
-//            checked = viewModel.showVerticesDistanceLabels.value,
-//            onCheckedChange = { viewModel.showVerticesDistanceLabels.value = it }
-//        )
+        ToggleRow(
+            label = "Show Edges Labels",
+            checked = viewModel.showEdgesLabels.value,
+            onCheckedChange = { viewModel.showEdgesLabels.value = it }
+        )
+
+        ToggleRow(
+            label = "Show Distance Labels",
+            checked = viewModel.showVerticesDistanceLabels.value,
+            onCheckedChange = { viewModel.showVerticesDistanceLabels.value = it }
+        )
 //
 //        Button(
 //            onClick = viewModel::resetGraphView,
