@@ -30,4 +30,8 @@ open class UndirectedGraph<T> : AbstractGraph<T>(), GraphUndirected<T> {
         TODO()
     }
 
+    override fun runLeidenMethod() {
+        TODO("Not yet implemented")
+    }
+
 }

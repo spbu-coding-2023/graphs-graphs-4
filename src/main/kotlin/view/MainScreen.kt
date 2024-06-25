@@ -176,6 +176,20 @@ fun <T> ToolPanel(
                 viewModel.showBridges()
             }
 
+            Button(
+                onClick = { viewModel.findCommunities() },
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = MaterialTheme.colors.secondary,
+                    contentColor = MaterialTheme.colors.onSurface,
+                ),
+                enabled = true,
+                modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
+            ) {
+                Icon(Icons.Default.Search, contentDescription = "Find Communities")
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(text = "Find Communities")
+            }
+
         }
 
         if (viewModel.graph is GraphWeighted<*>) {

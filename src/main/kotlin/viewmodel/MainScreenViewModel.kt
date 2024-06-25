@@ -83,6 +83,12 @@ class MainScreenViewModel<T>(
         } else throw IllegalArgumentException("graph is directed!")
     }
 
+    fun findCommunities() {
+        if (graph is GraphUndirected) {
+            (graph as GraphUndirected<T>).runLeidenMethod()
+        } else throw IllegalArgumentException("leiden method does not support directed graphs")
+    }
+
     fun findDistanceBellman() {
         if (graph is GraphWeighted) {
             val labels =

@@ -8,4 +8,6 @@ interface GraphUndirected<T> : Graph<T> {
     }
 
     fun findMinSpanTree(): Set<Edge<T>>?
+
+    fun runLeidenMethod()
 }

@@ -28,4 +28,8 @@ open class UndirectedWeightedGraph<T> : AbstractGraph<T>(), GraphUndirected<T>, 
     override fun findMinSpanTree(): Set<Edge<T>>? {
         TODO()
     }
+
+    override fun runLeidenMethod() {
+        TODO("Not yet implemented")
+    }
 }
