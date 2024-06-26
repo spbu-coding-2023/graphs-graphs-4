@@ -107,7 +107,7 @@ class CommunityDetector<T>(var graph: GraphUndirected<T>, var y: Double) {
         graph: GraphUndirected<T>,
         partition: HashSet<HashSet<Vertex<T>>>
     ): HashSet<HashSet<Vertex<T>>> {
-        var refinedPartition = initPartition()
+        var refinedPartition = initPartition(graph)
 
         for (community in partition) {
             refinedPartition = mergeNodesSubset(graph, refinedPartition, community)
@@ -121,10 +121,18 @@ class CommunityDetector<T>(var graph: GraphUndirected<T>, var y: Double) {
         refinedPartition: HashSet<HashSet<Vertex<T>>>,
         community: java.util.HashSet<Vertex<T>>
     ): HashSet<HashSet<Vertex<T>>> {
+
+
         TODO()
     }
 
-    private fun initPartition(): HashSet<HashSet<Vertex<T>>> {
-        TODO()
+    private fun initPartition(graph: GraphUndirected<T>): HashSet<HashSet<Vertex<T>>> {
+        val partition: HashSet<HashSet<Vertex<T>>> = hashSetOf()
+
+        for (vertex in graph.vertices()) {
+            partition.add(hashSetOf(vertex))
+        }
+
+        return partition
     }
 }
