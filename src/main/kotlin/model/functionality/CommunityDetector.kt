@@ -4,8 +4,6 @@ import model.graphs.GraphUndirected
 import model.graphs.Vertex
 
 class CommunityDetector<T>(var graph: GraphUndirected<T>, var y: Double) {
-    // для невзвшененных графов
-
     private fun flatten(partition: HashSet<HashSet<Vertex<T>>>) {
         TODO()
     }
@@ -41,38 +39,30 @@ class CommunityDetector<T>(var graph: GraphUndirected<T>, var y: Double) {
         flatten(partition)
     }
 
-
-    // помни сделать amend когда допишешь
-
-    // сделать vert() тоже хэшсетом?
     private fun moveNodesFast(
         graph: GraphUndirected<T>,
         partition: HashSet<HashSet<Vertex<T>>>
     ): HashSet<HashSet<Vertex<T>>> {
-        val currentQuality = quality(graph, partition)
-        var max = currentQuality
-        var betterPartition = partition
 
         for (vertex in graph.vertices()) {
-            val tempPartition: HashSet<HashSet<Vertex<T>>> = partition
-            tempPartition.find { it.contains(vertex) }?.remove(vertex)
+            val currentQuality = quality(graph, partition)
+            var bestCommunity = partition.find { it.contains(vertex) }
+            var max = currentQuality
 
-            for (community in tempPartition) {
+            bestCommunity?.remove(vertex)
+
+            for (community in partition) {
                 community.add(vertex)
 
-                val newQuality = quality(graph, tempPartition)
+                val tempQuality = quality(graph, partition)
 
-                if (newQuality > max) {
-                    max = newQuality
-                    betterPartition = tempPartition
+                if (tempQuality > max) {
+                    max = tempQuality
+                    bestCommunity = community
                 }
-
-                community.remove(vertex)
             }
 
-            if (max > 0) {
-                return betterPartition
-            }
+            bestCommunity?.add(vertex)
         }
 
         return partition
