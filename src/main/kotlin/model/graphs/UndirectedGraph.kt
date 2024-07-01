@@ -12,6 +12,15 @@ open class UndirectedGraph<T> : AbstractGraph<T>(), GraphUndirected<T> {
         adjList.getOrPut(vertex2) { HashSet() }.add(UnweightedEdge(vertex2, vertex1))
     }
 
+    // добавляет одно конкретное ребро, пока надо только алг поиска
+    // сообществ
+    fun addSingleEdge(edge: UnweightedEdge<T>) {
+        require(adjList.containsKey(edge.from))
+        require(adjList.containsKey(edge.to))
+
+        adjList.getOrPut(edge.from) { HashSet() }.add(edge)
+    }
+
 //    open fun addEdge(key1: T, key2: T) {
 //        addEdge(Vertex(key1), Vertex(key2))
 //    }

@@ -1,6 +1,7 @@
 package model.functionality
 
 import model.graphs.GraphUndirected
+import model.graphs.UndirectedGraph
 import model.graphs.Vertex
 
 class CommunityDetector<T>(var graph: GraphUndirected<T>, var y: Double) {
@@ -98,9 +99,30 @@ class CommunityDetector<T>(var graph: GraphUndirected<T>, var y: Double) {
 
     private fun aggregateGraph(
         graph: GraphUndirected<T>,
-        refinedPartition: HashSet<HashSet<Vertex<T>>>
+        partition: HashSet<HashSet<Vertex<T>>>
     ): GraphUndirected<T> {
-        TODO()
+
+        val newGraph = UndirectedGraph<HashSet<Vertex<T>>>()
+
+        for (community in partition) {
+            newGraph.addVertex(community)
+        }
+
+        val communities = newGraph.vertices()
+
+        for (edge in graph.edges()) {
+            val v1 = edge.from
+            val v2 = edge.to
+
+            val c1 = communities.find { it.key.contains(v1) }
+            val c2 = communities.find { it.key.contains(v2) }
+
+            if (c1 != null && c2 != null) {
+                newGraph.addEdge(c1, c2)
+            } else throw IllegalArgumentException("idk something weird just happened")
+        }
+
+        return newGraph as GraphUndirected<T>
     }
 
     private fun refinePartition(

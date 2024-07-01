@@ -15,10 +15,6 @@ open class UndirectedWeightedGraph<T> : AbstractGraph<T>(), GraphUndirected<T>, 
 //        addEdge(Vertex(key1), Vertex(key2))
 //    }
 
-//    open fun addEdge(edge: UnweightedEdge<T>) {
-//        addEdge(edge.from, edge.to)
-//    }
-
 //    open fun addEdges(vararg edges: UnweightedEdge<T>) {
 //        for (edge in edges) {
 //            addEdge(edge)
