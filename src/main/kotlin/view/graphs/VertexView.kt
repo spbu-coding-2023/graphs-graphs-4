@@ -37,10 +37,12 @@ fun <V> VertexView(
 ) {
     var color by remember { mutableStateOf(Color.Unspecified) }
 
-    color = if (viewModel.isSelected) {
-        Color(255, 166, 0)
+    if (viewModel.isSelected) {
+        color = Color(255, 166, 0)
+    } else if (viewModel.color != Color.Unspecified) {
+        color = viewModel.color
     } else {
-        MaterialTheme.colors.onBackground
+        color = MaterialTheme.colors.onBackground
     }
 
     Box(

@@ -1,6 +1,7 @@
 package model.graphs
 
 import kotlinx.serialization.Serializable
+import model.functionality.CommunityDetector
 
 @Serializable
 open class UndirectedGraph<T> : AbstractGraph<T>(), GraphUndirected<T> {
@@ -39,8 +40,8 @@ open class UndirectedGraph<T> : AbstractGraph<T>(), GraphUndirected<T> {
         TODO()
     }
 
-    override fun runLeidenMethod() {
-        TODO("Not yet implemented")
+    override fun runLeidenMethod(): HashSet<HashSet<Vertex<T>>> {
+        return CommunityDetector(this, 0.5).leiden()
     }
 
 }

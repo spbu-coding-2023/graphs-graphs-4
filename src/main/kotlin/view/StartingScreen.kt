@@ -16,22 +16,93 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import model.graphs.Graph
-import model.graphs.UndirectedWeightedGraph
+import model.graphs.UndirectedGraph
 
-val sampleGraph = UndirectedWeightedGraph<Int>().apply {
-    for (i in 1..25) {
+val sampleGraph = UndirectedGraph<Int>().apply {
+    for (i in 1..34) {
         addVertex(i)
     }
 
     val nodes = arrayListOf(adjList.keys.toList())
 
-    for (i in 0..24) {
-        val v1 = (0..24).random()
-        val v2 = (0..24).random()
-        val weight = (1..50).random()
-
-        addEdge(nodes[0][v1], nodes[0][v2], weight.toDouble())
-    }
+    addEdge(nodes[0][1], nodes[0][0])
+    addEdge(nodes[0][2], nodes[0][0])
+    addEdge(nodes[0][2], nodes[0][1])
+    addEdge(nodes[0][3], nodes[0][0])
+    addEdge(nodes[0][3], nodes[0][1])
+    addEdge(nodes[0][3], nodes[0][2])
+    addEdge(nodes[0][4], nodes[0][0])
+    addEdge(nodes[0][5], nodes[0][0])
+    addEdge(nodes[0][6], nodes[0][0])
+    addEdge(nodes[0][6], nodes[0][4])
+    addEdge(nodes[0][6], nodes[0][5])
+    addEdge(nodes[0][7], nodes[0][0])
+    addEdge(nodes[0][7], nodes[0][1])
+    addEdge(nodes[0][7], nodes[0][2])
+    addEdge(nodes[0][7], nodes[0][3])
+    addEdge(nodes[0][8], nodes[0][1])
+    addEdge(nodes[0][8], nodes[0][2])
+    addEdge(nodes[0][9], nodes[0][2])
+    addEdge(nodes[0][10], nodes[0][0])
+    addEdge(nodes[0][10], nodes[0][4])
+    addEdge(nodes[0][10], nodes[0][5])
+    addEdge(nodes[0][11], nodes[0][0])
+    addEdge(nodes[0][12], nodes[0][0])
+    addEdge(nodes[0][12], nodes[0][3])
+    addEdge(nodes[0][13], nodes[0][0])
+    addEdge(nodes[0][13], nodes[0][1])
+    addEdge(nodes[0][13], nodes[0][2])
+    addEdge(nodes[0][13], nodes[0][3])
+    addEdge(nodes[0][16], nodes[0][5])
+    addEdge(nodes[0][16], nodes[0][6])
+    addEdge(nodes[0][17], nodes[0][0])
+    addEdge(nodes[0][17], nodes[0][1])
+    addEdge(nodes[0][19], nodes[0][0])
+    addEdge(nodes[0][19], nodes[0][1])
+    addEdge(nodes[0][21], nodes[0][0])
+    addEdge(nodes[0][21], nodes[0][1])
+    addEdge(nodes[0][25], nodes[0][23])
+    addEdge(nodes[0][25], nodes[0][24])
+    addEdge(nodes[0][27], nodes[0][2])
+    addEdge(nodes[0][27], nodes[0][23])
+    addEdge(nodes[0][27], nodes[0][24])
+    addEdge(nodes[0][28], nodes[0][2])
+    addEdge(nodes[0][29], nodes[0][23])
+    addEdge(nodes[0][29], nodes[0][26])
+    addEdge(nodes[0][30], nodes[0][1])
+    addEdge(nodes[0][30], nodes[0][8])
+    addEdge(nodes[0][31], nodes[0][0])
+    addEdge(nodes[0][31], nodes[0][24])
+    addEdge(nodes[0][31], nodes[0][25])
+    addEdge(nodes[0][31], nodes[0][28])
+    addEdge(nodes[0][32], nodes[0][2])
+    addEdge(nodes[0][32], nodes[0][8])
+    addEdge(nodes[0][32], nodes[0][14])
+    addEdge(nodes[0][32], nodes[0][15])
+    addEdge(nodes[0][32], nodes[0][18])
+    addEdge(nodes[0][32], nodes[0][20])
+    addEdge(nodes[0][32], nodes[0][22])
+    addEdge(nodes[0][32], nodes[0][23])
+    addEdge(nodes[0][32], nodes[0][29])
+    addEdge(nodes[0][32], nodes[0][30])
+    addEdge(nodes[0][32], nodes[0][31])
+    addEdge(nodes[0][33], nodes[0][8])
+    addEdge(nodes[0][33], nodes[0][9])
+    addEdge(nodes[0][33], nodes[0][13])
+    addEdge(nodes[0][33], nodes[0][14])
+    addEdge(nodes[0][33], nodes[0][15])
+    addEdge(nodes[0][33], nodes[0][18])
+    addEdge(nodes[0][33], nodes[0][19])
+    addEdge(nodes[0][33], nodes[0][20])
+    addEdge(nodes[0][33], nodes[0][22])
+    addEdge(nodes[0][33], nodes[0][23])
+    addEdge(nodes[0][33], nodes[0][26])
+    addEdge(nodes[0][33], nodes[0][27])
+    addEdge(nodes[0][33], nodes[0][28])
+    addEdge(nodes[0][33], nodes[0][29])
+    addEdge(nodes[0][33], nodes[0][30])
+    addEdge(nodes[0][33], nodes[0][31])
+    addEdge(nodes[0][33], nodes[0][32])
 }
 
 

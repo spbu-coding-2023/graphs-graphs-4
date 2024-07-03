@@ -5,6 +5,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import model.graphs.Vertex
@@ -19,7 +20,7 @@ class VertexViewModel<V>(
     val radius: Dp = 25.dp
 ) {
     var isSelected by mutableStateOf(false)
-
+    var color by mutableStateOf(Color.Unspecified)
 
     private var _x = mutableStateOf(x)
     var x: Dp

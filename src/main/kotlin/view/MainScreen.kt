@@ -235,12 +235,12 @@ fun <T> ToolPanel(
 //            Text(text = "Find SCC")
 //        }
 
-//        ToggleRow(
-//            label = "Show Vertices Labels",
-//            checked = viewModel.showVerticesLabels.value,
-//            onCheckedChange = { viewModel.showVerticesLabels.value = it }
-//        )
-//
+        ToggleRow(
+            label = "Show Vertices Labels",
+            checked = viewModel.showVerticesLabels.value,
+            onCheckedChange = { viewModel.showVerticesLabels.value = it }
+        )
+
         ToggleRow(
             label = "Show Edges Labels",
             checked = viewModel.showEdgesLabels.value,

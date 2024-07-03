@@ -4,6 +4,7 @@ import androidx.compose.runtime.State
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import model.graphs.Graph
+import model.graphs.Vertex
 
 
 class GraphViewModel<T>(
@@ -13,6 +14,7 @@ class GraphViewModel<T>(
     showVerticesDistanceLabels: State<Boolean>,
 ) {
     var currentVertex: VertexViewModel<T>? = null
+    var biggestIndexCommunity = 0
 
     private val _vertices = graph.vertices().associateWith { v ->
         VertexViewModel(0.dp, 0.dp, v, showVerticesLabels, showVerticesDistanceLabels)
@@ -25,6 +27,31 @@ class GraphViewModel<T>(
             ?: error("VertexView for ${e.to} not found")
 
         EdgeViewModel(fst, snd, Color.Black, 4.toFloat(), e, showEdgesLabels)
+    }
+
+    // Color(78, 86, 129),
+    //        Color(122, 91, 148),
+    //        Color(173, 91, 151),
+    //        Color(219, 91, 136),
+    //        Color(252, 101, 107),
+    //        Color(255, 129, 68),
+
+    fun indexCommunities(communities: HashSet<HashSet<Vertex<T>>>) {
+        var count = 1
+
+        val biggestCommunities = communities.sortedBy { it.size }.reversed()
+
+        for (community in biggestCommunities) {
+            val color = Color((0..255).random(), (0..255).random(), (0..255).random())
+
+            for (vertex in community) {
+                _vertices[vertex]?.color = color
+            }
+
+            count += 1
+        }
+
+        biggestIndexCommunity = biggestCommunities[0].size
     }
 
     val vertices: Collection<VertexViewModel<T>>

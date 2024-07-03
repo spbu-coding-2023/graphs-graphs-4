@@ -15,7 +15,7 @@ class MainScreenViewModel<T>(
     var graph: Graph<T>,
     private val representationStrategy: RepresentationStrategy
 ) {
-    private val showVerticesLabels = mutableStateOf(false)
+    val showVerticesLabels = mutableStateOf(false)
     val showVerticesDistanceLabels = mutableStateOf(false)
     val showEdgesLabels = mutableStateOf(false)
     var graphViewModel = GraphViewModel(graph, showVerticesLabels, showEdgesLabels, showVerticesDistanceLabels)
@@ -85,7 +85,10 @@ class MainScreenViewModel<T>(
 
     fun findCommunities() {
         if (graph is GraphUndirected) {
-            (graph as GraphUndirected<T>).runLeidenMethod()
+            val communities = (graph as GraphUndirected<T>).runLeidenMethod()
+            println(communities)
+            graphViewModel.indexCommunities(communities)
+
         } else throw IllegalArgumentException("leiden method does not support directed graphs")
     }
 

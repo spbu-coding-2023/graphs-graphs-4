@@ -25,7 +25,7 @@ open class UndirectedWeightedGraph<T> : AbstractGraph<T>(), GraphUndirected<T>, 
         TODO()
     }
 
-    override fun runLeidenMethod() {
+    override fun runLeidenMethod(): HashSet<HashSet<Vertex<T>>> {
         TODO("Not yet implemented")
     }
 }

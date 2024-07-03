@@ -5,11 +5,10 @@ import model.graphs.UndirectedGraph
 import model.graphs.Vertex
 
 class CommunityDetector<T>(var graph: GraphUndirected<T>, var y: Double) {
-    /// еще ОЧЕНЬ наверное стоит дробить T пока не избавимся от сета
+    private fun flatten(partition: HashSet<HashSet<Vertex<T>>>): HashSet<HashSet<Vertex<T>>> {
+        val output = HashSet<HashSet<Vertex<T>>>()
 
-
-    private fun flatten(partition: HashSet<HashSet<Vertex<T>>>): HashSet<HashSet<*>> {
-        val output = HashSet<HashSet<*>>()
+        println(partition)
 
         for (community in partition) {
             output.add(flatCommunity(community))
@@ -18,23 +17,26 @@ class CommunityDetector<T>(var graph: GraphUndirected<T>, var y: Double) {
         return output
     }
 
-    fun leiden() {
-        var partition: HashSet<HashSet<Vertex<T>>> = hashSetOf()
+    fun leiden(): HashSet<HashSet<Vertex<T>>> {
+        var graphCurr = graph
+        var partition: HashSet<HashSet<Vertex<T>>> = initPartition(graphCurr)
+        var done = false
 
-        while (partition.size != graph.vertices().size) {
-            partition = moveNodesFast(graph, partition)
+        while (!done) {
+            partition = moveNodesFast(graphCurr, partition)
+            done = ((partition.size) == (graphCurr.vertices().size))
 
-            if (partition.size != graph.vertices().size) {
-                val refinedPartition = refinePartition(graph, partition)
+            if (partition.size != graphCurr.vertices().size) {
+                val refinedPartition = refinePartition(graphCurr, partition)
 
                 val temp: HashSet<HashSet<Vertex<T>>> = hashSetOf()
-                graph = aggregateGraph(graph, refinedPartition)
+                graphCurr = aggregateGraph(graphCurr, refinedPartition)
 
                 for (community in partition) {
                     val tempCommunity: HashSet<Vertex<T>> = hashSetOf()
 
                     for (vertex in community) {
-                        if (graph.vertices().contains(vertex)) {
+                        if (graphCurr.vertices().contains(vertex)) {
                             tempCommunity.add(vertex)
                         }
                     }
@@ -46,33 +48,43 @@ class CommunityDetector<T>(var graph: GraphUndirected<T>, var y: Double) {
             }
         }
 
-        flatten(partition)
+        return flatten(partition)
     }
 
     private fun moveNodesFast(
         graph: GraphUndirected<T>,
         partition: HashSet<HashSet<Vertex<T>>>
     ): HashSet<HashSet<Vertex<T>>> {
+        val vertexQueue = graph.vertices().toMutableList()
+        vertexQueue.shuffle()
 
-        for (vertex in graph.vertices()) {
+        for (vertex in vertexQueue) {
             val currentQuality = quality(graph, partition)
-            var bestCommunity = partition.find { it.contains(vertex) }
             var max = currentQuality
+            var bestCommunity = partition.find { it.contains(vertex) }
 
-            bestCommunity?.remove(vertex)
+            if (bestCommunity != null) {
+                bestCommunity.remove(vertex)
 
-            for (community in partition) {
-                community.add(vertex)
+                for (community in partition) {
+                    community.add(vertex)
 
-                val tempQuality = quality(graph, partition)
+                    val tempQuality = quality(graph, partition)
 
-                if (tempQuality > max) {
-                    max = tempQuality
-                    bestCommunity = community
+                    if (tempQuality > max) {
+                        max = tempQuality
+                        bestCommunity = community
+                    }
+
+                    community.remove(vertex)
+                }
+
+                bestCommunity?.add(vertex)
+
+                if (bestCommunity?.size == 0) {
+                    partition.remove(bestCommunity)
                 }
             }
-
-            bestCommunity?.add(vertex)
         }
 
         return partition
@@ -82,17 +94,18 @@ class CommunityDetector<T>(var graph: GraphUndirected<T>, var y: Double) {
         var sum = 0.0
 
         for (community in partition) {
-            sum += countEdges(graph, community, community) - ((y * community.size * (community.size - 1)) / 2)
+            val cS = flatCommunity(community).size
+            sum += countEdges(graph, community, community) - ((y * cS * (cS - 1)) / 2)
         }
 
         return sum
     }
 
-    private fun countEdges(graph: GraphUndirected<T>, set1: HashSet<Vertex<T>>, set2: Set<Vertex<T>>): Int {
+    private fun countEdges(currGraph: GraphUndirected<T>, set1: HashSet<Vertex<T>>, set2: Set<Vertex<T>>): Int {
         var count = 0
 
         for (u in set1) {
-            for (v in graph.getNeighbors(u)) {
+            for (v in currGraph.getNeighbors(u)) {
                 if (v.to in set2) {
                     count += 1
                 }
@@ -110,7 +123,6 @@ class CommunityDetector<T>(var graph: GraphUndirected<T>, var y: Double) {
         graph: GraphUndirected<T>,
         partition: HashSet<HashSet<Vertex<T>>>
     ): GraphUndirected<T> {
-
         val newGraph = UndirectedGraph<HashSet<Vertex<T>>>()
 
         for (community in partition) {
@@ -128,7 +140,7 @@ class CommunityDetector<T>(var graph: GraphUndirected<T>, var y: Double) {
 
             if (c1 != null && c2 != null) {
                 newGraph.addEdge(c1, c2)
-            } else throw IllegalArgumentException("idk something weird just happened")
+            }
         }
 
         return newGraph as GraphUndirected<T>
@@ -159,24 +171,32 @@ class CommunityDetector<T>(var graph: GraphUndirected<T>, var y: Double) {
         return count
     }
 
-    private fun flatVertex(vertex: Vertex<T>): HashSet<*> {
-        if (vertex.key is HashSet<*>) {
-            return vertex.key
-        } else {
-            return hashSetOf(vertex)
-        }
-    }
-
-    private fun flatCommunity(community: HashSet<Vertex<T>>): HashSet<*> {
+    private fun <E> flatCommunity(community: HashSet<Vertex<E>>): HashSet<Vertex<T>> {
         val output: HashSet<Vertex<T>> = hashSetOf()
 
         for (vertex in community) {
-            for (element in flatVertex(vertex)) {
-                output.add(element as Vertex<T>)
-            }
+            output.addAll(flatVertex(vertex))
         }
 
         return output
+    }
+
+    private fun unpack(vertices: HashSet<Vertex<T>>, vertex: Vertex<Collection<*>>): HashSet<Vertex<T>> {
+        for (element in vertex.key) {
+            when (element) {
+                is Vertex<*> -> vertices.add(element as Vertex<T>)
+                is Collection<*> -> unpack(vertices, element as Vertex<Collection<*>>)
+            }
+        }
+
+        return vertices
+    }
+
+    private fun <E> flatVertex(vertex: Vertex<E>): HashSet<Vertex<T>> {
+        return when (vertex.key) {
+            is Collection<*> -> unpack(hashSetOf(), vertex as Vertex<Collection<*>>)
+            else -> hashSetOf(vertex) as HashSet<Vertex<T>>
+        }
     }
 
     private fun mergeNodesSubset(
@@ -187,7 +207,7 @@ class CommunityDetector<T>(var graph: GraphUndirected<T>, var y: Double) {
         val r: HashSet<Vertex<T>> = hashSetOf()
 
         for (vertex in community) {
-            val vertexSize = flatVertex(vertex).size
+            val vertexSize: Double = flatVertex(vertex).size.toDouble()
 
             if (countEdgesInside(
                     graph,
@@ -200,31 +220,16 @@ class CommunityDetector<T>(var graph: GraphUndirected<T>, var y: Double) {
         }
 
         for (vertex in r) {
-            if (refinedPartition.find { it.contains(vertex) }?.size == 1) {
-                val wellConnectedCommunities = hashSetOf<HashSet<Vertex<T>>>()
+            val currentCommunity = refinedPartition.find { it.contains(vertex) }
 
-                // мб функцию ?
-                for (element in refinedPartition) {
-                    if (flatCommunity(element).all { community.contains(it) }) {
-                        if (countEdges(
-                                graph,
-                                element,
-                                community.minus(element)
-                            ) > (y * flatCommunity(element).size * (flatCommunity(community).size - flatCommunity(
-                                element
-                            ).size))
-                        ) {
-                            wellConnectedCommunities.add(element)
-                        }
-                    }
-                }
+            if (currentCommunity?.size == 1) {
+                val wellConnectedCommunities = refinedPartition.filter { it.all { v -> community.contains(v) } }
+                    .filter { countEdges(graph, it, community.minus(it)) > (y * it.size * (community.size - it.size)) }
+                    .toHashSet()
 
-                // была какая-то формула но написано вернуть случайное
-                // вообще по хорошему надо проверять как изменилось качество
-                val newCommunity = refinedPartition.random()
+                val newCommunity = wellConnectedCommunities.randomOrNull() ?: refinedPartition.random()
 
-                refinedPartition.find { it.contains(vertex) }?.remove(vertex)
-
+                currentCommunity.remove(vertex)
                 newCommunity.add(vertex)
             }
         }
@@ -232,13 +237,7 @@ class CommunityDetector<T>(var graph: GraphUndirected<T>, var y: Double) {
         return refinedPartition
     }
 
-    private fun initPartition(graph: GraphUndirected<T>): HashSet<HashSet<Vertex<T>>> {
-        val partition: HashSet<HashSet<Vertex<T>>> = hashSetOf()
-
-        for (vertex in graph.vertices()) {
-            partition.add(hashSetOf(vertex))
-        }
-
-        return partition
+    internal fun initPartition(graph: GraphUndirected<T>): HashSet<HashSet<Vertex<T>>> {
+        return graph.vertices().map { hashSetOf(it) }.toHashSet()
     }
 }
