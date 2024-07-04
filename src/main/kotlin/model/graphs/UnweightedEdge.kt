@@ -9,6 +9,8 @@ data class UnweightedEdge<T>(override val from: Vertex<T>, override val to: Vert
         TODO("Not yet implemented")
     }
 
+    override var copies: Int = 0
+
     // override fun toString(): String {
     //        return "($from, $to)"
     //    }
