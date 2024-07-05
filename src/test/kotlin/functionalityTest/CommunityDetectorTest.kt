@@ -145,6 +145,47 @@ class CommunityDetectorTest {
             assertEquals(expectedEdges, aggregatedGraph.edges() as HashSet<UnweightedEdge<HashSet<Vertex<Int>>>>)
         }
 
+        @Test
+        @DisplayName("flatVertex(vertex<Collection>) will unpack nested vertices properly")
+        ///        ___________   vertex   ___________
+        ///      /                  |                 \
+        ///   ([1, 2, 3], [4, 5])   ([6], [7, 8])     ([9, 10])
+        fun flatVertexTest1() {
+            val vertex = Vertex(
+                hashSetOf(
+                    Vertex(
+                        hashSetOf(
+                            Vertex(hashSetOf(Vertex(1), Vertex(2), Vertex(3))),
+                            Vertex(hashSetOf(Vertex(4), Vertex(5)))
+                        )
+                    ),
+                    Vertex(hashSetOf(Vertex(hashSetOf(Vertex(6))), Vertex(hashSetOf(Vertex(7), Vertex(8))))),
+                    Vertex(hashSetOf(Vertex(hashSetOf(Vertex(9), Vertex(10))))),
+                )
+            )
 
+            val expected = hashSetOf(
+                Vertex(1),
+                Vertex(2),
+                Vertex(3),
+                Vertex(4),
+                Vertex(5),
+                Vertex(6),
+                Vertex(7),
+                Vertex(8),
+                Vertex(9),
+                Vertex(10),
+            )
+
+            assertEquals(expected, CommunityDetector(sampleGraph, 1.0).flatVertex(vertex))
+        }
+
+        @Test
+        @DisplayName("flatVertex(vertex) will return hashSet of given vertex if it's key is not a collection")
+        fun flatVertexTest2() {
+            val vertex = Vertex(42)
+
+            assertEquals(hashSetOf(vertex), CommunityDetector(sampleGraph, 1.0).flatVertex(vertex))
+        }
     }
 }
