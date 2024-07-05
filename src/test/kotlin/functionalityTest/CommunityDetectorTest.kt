@@ -277,5 +277,52 @@ class CommunityDetectorTest {
 
             assertEquals(expected, CommunityDetector(sampleGraph, 1.0).flatCommunity(community))
         }
+
+        @Test
+        @DisplayName("countEdges() counts edges inside the given community properly")
+        fun countEdgesTest1() {
+            val communty = hashSetOf(
+                nodes[0],
+                nodes[1],
+                nodes[2],
+                nodes[3]
+            )
+
+            assertEquals(6, CommunityDetector(sampleGraph, 1.0).countEdges(sampleGraph, communty, communty))
+        }
+
+        @Test
+        @DisplayName("countEdges() counts neighbors of the given vertex inside a specific community properly")
+        fun countEdgesTest2() {
+            val communty = hashSetOf(
+                nodes[0],
+                nodes[1],
+                nodes[2],
+                nodes[3]
+            )
+
+            val vertex = nodes[0]
+
+            assertEquals(
+                3,
+                CommunityDetector(sampleGraph, 1.0).countEdges(sampleGraph, hashSetOf(vertex), communty.minus(vertex))
+            )
+        }
+
+        @Test
+        @DisplayName("countEdges() handles multi-edges properly")
+        fun countEdgesTest3() {
+            val testGraph = UndirectedGraph<Int>()
+            testGraph.addVertex(1)
+            testGraph.addVertex(2)
+
+            val community = testGraph.adjList.keys.toHashSet()
+
+            for (i in 1..50) {
+                testGraph.addEdge(testGraph.adjList.keys.first(), testGraph.adjList.keys.last())
+            }
+
+            assertEquals(50, CommunityDetector(testGraph, 1.0).countEdges(testGraph, community, community))
+        }
     }
 }
