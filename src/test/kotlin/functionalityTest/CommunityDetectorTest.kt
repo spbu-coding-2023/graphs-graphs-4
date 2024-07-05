@@ -159,8 +159,19 @@ class CommunityDetectorTest {
                             Vertex(hashSetOf(Vertex(4), Vertex(5)))
                         )
                     ),
-                    Vertex(hashSetOf(Vertex(hashSetOf(Vertex(6))), Vertex(hashSetOf(Vertex(7), Vertex(8))))),
-                    Vertex(hashSetOf(Vertex(hashSetOf(Vertex(9), Vertex(10))))),
+
+                    Vertex(
+                        hashSetOf(
+                            Vertex(hashSetOf(Vertex(6))),
+                            Vertex(hashSetOf(Vertex(7), Vertex(8)))
+                        )
+                    ),
+
+                    Vertex(
+                        hashSetOf(
+                            Vertex(hashSetOf(Vertex(9), Vertex(10)))
+                        )
+                    ),
                 )
             )
 
@@ -186,6 +197,85 @@ class CommunityDetectorTest {
             val vertex = Vertex(42)
 
             assertEquals(hashSetOf(vertex), CommunityDetector(sampleGraph, 1.0).flatVertex(vertex))
+        }
+
+        @Test
+        @DisplayName("flatCommunity(<Collection>) unpacks vertices properly")
+        fun flatCommunityTest1() {
+            val vertex1 = Vertex(
+                hashSetOf(
+                    Vertex(
+                        hashSetOf(
+                            Vertex(hashSetOf(Vertex(1), Vertex(2), Vertex(3))),
+                            Vertex(hashSetOf(Vertex(4), Vertex(5)))
+                        )
+                    ),
+
+                    Vertex(
+                        hashSetOf(
+                            Vertex(hashSetOf(Vertex(6))),
+                            Vertex(hashSetOf(Vertex(7), Vertex(8)))
+                        )
+                    ),
+
+                    Vertex(
+                        hashSetOf(
+                            Vertex(hashSetOf(Vertex(9), Vertex(10)))
+                        )
+                    ),
+                )
+            )
+
+            val vertex2 = Vertex(
+                hashSetOf(
+                    Vertex(
+                        hashSetOf(
+                            Vertex(hashSetOf(Vertex(11), Vertex(12), Vertex(13))),
+                            Vertex(hashSetOf(Vertex(14), Vertex(15)))
+                        )
+                    ),
+
+                    Vertex(
+                        hashSetOf(
+                            Vertex(hashSetOf(Vertex(16))),
+                            Vertex(hashSetOf(Vertex(17), Vertex(18)))
+                        )
+                    ),
+
+                    Vertex(
+                        hashSetOf(
+                            Vertex(hashSetOf(Vertex(19), Vertex(20)))
+                        )
+                    ),
+                )
+            )
+
+            val community = hashSetOf(vertex1, vertex2)
+
+            val expected = hashSetOf(
+                Vertex(1),
+                Vertex(2),
+                Vertex(3),
+                Vertex(4),
+                Vertex(5),
+                Vertex(6),
+                Vertex(7),
+                Vertex(8),
+                Vertex(9),
+                Vertex(10),
+                Vertex(11),
+                Vertex(12),
+                Vertex(13),
+                Vertex(14),
+                Vertex(15),
+                Vertex(16),
+                Vertex(17),
+                Vertex(18),
+                Vertex(19),
+                Vertex(20),
+            )
+
+            assertEquals(expected, CommunityDetector(sampleGraph, 1.0).flatCommunity(community))
         }
     }
 }
