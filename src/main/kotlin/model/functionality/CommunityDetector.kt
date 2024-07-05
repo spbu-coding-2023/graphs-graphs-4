@@ -183,20 +183,23 @@ class CommunityDetector<T>(var graph: GraphUndirected<T>, var y: Double) {
 
     private fun unpack(vertices: HashSet<Vertex<T>>, vertex: Vertex<Collection<*>>): HashSet<Vertex<T>> {
         for (element in vertex.key) {
-            when (element) {
-                is Vertex<*> -> vertices.add(element as Vertex<T>)
-                is Collection<*> -> unpack(vertices, element as Vertex<Collection<*>>)
+            element as Vertex<*>
+            if (element.key is Collection<*>) {
+                unpack(vertices, element as Vertex<Collection<*>>)
+            } else {
+                vertices.add(element as Vertex<T>)
             }
         }
 
         return vertices
     }
 
-    private fun <E> flatVertex(vertex: Vertex<E>): HashSet<Vertex<T>> {
-        return when (vertex.key) {
-            is Collection<*> -> unpack(hashSetOf(), vertex as Vertex<Collection<*>>)
-            else -> hashSetOf(vertex) as HashSet<Vertex<T>>
+    internal fun <E> flatVertex(vertex: Vertex<E>): HashSet<Vertex<T>> {
+        if (vertex.key is Collection<*>) {
+            return unpack(hashSetOf(), vertex as Vertex<Collection<*>>)
         }
+
+        return hashSetOf(vertex) as HashSet<Vertex<T>>
     }
 
     private fun mergeNodesSubset(
