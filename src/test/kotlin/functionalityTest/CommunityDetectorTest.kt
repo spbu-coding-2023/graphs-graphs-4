@@ -1,6 +1,8 @@
-package model.functionality
+package functionalityTest
 
+import model.functionality.CommunityDetector
 import model.graphs.UndirectedGraph
+import model.graphs.UnweightedEdge
 import model.graphs.Vertex
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -110,5 +112,39 @@ class CommunityDetectorTest {
 
             assertEquals(expected, CommunityDetector(sampleGraph, 1.0).initPartition(sampleGraph))
         }
+
+        @Test
+        @DisplayName("Communities become nodes in aggregate graph")
+        fun aggregateGraphTest1() {
+            val partition: HashSet<HashSet<Vertex<Int>>> = hashSetOf(hashSetOf(), hashSetOf())
+            for (i in 0..33) {
+                if (i <= 16) {
+                    partition.first().add(nodes[i])
+                } else {
+                    if (partition.size == 1) {
+                        partition.add(hashSetOf())
+                    }
+
+                    partition.last().add(nodes[i])
+                }
+            }
+
+            val aggregatedGraph = CommunityDetector(sampleGraph, 1.0).aggregateGraph(sampleGraph, partition)
+            val expectedVertices = listOf(Vertex(partition.first()), Vertex(partition.last()))
+            val expectedEdges: HashSet<UnweightedEdge<HashSet<Vertex<Int>>>> = hashSetOf()
+
+            expectedEdges.add(UnweightedEdge(expectedVertices[0], expectedVertices[0]))
+            expectedEdges.add(UnweightedEdge(expectedVertices[0], expectedVertices[1]))
+            expectedEdges.add(UnweightedEdge(expectedVertices[1], expectedVertices[0]))
+            expectedEdges.add(UnweightedEdge(expectedVertices[1], expectedVertices[1]))
+            expectedEdges.forEach { it.copies = 20 }
+            expectedEdges.first().copies = 119
+            expectedEdges.last().copies = 40
+
+            assertEquals(expectedVertices, aggregatedGraph.vertices().toList() as List<Vertex<HashSet<Vertex<Int>>>>)
+            assertEquals(expectedEdges, aggregatedGraph.edges() as HashSet<UnweightedEdge<HashSet<Vertex<Int>>>>)
+        }
+
+
     }
 }

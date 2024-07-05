@@ -9,7 +9,7 @@ data class WeightedEdge<T>(override val from: Vertex<T>, override val to: Vertex
         TODO("Not yet implemented")
     }
 
-    override var copies: Int = 0
+    override var copies: Int = 1
 }
 
 //    operator fun Number.minus(other: Number): Number {

@@ -119,7 +119,7 @@ class CommunityDetector<T>(var graph: GraphUndirected<T>, var y: Double) {
         return count
     }
 
-    private fun aggregateGraph(
+    internal fun aggregateGraph(
         graph: GraphUndirected<T>,
         partition: HashSet<HashSet<Vertex<T>>>
     ): GraphUndirected<T> {
