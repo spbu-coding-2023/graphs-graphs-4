@@ -4,7 +4,7 @@ import model.graphs.GraphUndirected
 import model.graphs.UndirectedGraph
 import model.graphs.Vertex
 
-class CommunityDetector<T>(var graph: GraphUndirected<T>, var y: Double) {
+class CommunityDetector<T>(var graph: GraphUndirected<T>, var resolution: Double) {
     private fun flatten(partition: HashSet<HashSet<Vertex<T>>>): HashSet<HashSet<Vertex<T>>> {
         val output = HashSet<HashSet<Vertex<T>>>()
 
@@ -95,19 +95,19 @@ class CommunityDetector<T>(var graph: GraphUndirected<T>, var y: Double) {
 
         for (community in partition) {
             val cS = flatCommunity(community).size
-            sum += countEdges(graph, community, community) - ((y * cS * (cS - 1)) / 2)
+            sum += countEdges(graph, community, community) - ((resolution * cS * (cS - 1)) / 2)
         }
 
         return sum
     }
 
-    private fun countEdges(currGraph: GraphUndirected<T>, set1: HashSet<Vertex<T>>, set2: Set<Vertex<T>>): Int {
+    internal fun countEdges(currGraph: GraphUndirected<T>, set1: HashSet<Vertex<T>>, set2: Set<Vertex<T>>): Int {
         var count = 0
 
         for (u in set1) {
             for (v in currGraph.getNeighbors(u)) {
                 if (v.to in set2) {
-                    count += 1
+                    count += v.copies
                 }
             }
         }
@@ -159,26 +159,12 @@ class CommunityDetector<T>(var graph: GraphUndirected<T>, var y: Double) {
         return refinedPartition
     }
 
-    private fun countEdgesInside(graph: GraphUndirected<T>, set: HashSet<Vertex<T>>, vertex: Vertex<T>): Int {
-        var count = 0
-
-        for (neighbor in graph.getNeighbors(vertex)) {
-            if (set.contains(neighbor.to)) {
-                count += 1
-            }
+    internal fun <E> flatVertex(vertex: Vertex<E>): HashSet<Vertex<T>> {
+        if (vertex.key is Collection<*>) {
+            return unpack(hashSetOf(), vertex as Vertex<Collection<*>>)
         }
 
-        return count
-    }
-
-    private fun <E> flatCommunity(community: HashSet<Vertex<E>>): HashSet<Vertex<T>> {
-        val output: HashSet<Vertex<T>> = hashSetOf()
-
-        for (vertex in community) {
-            output.addAll(flatVertex(vertex))
-        }
-
-        return output
+        return hashSetOf(vertex) as HashSet<Vertex<T>>
     }
 
     private fun unpack(vertices: HashSet<Vertex<T>>, vertex: Vertex<Collection<*>>): HashSet<Vertex<T>> {
@@ -194,12 +180,14 @@ class CommunityDetector<T>(var graph: GraphUndirected<T>, var y: Double) {
         return vertices
     }
 
-    internal fun <E> flatVertex(vertex: Vertex<E>): HashSet<Vertex<T>> {
-        if (vertex.key is Collection<*>) {
-            return unpack(hashSetOf(), vertex as Vertex<Collection<*>>)
+    internal fun <E> flatCommunity(community: HashSet<Vertex<E>>): HashSet<Vertex<T>> {
+        val output: HashSet<Vertex<T>> = hashSetOf()
+
+        for (vertex in community) {
+            output.addAll(flatVertex(vertex))
         }
 
-        return hashSetOf(vertex) as HashSet<Vertex<T>>
+        return output
     }
 
     private fun mergeNodesSubset(
@@ -211,13 +199,9 @@ class CommunityDetector<T>(var graph: GraphUndirected<T>, var y: Double) {
 
         for (vertex in community) {
             val vertexSize: Double = flatVertex(vertex).size.toDouble()
+            val edges = countEdges(graph, hashSetOf(vertex), community.minus(vertex))
 
-            if (countEdgesInside(
-                    graph,
-                    community,
-                    vertex
-                ) >= (y * vertexSize * (flatCommunity(community).size - vertexSize))
-            ) {
+            if (edges >= (resolution * vertexSize * (flatCommunity(community).size - vertexSize))) {
                 r.add(vertex)
             }
         }
@@ -227,7 +211,13 @@ class CommunityDetector<T>(var graph: GraphUndirected<T>, var y: Double) {
 
             if (currentCommunity?.size == 1) {
                 val wellConnectedCommunities = refinedPartition.filter { it.all { v -> community.contains(v) } }
-                    .filter { countEdges(graph, it, community.minus(it)) > (y * it.size * (community.size - it.size)) }
+                    .filter {
+                        countEdges(
+                            graph,
+                            it,
+                            community.minus(it)
+                        ) > (resolution * it.size * (community.size - it.size))
+                    }
                     .toHashSet()
 
                 val newCommunity = wellConnectedCommunities.randomOrNull() ?: refinedPartition.random()
