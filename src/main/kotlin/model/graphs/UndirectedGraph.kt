@@ -3,6 +3,10 @@ package model.graphs
 import kotlinx.serialization.Serializable
 import model.functionality.CommunityDetector
 
+// Resolution parameter x > 0 for community detection
+// Higher resolution -> more communities
+var RESOLUTION = 0.1
+
 @Serializable
 open class UndirectedGraph<T> : AbstractGraph<T>(), GraphUndirected<T> {
     fun addEdge(vertex1: Vertex<T>, vertex2: Vertex<T>) {
@@ -48,7 +52,7 @@ open class UndirectedGraph<T> : AbstractGraph<T>(), GraphUndirected<T> {
     }
 
     override fun runLeidenMethod(): HashSet<HashSet<Vertex<T>>> {
-        return CommunityDetector(this, 0.5).leiden()
+        return CommunityDetector(this, RESOLUTION).leiden()
     }
 
 }

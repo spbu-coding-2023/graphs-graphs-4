@@ -8,8 +8,6 @@ class CommunityDetector<T>(var graph: GraphUndirected<T>, var resolution: Double
     private fun flatten(partition: HashSet<HashSet<Vertex<T>>>): HashSet<HashSet<Vertex<T>>> {
         val output = HashSet<HashSet<Vertex<T>>>()
 
-        println(partition)
-
         for (community in partition) {
             output.add(flatCommunity(community))
         }
@@ -17,35 +15,41 @@ class CommunityDetector<T>(var graph: GraphUndirected<T>, var resolution: Double
         return output
     }
 
+
+    private fun <E> maintainPartition(
+        partition: List<HashSet<Vertex<E>>>,
+        currGraph: GraphUndirected<T>
+    ): HashSet<HashSet<Vertex<T>>> {
+        // проверить создается ли то что надо
+        var newPartition: MutableList<HashSet<Vertex<T>>> = MutableList(partition.size) { hashSetOf() }
+
+        for (vertex in currGraph.vertices()) {
+            val index = partition.indexOf(partition.find { it.containsAll(vertex.key as HashSet<Vertex<E>>) })
+            newPartition[index].add(vertex)
+        }
+
+        return newPartition.toHashSet()
+    }
+
+
     fun leiden(): HashSet<HashSet<Vertex<T>>> {
-        var graphCurr = graph
-        var partition: HashSet<HashSet<Vertex<T>>> = initPartition(graphCurr)
-        var done = false
+        // currentGraph is used because we don't want to change the original graph
+        var currentGraph = graph
+        var partition: HashSet<HashSet<Vertex<T>>> = initPartition(graph)
+        var notDone = true
 
-        while (!done) {
-            partition = moveNodesFast(graphCurr, partition)
-            done = ((partition.size) == (graphCurr.vertices().size))
+        while (notDone) {
+            // проверить меняет ли функция разбиение
+            moveNodesFast(currentGraph, partition)
+            notDone = (partition.size) != (currentGraph.vertices().size)
 
-            if (partition.size != graphCurr.vertices().size) {
-                val refinedPartition = refinePartition(graphCurr, partition)
-
-                val temp: HashSet<HashSet<Vertex<T>>> = hashSetOf()
-                graphCurr = aggregateGraph(graphCurr, refinedPartition)
-
-                for (community in partition) {
-                    val tempCommunity: HashSet<Vertex<T>> = hashSetOf()
-
-                    for (vertex in community) {
-                        if (graphCurr.vertices().contains(vertex)) {
-                            tempCommunity.add(vertex)
-                        }
-                    }
-
-                    temp.add(tempCommunity)
-                }
-
-                partition = temp
+            if (notDone) {
+                val refinedPartition = refinePartition(currentGraph, partition)
+                currentGraph = aggregateGraph(currentGraph, refinedPartition)
+                partition = maintainPartition(partition.toList(), currentGraph)
             }
+
+            println(partition)
         }
 
         return flatten(partition)
@@ -54,11 +58,15 @@ class CommunityDetector<T>(var graph: GraphUndirected<T>, var resolution: Double
     private fun moveNodesFast(
         graph: GraphUndirected<T>,
         partition: HashSet<HashSet<Vertex<T>>>
-    ): HashSet<HashSet<Vertex<T>>> {
+    ) {
         val vertexQueue = graph.vertices().toMutableList()
         vertexQueue.shuffle()
 
-        for (vertex in vertexQueue) {
+        while (vertexQueue.size > 0) {
+            val vertex = vertexQueue.first()
+
+            vertexQueue.remove(vertex)
+
             val currentQuality = quality(graph, partition)
             var max = currentQuality
             var bestCommunity = partition.find { it.contains(vertex) }
@@ -66,12 +74,14 @@ class CommunityDetector<T>(var graph: GraphUndirected<T>, var resolution: Double
             if (bestCommunity != null) {
                 bestCommunity.remove(vertex)
 
+                // searching for the best community where to move vertex
+
                 for (community in partition) {
                     community.add(vertex)
 
                     val tempQuality = quality(graph, partition)
 
-                    if (tempQuality > max) {
+                    if (tempQuality >= max) {
                         max = tempQuality
                         bestCommunity = community
                     }
@@ -80,14 +90,8 @@ class CommunityDetector<T>(var graph: GraphUndirected<T>, var resolution: Double
                 }
 
                 bestCommunity?.add(vertex)
-
-                if (bestCommunity?.size == 0) {
-                    partition.remove(bestCommunity)
-                }
             }
         }
-
-        return partition
     }
 
     private fun quality(graph: GraphUndirected<T>, partition: HashSet<HashSet<Vertex<T>>>): Double {
@@ -193,39 +197,70 @@ class CommunityDetector<T>(var graph: GraphUndirected<T>, var resolution: Double
     private fun mergeNodesSubset(
         graph: GraphUndirected<T>,
         refinedPartition: HashSet<HashSet<Vertex<T>>>,
-        community: HashSet<Vertex<T>>
+        subset: HashSet<Vertex<T>>
     ): HashSet<HashSet<Vertex<T>>> {
         val r: HashSet<Vertex<T>> = hashSetOf()
 
-        for (vertex in community) {
-            val vertexSize: Double = flatVertex(vertex).size.toDouble()
-            val edges = countEdges(graph, hashSetOf(vertex), community.minus(vertex))
+        // Consider only nodes that are well-connected within subset
 
-            if (edges >= (resolution * vertexSize * (flatCommunity(community).size - vertexSize))) {
+        for (vertex in subset) {
+            val vertexSize: Double = flatVertex(vertex).size.toDouble()
+            val edges = countEdges(graph, hashSetOf(vertex), subset.minus(vertex))
+
+            if (edges >= (resolution * vertexSize * (flatCommunity(subset).size - vertexSize))) {
                 r.add(vertex)
             }
         }
 
-        for (vertex in r) {
+        for (vertex in r.shuffled()) {
             val currentCommunity = refinedPartition.find { it.contains(vertex) }
 
-            if (currentCommunity?.size == 1) {
-                val wellConnectedCommunities = refinedPartition.filter { it.all { v -> community.contains(v) } }
-                    .filter {
-                        countEdges(
-                            graph,
-                            it,
-                            community.minus(it)
-                        ) > (resolution * it.size * (community.size - it.size))
-                    }
-                    .toHashSet()
+            // Consider only nodes that have not yet been merged
 
-                val newCommunity = wellConnectedCommunities.randomOrNull() ?: refinedPartition.random()
+            if (currentCommunity?.size == 1) {
+                val wellConnectedCommunities: HashSet<HashSet<Vertex<T>>> = hashSetOf()
+
+                //  Consider only well-connected communities
+
+                for (community in refinedPartition) {
+                    if (subset.containsAll(community)) {
+                        val communitySize = flatCommunity(community).size
+
+                        if (countEdges(
+                                graph,
+                                community,
+                                subset.minus(community)
+                            ) >= (resolution * communitySize * (flatCommunity(subset).size) - communitySize)
+                        ) {
+                            wellConnectedCommunities.add(community)
+                        }
+                    }
+                }
+
+                val communitiesToConsider: HashSet<HashSet<Vertex<T>>> = hashSetOf()
 
                 currentCommunity.remove(vertex)
-                newCommunity.add(vertex)
+
+                for (community in wellConnectedCommunities) {
+                    community.add(vertex)
+                    if (quality(graph, refinedPartition) >= 0) {
+                        communitiesToConsider.add(community.minus(vertex).toHashSet())
+                    }
+                    community.remove(vertex)
+                }
+
+                if (communitiesToConsider.isNotEmpty()) {
+                    refinedPartition.find { it == communitiesToConsider.random() }?.add(vertex)
+                } else {
+                    currentCommunity.add(vertex)
+                }
             }
         }
+
+        /// randomness parameter
+        //  Randomness in the selection of a community
+        //allows the partition space to be explored more broadly.
+        // надо позволить пользователю вводить рандомность и резолюшон при запуске
 
         return refinedPartition
     }
