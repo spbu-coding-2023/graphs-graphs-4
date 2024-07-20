@@ -15,7 +15,6 @@ class CommunityDetector<T>(var graph: GraphUndirected<T>, var resolution: Double
         return output
     }
 
-
     private fun <E> maintainPartition(
         partition: List<HashSet<Vertex<E>>>,
         currGraph: GraphUndirected<T>
@@ -41,6 +40,7 @@ class CommunityDetector<T>(var graph: GraphUndirected<T>, var resolution: Double
         while (notDone) {
             // проверить меняет ли функция разбиение
             moveNodesFast(currentGraph, partition)
+
             notDone = (partition.size) != (currentGraph.vertices().size)
 
             if (notDone) {
@@ -69,6 +69,8 @@ class CommunityDetector<T>(var graph: GraphUndirected<T>, var resolution: Double
             if (bestCommunity != null) {
                 bestCommunity.remove(currentVertex)
 
+                partition.add(hashSetOf())
+
                 // Determine the best community for currentVertex
 
                 for (community in partition) {
@@ -94,6 +96,8 @@ class CommunityDetector<T>(var graph: GraphUndirected<T>, var resolution: Double
                 }
             } else throw IllegalArgumentException("Community that contains currentVertex must exist.")
         }
+
+        partition.removeIf { it.size == 0 }
     }
 
     private fun quality(graph: GraphUndirected<T>, partition: HashSet<HashSet<Vertex<T>>>): Double {
@@ -132,7 +136,9 @@ class CommunityDetector<T>(var graph: GraphUndirected<T>, var resolution: Double
         val newGraph = UndirectedGraph<HashSet<Vertex<T>>>()
 
         for (community in partition) {
-            newGraph.addVertex(community)
+            if (community.size != 0) {
+                newGraph.addVertex(community)
+            }
         }
 
         val communities = newGraph.vertices()
@@ -252,7 +258,13 @@ class CommunityDetector<T>(var graph: GraphUndirected<T>, var resolution: Double
                 }
 
                 if (communitiesToConsider.isNotEmpty()) {
-                    refinedPartition.find { it == communitiesToConsider.random() }?.add(vertex)
+                    var rand = communitiesToConsider.random()
+                    var desiredPartition = refinedPartition.find { it == rand }
+                    if (desiredPartition != null) {
+                        desiredPartition.add(vertex)
+                    } else {
+                        println("***")
+                    }
                 } else {
                     currentCommunity.add(vertex)
                 }
