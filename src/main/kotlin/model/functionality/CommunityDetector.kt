@@ -48,49 +48,51 @@ class CommunityDetector<T>(var graph: GraphUndirected<T>, var resolution: Double
                 currentGraph = aggregateGraph(currentGraph, refinedPartition)
                 partition = maintainPartition(partition.toList(), currentGraph)
             }
-
-            println(partition)
         }
 
         return flatten(partition)
     }
 
-    private fun moveNodesFast(
-        graph: GraphUndirected<T>,
-        partition: HashSet<HashSet<Vertex<T>>>
-    ) {
+    private fun moveNodesFast(graph: GraphUndirected<T>, partition: HashSet<HashSet<Vertex<T>>>) {
         val vertexQueue = graph.vertices().toMutableList()
         vertexQueue.shuffle()
 
-        while (vertexQueue.size > 0) {
-            val vertex = vertexQueue.first()
-
-            vertexQueue.remove(vertex)
+        while (vertexQueue.isNotEmpty()) {
+            val currentVertex = vertexQueue.first()
+            vertexQueue.remove(currentVertex)
 
             val currentQuality = quality(graph, partition)
             var max = currentQuality
-            var bestCommunity = partition.find { it.contains(vertex) }
+            var bestCommunity = partition.find { it.contains(currentVertex) }
+            val originalCommunity = bestCommunity
 
             if (bestCommunity != null) {
-                bestCommunity.remove(vertex)
+                bestCommunity.remove(currentVertex)
 
-                // searching for the best community where to move vertex
+                // Determine the best community for currentVertex
 
                 for (community in partition) {
-                    community.add(vertex)
+                    community.add(currentVertex)
 
                     val tempQuality = quality(graph, partition)
+                    community.remove(currentVertex)
 
                     if (tempQuality >= max) {
                         max = tempQuality
                         bestCommunity = community
                     }
-
-                    community.remove(vertex)
                 }
 
-                bestCommunity?.add(vertex)
-            }
+                bestCommunity?.add(currentVertex)
+
+                if (bestCommunity != originalCommunity) {
+                    for (edge in graph.getNeighbors(currentVertex)) {
+                        if (bestCommunity?.contains(edge.to) == false) {
+                            vertexQueue.add(edge.to)
+                        }
+                    }
+                }
+            } else throw IllegalArgumentException("Community that contains currentVertex must exist.")
         }
     }
 
