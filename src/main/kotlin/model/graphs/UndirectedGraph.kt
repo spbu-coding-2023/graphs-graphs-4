@@ -5,10 +5,10 @@ import model.functionality.CommunityDetector
 
 // Resolution parameter x > 0 for community detection
 // Higher resolution -> more communities
-const val RESOLUTION = 0.1
+const val RESOLUTION = 0.02
 
 // Higher randomness -> more random node movements
-const val RANDOMNESS = 0.01
+const val RANDOMNESS = 0.001
 
 @Serializable
 open class UndirectedGraph<T> : AbstractGraph<T>(), GraphUndirected<T> {

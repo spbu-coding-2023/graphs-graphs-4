@@ -8,7 +8,11 @@ import java.lang.Math.random
 import kotlin.math.exp
 import kotlin.math.pow
 
-class CommunityDetector<T>(var graph: GraphUndirected<T>, var resolution: Double, var randomness: Double) {
+class CommunityDetector<T>(
+    var graph: GraphUndirected<T>,
+    private var resolution: Double,
+    private var randomness: Double
+) {
     private fun flatten(partition: HashSet<HashSet<Vertex<T>>>): HashSet<HashSet<Vertex<T>>> {
         val output = HashSet<HashSet<Vertex<T>>>()
 
@@ -24,10 +28,10 @@ class CommunityDetector<T>(var graph: GraphUndirected<T>, var resolution: Double
         currGraph: GraphUndirected<T>
     ): HashSet<HashSet<Vertex<T>>> {
         // проверить создается ли то что надо
-        var newPartition: MutableList<HashSet<Vertex<T>>> = MutableList(partition.size) { hashSetOf() }
+        val newPartition: MutableList<HashSet<Vertex<T>>> = MutableList(partition.size) { hashSetOf() }
 
         for (vertex in currGraph.vertices()) {
-            val index = partition.indexOf(partition.find { it.containsAll(vertex.key as HashSet<Vertex<E>>) })
+            val index = partition.indexOf(partition.find { it.containsAll(vertex.key as HashSet<*>) })
             newPartition[index].add(vertex)
         }
 
@@ -159,6 +163,8 @@ class CommunityDetector<T>(var graph: GraphUndirected<T>, var resolution: Double
             }
         }
 
+        // ANY UndirectedGraph is GraphUndirected
+        @Suppress("UNCHECKED_CAST")
         return newGraph as GraphUndirected<T>
     }
 
@@ -179,9 +185,11 @@ class CommunityDetector<T>(var graph: GraphUndirected<T>, var resolution: Double
 
     internal fun <E> flatVertex(vertex: Vertex<E>): HashSet<Vertex<T>> {
         if (vertex.key is Collection<*>) {
+            @Suppress("UNCHECKED_CAST")
             return unpack(hashSetOf(), vertex as Vertex<Collection<*>>)
         }
 
+        @Suppress("UNCHECKED_CAST")
         return hashSetOf(vertex) as HashSet<Vertex<T>>
     }
 
@@ -189,8 +197,10 @@ class CommunityDetector<T>(var graph: GraphUndirected<T>, var resolution: Double
         for (element in vertex.key) {
             element as Vertex<*>
             if (element.key is Collection<*>) {
+                @Suppress("UNCHECKED_CAST")
                 unpack(vertices, element as Vertex<Collection<*>>)
             } else {
+                @Suppress("UNCHECKED_CAST")
                 vertices.add(element as Vertex<T>)
             }
         }
@@ -214,7 +224,7 @@ class CommunityDetector<T>(var graph: GraphUndirected<T>, var resolution: Double
         subset: HashSet<Vertex<T>>
     ): HashSet<HashSet<Vertex<T>>> {
         // Consider only nodes that are well-connected within subset
-        var r: MutableList<Vertex<T>> = mutableListOf()
+        val r: MutableList<Vertex<T>> = mutableListOf()
 
         for (vertex in subset) {
             val vertexSize: Double = flatVertex(vertex).size.toDouble()
@@ -237,7 +247,7 @@ class CommunityDetector<T>(var graph: GraphUndirected<T>, var resolution: Double
 
             if (originalCommunity?.size == 1) {
                 // Consider only well-connected communities
-                var wellConnectedCommunities: HashSet<HashSet<Vertex<T>>> = hashSetOf()
+                val wellConnectedCommunities: HashSet<HashSet<Vertex<T>>> = hashSetOf()
 
                 for (community in partition) {
                     if (subset.containsAll(community)) {
@@ -278,26 +288,31 @@ class CommunityDetector<T>(var graph: GraphUndirected<T>, var resolution: Double
 
                 wellConnectedCommunities.removeAll(temp)
                 wellConnectedCommunities.removeIf { it.size == 0 }
-                // Choose random community for more broad exploration of possible partitions
 
-                var totalWeight = 0.0
+                if (wellConnectedCommunities.size != 0) {
+                    // Choose random community for more broad exploration of possible partitions
 
-                for (community in wellConnectedCommunities) {
-                    val x = qualityProbability[community]
+                    var totalWeight = 0.0
 
-                    if (x != null) {
-                        totalWeight += x
-                    } else throw Exception("failed miserably")
+                    for (community in wellConnectedCommunities) {
+                        val x = qualityProbability[community]
+
+                        if (x != null) {
+                            totalWeight += x
+                        } else throw Exception("failed miserably")
+                    }
+
+                    val randomNumber = random() * totalWeight
+                    val keyList = qualityProbability.values.filter { it < randomNumber }
+                    val key = keyList.maxOrNull() ?: qualityProbability.values.min()
+                    val newCommunity = qualityProbability.entries.find { it.value == key }?.key
+
+                    if (newCommunity != null) {
+                        partition.find { it == newCommunity }?.add(vertex)
+                    } else throw Exception("failed to assign newCommunity")
+                } else {
+                    originalCommunity.add(vertex)
                 }
-
-                val randomNumber = random() * totalWeight
-                val keyList = qualityProbability.values.filter { it < randomNumber }
-                val key = keyList.maxOrNull() ?: qualityProbability.values.min()
-                val newCommunity = qualityProbability.entries.find { it.value == key }?.key
-
-                if (newCommunity != null) {
-                    partition.find { it == newCommunity }?.add(vertex)
-                } else throw Exception("failed to assign newCommunity")
             }
         }
 
