@@ -5,7 +5,10 @@ import model.functionality.CommunityDetector
 
 // Resolution parameter x > 0 for community detection
 // Higher resolution -> more communities
-var RESOLUTION = 0.1
+const val RESOLUTION = 0.1
+
+// Higher randomness -> more random node movements
+const val RANDOMNESS = 0.01
 
 @Serializable
 open class UndirectedGraph<T> : AbstractGraph<T>(), GraphUndirected<T> {
@@ -30,6 +33,7 @@ open class UndirectedGraph<T> : AbstractGraph<T>(), GraphUndirected<T> {
         require(adjList.containsKey(edge.from))
         require(adjList.containsKey(edge.to))
 
+        edge.copies += 1
         adjList.getOrPut(edge.from) { HashSet() }.add(edge)
     }
 
@@ -52,7 +56,7 @@ open class UndirectedGraph<T> : AbstractGraph<T>(), GraphUndirected<T> {
     }
 
     override fun runLeidenMethod(): HashSet<HashSet<Vertex<T>>> {
-        return CommunityDetector(this, RESOLUTION).leiden()
+        return CommunityDetector(this, RESOLUTION, RANDOMNESS).leiden()
     }
 
 }

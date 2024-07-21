@@ -2,9 +2,13 @@ package model.functionality
 
 import model.graphs.GraphUndirected
 import model.graphs.UndirectedGraph
+import model.graphs.UnweightedEdge
 import model.graphs.Vertex
+import java.lang.Math.random
+import kotlin.math.exp
+import kotlin.math.pow
 
-class CommunityDetector<T>(var graph: GraphUndirected<T>, var resolution: Double) {
+class CommunityDetector<T>(var graph: GraphUndirected<T>, var resolution: Double, var randomness: Double) {
     private fun flatten(partition: HashSet<HashSet<Vertex<T>>>): HashSet<HashSet<Vertex<T>>> {
         val output = HashSet<HashSet<Vertex<T>>>()
 
@@ -32,7 +36,7 @@ class CommunityDetector<T>(var graph: GraphUndirected<T>, var resolution: Double
 
 
     fun leiden(): HashSet<HashSet<Vertex<T>>> {
-        // currentGraph is used because we don't want to change the original graph
+        // currentGraph is used because original graph should remain unchanged
         var currentGraph = graph
         var partition: HashSet<HashSet<Vertex<T>>> = initPartition(graph)
         var notDone = true
@@ -61,8 +65,8 @@ class CommunityDetector<T>(var graph: GraphUndirected<T>, var resolution: Double
             val currentVertex = vertexQueue.first()
             vertexQueue.remove(currentVertex)
 
-            val currentQuality = quality(graph, partition)
-            var max = currentQuality
+            val startingQuality = quality(graph, partition)
+            var max = 0.0
             var bestCommunity = partition.find { it.contains(currentVertex) }
             val originalCommunity = bestCommunity
 
@@ -76,11 +80,11 @@ class CommunityDetector<T>(var graph: GraphUndirected<T>, var resolution: Double
                 for (community in partition) {
                     community.add(currentVertex)
 
-                    val tempQuality = quality(graph, partition)
+                    val currentQuality = quality(graph, partition)
                     community.remove(currentVertex)
 
-                    if (tempQuality >= max) {
-                        max = tempQuality
+                    if (currentQuality - startingQuality >= max) {
+                        max = currentQuality - startingQuality
                         bestCommunity = community
                     }
                 }
@@ -151,7 +155,7 @@ class CommunityDetector<T>(var graph: GraphUndirected<T>, var resolution: Double
             val c2 = communities.find { it.key.contains(v2) }
 
             if (c1 != null && c2 != null) {
-                newGraph.addEdge(c1, c2)
+                newGraph.addSingleEdge(UnweightedEdge(c1, c2))
             }
         }
 
@@ -167,6 +171,8 @@ class CommunityDetector<T>(var graph: GraphUndirected<T>, var resolution: Double
         for (community in partition) {
             refinedPartition = mergeNodesSubset(graph, refinedPartition, community)
         }
+
+        refinedPartition.removeAll { it.size == 0 }
 
         return refinedPartition
     }
@@ -204,16 +210,21 @@ class CommunityDetector<T>(var graph: GraphUndirected<T>, var resolution: Double
 
     private fun mergeNodesSubset(
         graph: GraphUndirected<T>,
-        refinedPartition: HashSet<HashSet<Vertex<T>>>,
+        partition: HashSet<HashSet<Vertex<T>>>,
         subset: HashSet<Vertex<T>>
     ): HashSet<HashSet<Vertex<T>>> {
-        val r: HashSet<Vertex<T>> = hashSetOf()
-
         // Consider only nodes that are well-connected within subset
+        var r: MutableList<Vertex<T>> = mutableListOf()
 
         for (vertex in subset) {
             val vertexSize: Double = flatVertex(vertex).size.toDouble()
-            val edges = countEdges(graph, hashSetOf(vertex), subset.minus(vertex))
+
+            var edges = 0
+            graph.getNeighbors(vertex).forEach {
+                if (subset.contains(it.to)) {
+                    edges += 1
+                }
+            }
 
             if (edges >= (resolution * vertexSize * (flatCommunity(subset).size - vertexSize))) {
                 r.add(vertex)
@@ -221,62 +232,76 @@ class CommunityDetector<T>(var graph: GraphUndirected<T>, var resolution: Double
         }
 
         for (vertex in r.shuffled()) {
-            val currentCommunity = refinedPartition.find { it.contains(vertex) }
-
             // Consider only nodes that have not yet been merged
+            val originalCommunity = partition.find { it.contains(vertex) }
 
-            if (currentCommunity?.size == 1) {
-                val wellConnectedCommunities: HashSet<HashSet<Vertex<T>>> = hashSetOf()
+            if (originalCommunity?.size == 1) {
+                // Consider only well-connected communities
+                var wellConnectedCommunities: HashSet<HashSet<Vertex<T>>> = hashSetOf()
 
-                //  Consider only well-connected communities
-
-                for (community in refinedPartition) {
+                for (community in partition) {
                     if (subset.containsAll(community)) {
                         val communitySize = flatCommunity(community).size
+                        val edges = countEdges(graph, community, subset.minus(community))
 
-                        if (countEdges(
-                                graph,
-                                community,
-                                subset.minus(community)
-                            ) >= (resolution * communitySize * (flatCommunity(subset).size) - communitySize)
-                        ) {
+                        if (edges >= (resolution * communitySize * (flatCommunity(subset).size) - communitySize)) {
                             wellConnectedCommunities.add(community)
                         }
                     }
                 }
 
-                val communitiesToConsider: HashSet<HashSet<Vertex<T>>> = hashSetOf()
+                originalCommunity.remove(vertex)
 
-                currentCommunity.remove(vertex)
+                val qualityProbability: HashMap<HashSet<Vertex<T>>, Double> = hashMapOf()
+                val startingQuality = quality(graph, partition)
+                val temp: HashSet<HashSet<Vertex<T>>> = HashSet()
 
                 for (community in wellConnectedCommunities) {
-                    community.add(vertex)
-                    if (quality(graph, refinedPartition) >= 0) {
-                        communitiesToConsider.add(community.minus(vertex).toHashSet())
+                    // вообще проверка на ноль - костыль?
+                    // original community скорее всего единственное 0-ое коммьюнити
+                    // цель: случайно не вернуть нод в одиночное коммьюнити
+                    if (community.size != 0) {
+                        community.add(vertex)
+
+                        val currentQuality = quality(graph, partition)
+
+                        if (currentQuality - startingQuality < 0) {
+                            temp.add(community.minus(vertex).toHashSet())
+                        } else {
+                            qualityProbability[community.minus(vertex).toHashSet()] =
+                                exp((currentQuality - startingQuality) * (randomness.pow(-1.0)))
+                        }
+
+                        community.remove(vertex)
                     }
-                    community.remove(vertex)
                 }
 
-                if (communitiesToConsider.isNotEmpty()) {
-                    var rand = communitiesToConsider.random()
-                    var desiredPartition = refinedPartition.find { it == rand }
-                    if (desiredPartition != null) {
-                        desiredPartition.add(vertex)
-                    } else {
-                        println("***")
-                    }
-                } else {
-                    currentCommunity.add(vertex)
+                wellConnectedCommunities.removeAll(temp)
+                wellConnectedCommunities.removeIf { it.size == 0 }
+                // Choose random community for more broad exploration of possible partitions
+
+                var totalWeight = 0.0
+
+                for (community in wellConnectedCommunities) {
+                    val x = qualityProbability[community]
+
+                    if (x != null) {
+                        totalWeight += x
+                    } else throw Exception("failed miserably")
                 }
+
+                val randomNumber = random() * totalWeight
+                val keyList = qualityProbability.values.filter { it < randomNumber }
+                val key = keyList.maxOrNull() ?: qualityProbability.values.min()
+                val newCommunity = qualityProbability.entries.find { it.value == key }?.key
+
+                if (newCommunity != null) {
+                    partition.find { it == newCommunity }?.add(vertex)
+                } else throw Exception("failed to assign newCommunity")
             }
         }
 
-        /// randomness parameter
-        //  Randomness in the selection of a community
-        //allows the partition space to be explored more broadly.
-        // надо позволить пользователю вводить рандомность и резолюшон при запуске
-
-        return refinedPartition
+        return partition
     }
 
     internal fun initPartition(graph: GraphUndirected<T>): HashSet<HashSet<Vertex<T>>> {
