@@ -110,7 +110,7 @@ class CommunityDetectorTest {
                 expected.add(hashSetOf(nodes[i]))
             }
 
-            assertEquals(expected, CommunityDetector(sampleGraph, 1.0).initPartition(sampleGraph))
+            assertEquals(expected, CommunityDetector(sampleGraph, 1.0, 0.001).initPartition(sampleGraph))
         }
 
         @Test
@@ -129,7 +129,7 @@ class CommunityDetectorTest {
                 }
             }
 
-            val aggregatedGraph = CommunityDetector(sampleGraph, 1.0).aggregateGraph(sampleGraph, partition)
+            val aggregatedGraph = CommunityDetector(sampleGraph, 1.0, 0.001).aggregateGraph(sampleGraph, partition)
             val expectedVertices = listOf(Vertex(partition.first()), Vertex(partition.last()))
             val expectedEdges: HashSet<UnweightedEdge<HashSet<Vertex<Int>>>> = hashSetOf()
 
@@ -188,7 +188,7 @@ class CommunityDetectorTest {
                 Vertex(10),
             )
 
-            assertEquals(expected, CommunityDetector(sampleGraph, 1.0).flatVertex(vertex))
+            assertEquals(expected, CommunityDetector(sampleGraph, 1.0, 0.001).flatVertex(vertex))
         }
 
         @Test
@@ -196,7 +196,7 @@ class CommunityDetectorTest {
         fun flatVertexTest2() {
             val vertex = Vertex(42)
 
-            assertEquals(hashSetOf(vertex), CommunityDetector(sampleGraph, 1.0).flatVertex(vertex))
+            assertEquals(hashSetOf(vertex), CommunityDetector(sampleGraph, 1.0, 0.001).flatVertex(vertex))
         }
 
         @Test
@@ -275,7 +275,7 @@ class CommunityDetectorTest {
                 Vertex(20),
             )
 
-            assertEquals(expected, CommunityDetector(sampleGraph, 1.0).flatCommunity(community))
+            assertEquals(expected, CommunityDetector(sampleGraph, 1.0, 0.001).flatCommunity(community))
         }
 
         @Test
@@ -288,7 +288,7 @@ class CommunityDetectorTest {
                 nodes[3]
             )
 
-            assertEquals(6, CommunityDetector(sampleGraph, 1.0).countEdges(sampleGraph, communty, communty))
+            assertEquals(6, CommunityDetector(sampleGraph, 1.0, 0.001).countEdges(sampleGraph, communty, communty))
         }
 
         @Test
@@ -305,7 +305,11 @@ class CommunityDetectorTest {
 
             assertEquals(
                 3,
-                CommunityDetector(sampleGraph, 1.0).countEdges(sampleGraph, hashSetOf(vertex), communty.minus(vertex))
+                CommunityDetector(sampleGraph, 1.0, 0.001).countEdges(
+                    sampleGraph,
+                    hashSetOf(vertex),
+                    communty.minus(vertex)
+                )
             )
         }
 
@@ -322,7 +326,7 @@ class CommunityDetectorTest {
                 testGraph.addEdge(testGraph.adjList.keys.first(), testGraph.adjList.keys.last())
             }
 
-            assertEquals(50, CommunityDetector(testGraph, 1.0).countEdges(testGraph, community, community))
+            assertEquals(50, CommunityDetector(testGraph, 1.0, 0.001).countEdges(testGraph, community, community))
         }
     }
 }
