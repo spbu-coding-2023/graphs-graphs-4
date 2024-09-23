@@ -9,5 +9,9 @@ interface GraphUndirected<T> : Graph<T> {
 
     fun findMinSpanTree(): Set<Edge<T>>?
 
-    fun runLeidenMethod(): HashSet<HashSet<Vertex<T>>>
+
+    // Resolution parameter x > 0 for community detection
+    // Higher resolution -> more communities
+    // Higher randomness -> more random node movements
+    fun runLeidenMethod(RANDOMNESS: Double, RESOLUTION: Double): HashSet<HashSet<Vertex<T>>>
 }

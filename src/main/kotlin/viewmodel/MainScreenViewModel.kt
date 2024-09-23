@@ -83,9 +83,10 @@ class MainScreenViewModel<T>(
         } else throw IllegalArgumentException("graph is directed!")
     }
 
-    fun findCommunities() {
+    fun findCommunities(randomness: String, resolution: String) {
         if (graph is GraphUndirected) {
-            val communities = (graph as GraphUndirected<T>).runLeidenMethod()
+            val communities =
+                (graph as GraphUndirected<T>).runLeidenMethod(randomness.toDouble(), resolution.toDouble())
             println(communities)
             graphViewModel.indexCommunities(communities)
 
