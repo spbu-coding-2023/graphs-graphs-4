@@ -21,7 +21,7 @@ class CommunityDetector<T, E: Edge<T>>(
     }
 
     private fun maintainPartition(
-        partition: List<HashSet<Vertex<E>>>,
+        partition: List<HashSet<Vertex<T>>>,
         currGraph: GraphUndirected<T,E>
     ): HashSet<HashSet<Vertex<T>>> {
         // newPartition = {{v | v ⊆ C, v ∈ currGraph.vertices() } | C ∈ partition}
