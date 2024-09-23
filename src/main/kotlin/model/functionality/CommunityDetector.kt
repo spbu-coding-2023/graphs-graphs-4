@@ -13,7 +13,7 @@ class CommunityDetector<T>(
     private var resolution: Double,
     private var randomness: Double
 ) {
-    private fun flatten(partition: HashSet<HashSet<Vertex<T>>>): HashSet<HashSet<Vertex<T>>> {
+    internal fun <K> flatten(partition: HashSet<HashSet<Vertex<K>>>): HashSet<HashSet<Vertex<T>>> {
         val output = HashSet<HashSet<Vertex<T>>>()
 
         for (community in partition) {
