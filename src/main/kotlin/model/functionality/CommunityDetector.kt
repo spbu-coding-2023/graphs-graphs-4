@@ -1,16 +1,20 @@
 package model.functionality
 
-import model.graphs.*
+import model.graphs.Edge
+import model.graphs.GraphUndirected
+import model.graphs.UndirectedGraph
+import model.graphs.UnweightedEdge
+import model.graphs.Vertex
 import java.lang.Math.random
 import kotlin.math.exp
 import kotlin.math.pow
 
-class CommunityDetector<T, E: Edge<T>>(
-    var graph: GraphUndirected<T, E>,
+class CommunityDetector<T, M : Edge<T>>(
+    var graph: GraphUndirected<T, M>,
     private var resolution: Double,
     private var randomness: Double
 ) {
-    private fun flatten(partition: HashSet<HashSet<Vertex<T>>>): HashSet<HashSet<Vertex<T>>> {
+    internal fun <K> flatten(partition: HashSet<HashSet<Vertex<K>>>): HashSet<HashSet<Vertex<T>>> {
         val output = HashSet<HashSet<Vertex<T>>>()
 
         for (community in partition) {
@@ -20,9 +24,9 @@ class CommunityDetector<T, E: Edge<T>>(
         return output
     }
 
-    private fun maintainPartition(
-        partition: List<HashSet<Vertex<T>>>,
-        currGraph: GraphUndirected<T,E>
+    internal fun <E> maintainPartition(
+        partition: List<HashSet<Vertex<E>>>,
+        currGraph: GraphUndirected<T, M>
     ): HashSet<HashSet<Vertex<T>>> {
         // newPartition = {{v | v ⊆ C, v ∈ currGraph.vertices() } | C ∈ partition}
         val newPartition: MutableList<HashSet<Vertex<T>>> = MutableList(partition.size) { hashSetOf() }
@@ -56,7 +60,7 @@ class CommunityDetector<T, E: Edge<T>>(
         return flatten(partition)
     }
 
-    private fun moveNodesFast(graph: GraphUndirected<T, E>, partition: HashSet<HashSet<Vertex<T>>>) {
+    private fun moveNodesFast(graph: GraphUndirected<T, M>, partition: HashSet<HashSet<Vertex<T>>>) {
         val vertexQueue = graph.vertices().toMutableList()
         vertexQueue.shuffle()
 
@@ -103,7 +107,7 @@ class CommunityDetector<T, E: Edge<T>>(
         partition.removeIf { it.size == 0 }
     }
 
-    private fun quality(graph: GraphUndirected<T, E>, partition: HashSet<HashSet<Vertex<T>>>): Double {
+    private fun quality(graph: GraphUndirected<T, M>, partition: HashSet<HashSet<Vertex<T>>>): Double {
         var sum = 0.0
 
         for (community in partition) {
@@ -114,7 +118,7 @@ class CommunityDetector<T, E: Edge<T>>(
         return sum
     }
 
-    internal fun countEdges(currGraph: GraphUndirected<T, E>, set1: HashSet<Vertex<T>>, set2: Set<Vertex<T>>): Int {
+    internal fun countEdges(currGraph: GraphUndirected<T, M>, set1: HashSet<Vertex<T>>, set2: Set<Vertex<T>>): Int {
         var count = 0
 
         for (u in set1) {
@@ -133,9 +137,9 @@ class CommunityDetector<T, E: Edge<T>>(
     }
 
     internal fun aggregateGraph(
-        graph: GraphUndirected<T, E>,
+        graph: GraphUndirected<T, M>,
         partition: HashSet<HashSet<Vertex<T>>>
-    ): GraphUndirected<T, E> {
+    ): GraphUndirected<T, M> {
         val newGraph = UndirectedGraph<HashSet<Vertex<T>>>()
 
         for (community in partition) {
@@ -160,11 +164,11 @@ class CommunityDetector<T, E: Edge<T>>(
 
         // ANY UndirectedGraph is GraphUndirected
         @Suppress("UNCHECKED_CAST")
-        return newGraph as GraphUndirected<T, E>
+        return newGraph as GraphUndirected<T, M>
     }
 
     private fun refinePartition(
-        graph: GraphUndirected<T, E>,
+        graph: GraphUndirected<T, M>,
         partition: HashSet<HashSet<Vertex<T>>>
     ): HashSet<HashSet<Vertex<T>>> {
         var refinedPartition = initPartition(graph)
@@ -214,7 +218,7 @@ class CommunityDetector<T, E: Edge<T>>(
     }
 
     private fun mergeNodesSubset(
-        graph: GraphUndirected<T, E>,
+        graph: GraphUndirected<T, M>,
         partition: HashSet<HashSet<Vertex<T>>>,
         subset: HashSet<Vertex<T>>
     ): HashSet<HashSet<Vertex<T>>> {
@@ -310,7 +314,7 @@ class CommunityDetector<T, E: Edge<T>>(
         return partition
     }
 
-    internal fun initPartition(graph: GraphUndirected<T, E>): HashSet<HashSet<Vertex<T>>> {
+    internal fun initPartition(graph: GraphUndirected<T, M>): HashSet<HashSet<Vertex<T>>> {
         return graph.vertices().map { hashSetOf(it) }.toHashSet()
     }
 }
