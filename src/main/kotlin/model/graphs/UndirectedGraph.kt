@@ -1,117 +1,42 @@
 package model.graphs
 
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import model.functionality.BridgeFinder
-import model.functionality.StrConCompFinder
+import model.functionality.CommunityDetector
+import model.functionality.MinSpanTreeFinder
 
 @Serializable
-open class UndirectedGraph<T> : Graph<Vertex<T>, T> {
-	@SerialName("UndirectedGraph")
-	open var adjList: HashMap<Vertex<T>, HashSet<Vertex<T>>> = HashMap()
-		internal set
+open class UndirectedGraph<T> : AbstractGraph<T, UnweightedEdge<T>>(), GraphUndirected<T, UnweightedEdge<T>> {
+    fun addEdge(vertex1: Vertex<T>, vertex2: Vertex<T>) {
+        require(adjList.containsKey(vertex1))
+        require(adjList.containsKey(vertex2))
 
-	private var _size: Int = 0
-	override val size: Int
-		get() = _size
+        val edge = adjList[vertex1]?.find { it.to == vertex2 }
 
-	@Suppress("DuplicatedCode")
-	override fun addVertex(key: T): Vertex<T> {
-		for (v in adjList.keys) {
-			if (v.key == key) {
-				return v
-			}
-		}
+        if (edge != null) {
+            edge.copies += 1
+            adjList[vertex2]!!.find { it.to == vertex1 }!!.copies += 1
+        } else {
+            adjList.getOrPut(vertex1) { HashSet() }.add(UnweightedEdge(vertex1, vertex2))
+            adjList.getOrPut(vertex2) { HashSet() }.add(UnweightedEdge(vertex2, vertex1))
+        }
+    }
 
-		val vertex = Vertex(key)
-		adjList[vertex] = HashSet()
+    // добавляет одно конкретное ребро, пока надо только алг поиска
+    // сообществ
+    fun addSingleEdge(edge: UnweightedEdge<T>) {
+        require(adjList.containsKey(edge.from))
+        require(adjList.containsKey(edge.to))
 
-		_size += 1
+        edge.copies += 1
+        adjList.getOrPut(edge.from) { HashSet() }.add(edge)
+    }
 
-		return vertex
-	}
+    override fun findMinSpanTree(): Set<Edge<T>>? {
+        return MinSpanTreeFinder(this).mstSearch()
+    }
 
-	override fun addVertex(vertex: Vertex<T>): Vertex<T> {
-		if (adjList.containsKey(vertex)) {
-			return vertex
-		}
-
-		adjList[vertex] = HashSet()
-
-		_size += 1
-
-		return vertex
-	}
-
-	override fun addVertices(vararg keys: T) {
-		for (key in keys) {
-			addVertex(key)
-		}
-	}
-
-	override fun addVertices(vararg vertices: Vertex<T>) {
-		for (vertex in vertices) {
-			addVertex(vertex)
-		}
-	}
-
-	open fun addEdge(vertex1: Vertex<T>, vertex2: Vertex<T>) {
-		require(adjList.containsKey(vertex1))
-		require(adjList.containsKey(vertex2))
-
-		adjList.getOrPut(vertex1) { HashSet() }.add(vertex2)
-		adjList.getOrPut(vertex2) { HashSet() }.add(vertex1)
-	}
-
-	open fun addEdge(key1: T, key2: T) {
-		addEdge(Vertex(key1), Vertex(key2))
-	}
-
-	open fun addEdge(edge: Edge<T>) {
-		addEdge(edge.from, edge.to)
-	}
-
-	open fun addEdges(vararg edges: Edge<T>) {
-		for (edge in edges) {
-			addEdge(edge)
-		}
-	}
-
-	override fun findBridges(): Set<Pair<Vertex<T>, Vertex<T>>> {
-		return BridgeFinder<Vertex<T>, T>().findBridges(this)
-	}
-
-	override fun findSCC(): Set<Set<Vertex<T>>> {
-		return StrConCompFinder(this).sccSearch()
-	}
-
-	override fun findMinSpanTree(): Set<GraphEdge<T>>? {
-		return null
-	}
-
-	override fun vertices(): Set<Vertex<T>> {
-		return adjList.keys
-	}
-
-	override fun edges(): Set<Edge<T>> {
-		val edges = HashSet<Edge<T>>()
-		for (vertex in adjList.keys) {
-			for (neighbour in adjList[vertex] ?: continue) {
-				edges.add(Edge(vertex, neighbour, null))
-			}
-		}
-
-		return edges
-	}
-
-	override fun iterator(): Iterator<Vertex<T>> {
-		return this.adjList.keys.iterator()
-	}
-
-	override fun getNeighbors(vertex: Vertex<T>): HashSet<Vertex<T>> {
-		return adjList[vertex] ?: throw IllegalArgumentException(
-			"Can't get neighbors for vertex $vertex that is not in the graph"
-		)
-	}
+    override fun runLeidenMethod(RANDOMNESS: Double, RESOLUTION: Double): HashSet<HashSet<Vertex<T>>> {
+        return CommunityDetector(this, RESOLUTION, RANDOMNESS).leiden()
+    }
 
 }

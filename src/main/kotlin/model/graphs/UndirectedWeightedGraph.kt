@@ -1,122 +1,33 @@
 package model.graphs
 
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import model.functionality.BridgeFinder
 import model.functionality.MinSpanTreeFinder
-import model.functionality.ShortestPathFinder
 
 @Serializable
-open class UndirectedWeightedGraph<T, NUMBER_TYPE : Number> : Graph<Pair<Vertex<T>, NUMBER_TYPE>, T> {
-	@SerialName("UndirectedWeightedGraph")
-	open var adjList: HashMap<Vertex<T>, HashSet<Pair<Vertex<T>, NUMBER_TYPE>>> = HashMap()
-		internal set
+open class UndirectedWeightedGraph<T> : AbstractGraph<T, WeightedEdge<T>>(), GraphUndirected<T, WeightedEdge<T>>, GraphWeighted<T> {
+    fun addEdge(vertex1: Vertex<T>, vertex2: Vertex<T>, weight: Double) {
+        require(adjList.containsKey(vertex1))
+        require(adjList.containsKey(vertex2))
 
-	private var _size: Int = 0
-	override val size: Int
-		get() = _size
+        // для орграфов тоже надо будет реализовать дубликаты
+        // избавиться от !! (?)
 
-	@Suppress("DuplicatedCode")
-	override fun addVertex(key: T): Vertex<T> {
-		for (v in adjList.keys) {
-			if (v.key == key) {
-				return v
-			}
-		}
+        val edge = adjList[vertex1]?.find { it.to == vertex2 }
 
-		val vertex = Vertex(key)
-		adjList[vertex] = HashSet()
+        if (edge != null) {
+            edge.copies += 1
+            adjList[vertex2]!!.find { it.to == vertex1 }!!.copies += 1
+        } else {
+            adjList.getOrPut(vertex1) { HashSet() }.add(WeightedEdge(vertex1, vertex2, weight))
+            adjList.getOrPut(vertex2) { HashSet() }.add(WeightedEdge(vertex2, vertex1, weight))
+        }
+    }
 
-		_size += 1
+    override fun findMinSpanTree(): Set<Edge<T>>? {
+        return MinSpanTreeFinder(this).mstSearch()
+    }
 
-		return vertex
-	}
-
-	override fun addVertex(vertex: Vertex<T>): Vertex<T> {
-		if (adjList.containsKey(vertex)) {
-			return vertex
-		}
-
-		adjList[vertex] = HashSet()
-
-		_size += 1
-
-		return vertex
-	}
-
-	override fun addVertices(vararg keys: T) {
-		for (key in keys) {
-			addVertex(key)
-		}
-	}
-
-	override fun addVertices(vararg vertices: Vertex<T>) {
-		for (vertex in vertices) {
-			addVertex(vertex)
-		}
-	}
-
-	open fun addEdge(vertex1: Vertex<T>, vertex2: Vertex<T>, weight: NUMBER_TYPE) {
-		require(adjList.containsKey(vertex1))
-		require(adjList.containsKey(vertex2))
-
-		adjList.getOrPut(vertex1) { HashSet() }.add(Pair(vertex2, weight))
-		adjList.getOrPut(vertex2) { HashSet() }.add(Pair(vertex1, weight))
-	}
-
-	open fun addEdge(key1: T, key2: T, weight: NUMBER_TYPE) {
-		addEdge(Vertex(key1), Vertex(key2), weight)
-	}
-
-	open fun addEdge(edge: WeightedEdge<T, NUMBER_TYPE>) {
-		addEdge(edge.from, edge.to, edge.weight)
-	}
-
-	open fun addEdges(vararg edges: WeightedEdge<T, NUMBER_TYPE>) {
-		for (edge in edges) {
-			addEdge(edge)
-		}
-	}
-
-	fun findShortestDistance(start: Vertex<T>): Map<Vertex<T>, Double> {
-		val output = ShortestPathFinder(this).bellmanFord(start)
-		return output
-	}
-
-	override fun vertices(): Set<Vertex<T>> {
-		return adjList.keys
-	}
-
-	override fun edges(): Set<WeightedEdge<T, NUMBER_TYPE>> {
-		val edges = HashSet<WeightedEdge<T, NUMBER_TYPE>>()
-		for (vertex in adjList.keys) {
-			for (neighbour in adjList[vertex] ?: continue) {
-				edges.add(WeightedEdge(vertex, neighbour.first, neighbour.second))
-			}
-		}
-
-		return edges
-	}
-
-	override fun findBridges(): Set<Pair<Vertex<T>, Vertex<T>>> {
-		return BridgeFinder<Pair<Vertex<T>, NUMBER_TYPE>, T>().findBridges(this)
-	}
-
-	override fun findSCC(): Set<Set<Vertex<T>>> {
-		return emptySet()//StrConCompFinder(this as UndirectedGraph<T>).sccSearch()
-	}
-
-	override fun findMinSpanTree(): Set<GraphEdge<T>>? {
-		return MinSpanTreeFinder(this).mstSearch()
-	}
-
-	override fun iterator(): Iterator<Vertex<T>> {
-		return this.adjList.keys.iterator()
-	}
-
-	override fun getNeighbors(vertex: Vertex<T>): HashSet<Pair<Vertex<T>, NUMBER_TYPE>> {
-		return adjList[vertex] ?: throw IllegalArgumentException(
-			"Can't get neighbors for vertex $vertex that is not in the graph"
-		)
-	}
+    override fun runLeidenMethod(RANDOMNESS: Double, RESOLUTION: Double): HashSet<HashSet<Vertex<T>>> {
+        TODO("Not yet implemented")
+    }
 }

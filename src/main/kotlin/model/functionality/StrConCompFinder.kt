@@ -1,12 +1,12 @@
 package model.functionality
 
-import model.graphs.TarjanAlgoVertexStats
-import model.graphs.UndirectedGraph
+import model.graphs.Edge
+import model.graphs.GraphDirected
 import model.graphs.Vertex
 import java.util.*
 import kotlin.math.min
 
-class StrConCompFinder<T>(private val graph: UndirectedGraph<T>) {
+class StrConCompFinder<T, E: Edge<T>>(private val graph: GraphDirected<T, E>) {
     private val strConCompSet = mutableSetOf<Set<Vertex<T>>>()
 
     fun sccSearch(): Set<Set<Vertex<T>>> {
@@ -26,10 +26,11 @@ class StrConCompFinder<T>(private val graph: UndirectedGraph<T>) {
             stack.push(vertex)
             index++
 
-            val neighbors = graph.getNeighbors(vertex)
-            for (neighbor in neighbors) {
+            val adjEdges = graph.getNeighbors(vertex)
+            for (edge in adjEdges) {
+                val neighbor = edge.to
                 val neighborStats = sccSearchHelper[neighbor]
-                    ?: throw IllegalArgumentException("$neighbor vertex does not presented in graph.")
+                    ?: throw IllegalArgumentException("$edge vertex does not presented in graph.")
 
                 if (sccSearchHelper[neighbor]?.sccIndex == 0) {
                     strongConnect(neighbor)

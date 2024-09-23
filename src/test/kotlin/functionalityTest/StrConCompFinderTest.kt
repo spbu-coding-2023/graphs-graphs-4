@@ -1,7 +1,7 @@
 package functionalityTest
 
 import model.graphs.DirectedGraph
-import model.graphs.Edge
+import model.graphs.UnweightedEdge
 import model.graphs.Vertex
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -25,10 +25,10 @@ class StrConCompFinderTest {
 
         graphInt.addVertices(*vertices)
 
-        for (vertex1 in 0..5) {
-            for (vertex2 in 0..5) {
-                if (vertex1 != vertex2) {
-                    graphInt.addEdge(vertex1, vertex2)
+        for (digit1 in 0..5) {
+            for (digit2 in 0..5) {
+                if (digit1 != digit2) {
+                    graphInt.addEdge(Vertex(digit1), Vertex(digit2))
                 }
             }
         }
@@ -59,16 +59,16 @@ class StrConCompFinderTest {
     fun sccTest3() {
         val vertices = Array(8) { Vertex(it) }
         val edges = arrayOf(
-            Edge(vertices[0], vertices[1]),
-            Edge(vertices[1], vertices[0]),
-            Edge(vertices[2], vertices[3]),
-            Edge(vertices[3], vertices[4]),
-            Edge(vertices[4], vertices[2]),
-            Edge(vertices[5], vertices[6]),
-            Edge(vertices[6], vertices[7]),
-            Edge(vertices[7], vertices[6]),
-            Edge(vertices[7], vertices[5]),
-            )
+            UnweightedEdge(vertices[0], vertices[1]),
+            UnweightedEdge(vertices[1], vertices[0]),
+            UnweightedEdge(vertices[2], vertices[3]),
+            UnweightedEdge(vertices[3], vertices[4]),
+            UnweightedEdge(vertices[4], vertices[2]),
+            UnweightedEdge(vertices[5], vertices[6]),
+            UnweightedEdge(vertices[6], vertices[7]),
+            UnweightedEdge(vertices[7], vertices[6]),
+            UnweightedEdge(vertices[7], vertices[5]),
+        )
 
         graphInt.addVertices(*vertices)
         graphInt.addEdges(*edges)
@@ -76,7 +76,7 @@ class StrConCompFinderTest {
             setOf(Vertex(0), Vertex(1)),
             setOf(Vertex(2), Vertex(3), Vertex(4)),
             setOf(Vertex(5), Vertex(6), Vertex(7)),
-            )
+        )
 
         assertEquals(expectedSCC, graphInt.findSCC())
     }
