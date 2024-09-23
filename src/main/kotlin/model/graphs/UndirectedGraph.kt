@@ -4,13 +4,6 @@ import kotlinx.serialization.Serializable
 import model.functionality.CommunityDetector
 import model.functionality.MinSpanTreeFinder
 
-// Resolution parameter x > 0 for community detection
-// Higher resolution -> more communities
-const val RESOLUTION = 0.02
-
-// Higher randomness -> more random node movements
-const val RANDOMNESS = 0.001
-
 @Serializable
 open class UndirectedGraph<T> : AbstractGraph<T, UnweightedEdge<T>>(), GraphUndirected<T, UnweightedEdge<T>> {
     fun addEdge(vertex1: Vertex<T>, vertex2: Vertex<T>) {
@@ -42,7 +35,7 @@ open class UndirectedGraph<T> : AbstractGraph<T, UnweightedEdge<T>>(), GraphUndi
         return MinSpanTreeFinder(this).mstSearch()
     }
 
-    override fun runLeidenMethod(): HashSet<HashSet<Vertex<T>>> {
+    override fun runLeidenMethod(RANDOMNESS: Double, RESOLUTION: Double): HashSet<HashSet<Vertex<T>>> {
         return CommunityDetector(this, RESOLUTION, RANDOMNESS).leiden()
     }
 

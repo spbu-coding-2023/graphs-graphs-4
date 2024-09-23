@@ -130,6 +130,8 @@ fun <T, E: Edge<T>> ToolPanel(
 
         if (viewModel.graph is GraphUndirected<*, *>) {
             var needBridges by remember { mutableStateOf(false) }
+            var resolution by remember { mutableStateOf("") }
+            var randomness by remember { mutableStateOf("") }
 
             Button(
                 onClick = { needBridges = true },
@@ -151,8 +153,28 @@ fun <T, E: Edge<T>> ToolPanel(
                 viewModel.showBridges()
             }
 
+            Row {
+                TextField(
+                    modifier = Modifier.weight(2f),
+                    value = randomness,
+                    placeholder = { Text("Enter x: Double > 0. Optimal value lies in [0.0005, 0.1]") },
+                    onValueChange = { randomness = it },
+                    label = { Text("Randomness") }
+                )
+
+                TextField(
+                    modifier = Modifier.weight(2f),
+                    value = resolution,
+                    placeholder = { Text("Enter y: Double > 0. Higher resolution lead to more communities and lower resolutions lead to fewer communities.") },
+                    onValueChange = { resolution = it },
+                    label = { Text("Resolution") },
+                )
+            }
+
+
+
             Button(
-                onClick = { viewModel.findCommunities() },
+                onClick = { viewModel.findCommunities(randomness, resolution) },
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = MaterialTheme.colors.secondary,
                     contentColor = MaterialTheme.colors.onSurface,
@@ -200,8 +222,6 @@ fun <T, E: Edge<T>> ToolPanel(
             Button(
                 onClick = {
                     viewModel.findDistanceBellman()
-
-                    // костыль для обновления надписей
                     viewModel.showVerticesDistanceLabels.value = !viewModel.showVerticesDistanceLabels.value
                     viewModel.showVerticesDistanceLabels.value = !viewModel.showVerticesDistanceLabels.value
                 },
@@ -256,16 +276,6 @@ fun <T, E: Edge<T>> ToolPanel(
             checked = viewModel.showVerticesDistanceLabels.value,
             onCheckedChange = { viewModel.showVerticesDistanceLabels.value = it }
         )
-//
-//        Button(
-//            onClick = viewModel::resetGraphView,
-//            enabled = true,
-//            modifier = Modifier.fillMaxWidth().padding(top = 16.dp)
-//        ) {
-//            Icon(Icons.Default.Refresh, contentDescription = "Reset default settings")
-//            Spacer(modifier = Modifier.width(8.dp))
-//            Text(text = "Reset Default Settings")
-//        }
     }
 }
 

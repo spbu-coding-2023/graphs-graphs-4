@@ -15,7 +15,7 @@ class ShortestPathFinder<T>(private val graph: GraphWeighted<T>) {
 
         dist[start] = 0.0
 
-        for (i in 1..graph.size) {
+        for (i in 1..graph.size + 1) {
             for (vertex in graph.vertices()) {
                 for (edge in graph.getNeighbors(vertex)) {
                     edge as WeightedEdge
@@ -23,26 +23,16 @@ class ShortestPathFinder<T>(private val graph: GraphWeighted<T>) {
                     val distVertex = dist[vertex]
                     val distNeighbor = dist[edge.to] ?: POSITIVE_INFINITY
 
-                    if (distVertex != null) {
+                    if ((distVertex != null) && (i <= graph.size)) {
                         if (distVertex + edge.weight < distNeighbor) {
                             dist[edge.to] = (distVertex + edge.weight)
                         }
-                    }
-                }
-            }
-        }
-
-        @Suppress("DuplicatedCode")
-        for (vertex in graph.vertices()) {
-            for (edge in graph.getNeighbors(vertex)) {
-                edge as WeightedEdge
-
-                val distVertex = dist[vertex]
-                val distNeighbor = dist[edge.to] ?: POSITIVE_INFINITY
-
-                if (distVertex != null) {
-                    if (distVertex + edge.weight < distNeighbor) {
-                        dist[edge.to] = NEGATIVE_INFINITY
+                    } else if (i == graph.size + 1) {
+                        if (distVertex != null) {
+                            if (distVertex + edge.weight < distNeighbor) {
+                                dist[edge.to] = NEGATIVE_INFINITY
+                            }
+                        }
                     }
                 }
             }

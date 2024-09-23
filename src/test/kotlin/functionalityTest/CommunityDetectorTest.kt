@@ -103,7 +103,8 @@ class CommunityDetectorTest {
         private val nodes = sampleGraph.adjList.keys.toList()
 
         @Test
-        @DisplayName("Each node is assigned to its own community")
+        @DisplayName("Each node gets assigned to its own community")
+        // { {node_1}, {node_2} ... {node_n} }
         fun testInitPartition1() {
             val expected: HashSet<HashSet<Vertex<Int>>> = hashSetOf()
             for (i in 0..33) {
@@ -327,6 +328,51 @@ class CommunityDetectorTest {
             }
 
             assertEquals(50, CommunityDetector(testGraph, 1.0, 0.001).countEdges(testGraph, community, community))
+        }
+
+        @Test
+        @DisplayName("flatten() will return set of sets of nodes - communities")
+        fun flattenTest() {
+            val graph: UndirectedGraph<Int> = UndirectedGraph()
+            val test_set = hashSetOf(
+                hashSetOf(Vertex(hashSetOf(Vertex(2), Vertex(3), Vertex(4)))),
+                hashSetOf(Vertex(hashSetOf(Vertex(1), Vertex(5), Vertex(6))))
+            )
+
+            val output = CommunityDetector(graph, 1.0, 1.0).flatten(test_set)
+            val expected = hashSetOf(
+                hashSetOf(Vertex(2), Vertex(3), Vertex(4)),
+                hashSetOf(Vertex(1), Vertex(5), Vertex(6))
+            )
+
+            assertEquals(expected, output)
+        }
+
+        @Test
+        @DisplayName("Maintain the structure of a partition using vertices from an aggregated graph")
+        fun maintainPartitionTest() {
+            val testGraph = UndirectedGraph<HashSet<Vertex<Int>>>()
+            testGraph.addVertex(hashSetOf(Vertex(3)))
+            testGraph.addVertex(hashSetOf(Vertex(7), Vertex(9)))
+            testGraph.addVertex(hashSetOf(Vertex(2), Vertex(4)))
+            testGraph.addVertex(hashSetOf(Vertex(1)))
+
+            val partition = listOf(
+                hashSetOf(Vertex(2), Vertex(4)),
+                hashSetOf(Vertex(3), Vertex(7), Vertex(9)),
+                hashSetOf(Vertex(1))
+            )
+
+            val expectedPartition = hashSetOf(
+                hashSetOf(Vertex(hashSetOf(Vertex(2), Vertex(4)))),
+                hashSetOf(Vertex(hashSetOf(Vertex(3))), Vertex(hashSetOf(Vertex(7), Vertex(9)))),
+                hashSetOf(Vertex(hashSetOf(Vertex(1))))
+            )
+
+            assertEquals(
+                expectedPartition,
+                CommunityDetector(testGraph, 1.0, 1.0).maintainPartition(partition, testGraph)
+            )
         }
     }
 }

@@ -21,10 +21,10 @@ class CommunityDetector<T, E: Edge<T>>(
     }
 
     private fun maintainPartition(
-        partition: List<java.util.HashSet<Vertex<T>>>,
-        currGraph: GraphUndirected<T, E>
+        partition: List<HashSet<Vertex<E>>>,
+        currGraph: GraphUndirected<T,E>
     ): HashSet<HashSet<Vertex<T>>> {
-        // проверить создается ли то что надо
+        // newPartition = {{v | v ⊆ C, v ∈ currGraph.vertices() } | C ∈ partition}
         val newPartition: MutableList<HashSet<Vertex<T>>> = MutableList(partition.size) { hashSetOf() }
 
         for (vertex in currGraph.vertices()) {
@@ -37,13 +37,11 @@ class CommunityDetector<T, E: Edge<T>>(
 
 
     fun leiden(): HashSet<HashSet<Vertex<T>>> {
-        // currentGraph is used because original graph should remain unchanged
         var currentGraph = graph
         var partition: HashSet<HashSet<Vertex<T>>> = initPartition(graph)
         var notDone = true
 
         while (notDone) {
-            // проверить меняет ли функция разбиение
             moveNodesFast(currentGraph, partition)
 
             notDone = (partition.size) != (currentGraph.vertices().size)
@@ -264,9 +262,6 @@ class CommunityDetector<T, E: Edge<T>>(
                 val temp: HashSet<HashSet<Vertex<T>>> = HashSet()
 
                 for (community in wellConnectedCommunities) {
-                    // вообще проверка на ноль - костыль?
-                    // original community скорее всего единственное 0-ое коммьюнити
-                    // цель: случайно не вернуть нод в одиночное коммьюнити
                     if (community.size != 0) {
                         community.add(vertex)
 
@@ -288,7 +283,6 @@ class CommunityDetector<T, E: Edge<T>>(
 
                 if (wellConnectedCommunities.size != 0) {
                     // Choose random community for more broad exploration of possible partitions
-
                     var totalWeight = 0.0
 
                     for (community in wellConnectedCommunities) {
@@ -296,7 +290,7 @@ class CommunityDetector<T, E: Edge<T>>(
 
                         if (x != null) {
                             totalWeight += x
-                        } else throw Exception("failed miserably")
+                        } else throw Exception("qualityProbability != null")
                     }
 
                     val randomNumber = random() * totalWeight
@@ -306,7 +300,7 @@ class CommunityDetector<T, E: Edge<T>>(
 
                     if (newCommunity != null) {
                         partition.find { it == newCommunity }?.add(vertex)
-                    } else throw Exception("failed to assign newCommunity")
+                    } else throw Exception("Failed to assign newCommunity.")
                 } else {
                     originalCommunity.add(vertex)
                 }
