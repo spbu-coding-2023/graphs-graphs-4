@@ -347,5 +347,32 @@ class CommunityDetectorTest {
 
             assertEquals(expected, output)
         }
+
+        @Test
+        @DisplayName("Maintain the structure of a partition using vertices from an aggregated graph")
+        fun maintainPartitionTest() {
+            val testGraph = UndirectedGraph<HashSet<Vertex<Int>>>()
+            testGraph.addVertex(hashSetOf(Vertex(3)))
+            testGraph.addVertex(hashSetOf(Vertex(7), Vertex(9)))
+            testGraph.addVertex(hashSetOf(Vertex(2), Vertex(4)))
+            testGraph.addVertex(hashSetOf(Vertex(1)))
+
+            val partition = listOf(
+                hashSetOf(Vertex(2), Vertex(4)),
+                hashSetOf(Vertex(3), Vertex(7), Vertex(9)),
+                hashSetOf(Vertex(1))
+            )
+
+            val expectedPartition = hashSetOf(
+                hashSetOf(Vertex(hashSetOf(Vertex(2), Vertex(4)))),
+                hashSetOf(Vertex(hashSetOf(Vertex(3))), Vertex(hashSetOf(Vertex(7), Vertex(9)))),
+                hashSetOf(Vertex(hashSetOf(Vertex(1))))
+            )
+
+            assertEquals(
+                expectedPartition,
+                CommunityDetector(testGraph, 1.0, 1.0).maintainPartition(partition, testGraph)
+            )
+        }
     }
 }

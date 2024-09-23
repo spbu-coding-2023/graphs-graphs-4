@@ -32,6 +32,9 @@ class ShortestPathFinder<T>(private val graph: GraphWeighted<T>) {
             }
         }
 
+        // the final step of Bellman–Ford algorithm
+        // checks for negative-weight cycles
+
         @Suppress("DuplicatedCode")
         for (vertex in graph.vertices()) {
             for (edge in graph.getNeighbors(vertex)) {
