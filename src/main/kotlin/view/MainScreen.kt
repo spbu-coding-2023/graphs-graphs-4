@@ -1,44 +1,19 @@
 package view
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Checkbox
-import androidx.compose.material.CheckboxDefaults
-import androidx.compose.material.Divider
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import model.graphs.Edge
+import model.graphs.GraphDirected
 import model.graphs.GraphUndirected
 import model.graphs.GraphWeighted
 import view.graphs.GraphView
@@ -46,7 +21,7 @@ import viewmodel.MainScreenViewModel
 
 @Suppress("FunctionNaming")
 @Composable
-fun <T> MainScreen(viewModel: MainScreenViewModel<T>, darkTheme: MutableState<Boolean>) {
+fun <T, E: Edge<T>> MainScreen(viewModel: MainScreenViewModel<T, E>, darkTheme: MutableState<Boolean>) {
     var showMenu by remember { mutableStateOf(false) }
     var showGraph by remember { mutableStateOf(false) }
 
@@ -66,11 +41,11 @@ fun <T> MainScreen(viewModel: MainScreenViewModel<T>, darkTheme: MutableState<Bo
                             Text("New Graph")
                         }
 
-//                            DropdownMenuItem(onClick = { viewModel.openFile() }) {
-//                                Text("Open Graph")
-//                            }
+                            DropdownMenuItem(onClick = { TODO() }) {
+                                Text("Open Graph")
+                            }
 
-                        DropdownMenuItem(onClick = { /* код */ }) {
+                        DropdownMenuItem(onClick = { TODO() }) {
                             Text("Save Graph")
                         }
 
@@ -105,8 +80,8 @@ fun AppDropdownMenu(expanded: Boolean, onDismiss: () -> Unit, content: @Composab
 
 @Suppress("FunctionNaming")
 @Composable
-fun <T> MainContent(
-    viewModel: MainScreenViewModel<T>,
+fun <T, E: Edge<T>> MainContent(
+    viewModel: MainScreenViewModel<T, E>,
 ) {
     Row(horizontalArrangement = Arrangement.spacedBy(20.dp)) {
         Surface(
@@ -134,8 +109,8 @@ fun <T> MainContent(
 
 @Suppress("FunctionNaming")
 @Composable
-fun <T> ToolPanel(
-    viewModel: MainScreenViewModel<T>,
+fun <T, E: Edge<T>> ToolPanel(
+    viewModel: MainScreenViewModel<T, E>,
     modifier: Modifier = Modifier,
 ) {
 
@@ -153,7 +128,7 @@ fun <T> ToolPanel(
             color = MaterialTheme.colors.onSurface
         )
 
-        if (viewModel.graph is GraphUndirected<*>) {
+        if (viewModel.graph is GraphUndirected<*, *>) {
             var needBridges by remember { mutableStateOf(false) }
 
             Button(
@@ -190,6 +165,35 @@ fun <T> ToolPanel(
                 Text(text = "Find Communities")
             }
 
+            Button(
+                onClick = { viewModel.highlightMinSpanTree() },
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = MaterialTheme.colors.secondary,
+                    contentColor = MaterialTheme.colors.onSurface,
+                ),
+                enabled = true,
+                modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
+            ) {
+                Icon(Icons.Default.Search, contentDescription = "Find Minimal Spanning Tree")
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(text = "Find Minimal Spanning Tree")
+            }
+        }
+
+        if (viewModel.graph is GraphDirected<*, *>) {
+            Button(
+                onClick = { viewModel.highlightSCC() },
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = MaterialTheme.colors.secondary,
+                    contentColor = MaterialTheme.colors.onSurface,
+                ),
+                enabled = true,
+                modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
+            ) {
+                Icon(Icons.Default.Search, contentDescription = "Find Strong Connection Components")
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(text = "Find Strong Connection Components")
+            }
         }
 
         if (viewModel.graph is GraphWeighted<*>) {

@@ -3,16 +3,14 @@ package viewmodel
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
-import model.graphs.Graph
-import model.graphs.GraphUndirected
-import model.graphs.GraphWeighted
+import model.graphs.*
 import viewmodel.graphs.GraphViewModel
 import viewmodel.graphs.RepresentationStrategy
 import java.io.File
 import kotlin.system.exitProcess
 
-class MainScreenViewModel<T>(
-    var graph: Graph<T>,
+class MainScreenViewModel<T, E: Edge<T>>(
+    var graph: Graph<T, E>,
     private val representationStrategy: RepresentationStrategy
 ) {
     val showVerticesLabels = mutableStateOf(false)
@@ -55,19 +53,23 @@ class MainScreenViewModel<T>(
 //
 //    }
 
-//    fun highlightSCC() {
-//        val scc = graph.findSCC()
-//        representationStrategy.highlightSCC(scc, *graphViewModel.vertices.toTypedArray())
-//    }
+    fun highlightSCC() {
+        if (graph is GraphDirected) {
+            val scc = (graph as GraphDirected).findSCC()
+            representationStrategy.highlightSCC(scc, *graphViewModel.vertices.toTypedArray())
+        }
+    }
 
-//    fun highlightMinSpanTree() {
-//        val minSpanTree = graph.findMinSpanTree()
-//        if (minSpanTree == null) {
-//            return
-//        } else {
-//            representationStrategy.highlightMinSpanTree(minSpanTree, *graphViewModel.edges.toTypedArray())
-//        }
-//    }
+    fun highlightMinSpanTree() {
+        if (graph is GraphUndirected) {
+            val minSpanTree = (graph as GraphUndirected).findMinSpanTree()
+            if (minSpanTree == null) {
+                return
+            } else {
+                representationStrategy.highlightMinSpanTree(minSpanTree, *graphViewModel.edges.toTypedArray())
+            }
+        }
+    }
 
     fun closeApp() {
         exitProcess(0)
@@ -76,7 +78,7 @@ class MainScreenViewModel<T>(
     @Composable
     fun showBridges() {
         if (graph is GraphUndirected) {
-            val bridges = (graph as GraphUndirected<T>).findBridges()
+            val bridges = (graph as GraphUndirected<T, E>).findBridges()
 
             representationStrategy.highlightBridges(graphViewModel.edges, bridges)
 
@@ -85,7 +87,7 @@ class MainScreenViewModel<T>(
 
     fun findCommunities() {
         if (graph is GraphUndirected) {
-            val communities = (graph as GraphUndirected<T>).runLeidenMethod()
+            val communities = (graph as GraphUndirected<T, E>).runLeidenMethod()
             println(communities)
             graphViewModel.indexCommunities(communities)
 

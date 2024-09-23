@@ -1,17 +1,10 @@
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
+
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -26,7 +19,7 @@ val sampleGraph = UndirectedGraph<Int>().apply {
     val nodes = arrayListOf(adjList.keys.toList())
 
     addEdge(nodes[0][1], nodes[0][0])
-    addEdge(nodes[0][2], nodes[0][0])
+    addEdge(nodes[0][0], nodes[0][2])
     addEdge(nodes[0][2], nodes[0][1])
     addEdge(nodes[0][3], nodes[0][0])
     addEdge(nodes[0][3], nodes[0][1])
@@ -107,7 +100,7 @@ val sampleGraph = UndirectedGraph<Int>().apply {
 
 
 @Composable
-fun StartingScreen(onGraphCreated: (Graph<*>) -> Unit) {
+fun StartingScreen(onGraphCreated: (Graph<*, *>) -> Unit) {
     var showCreateNewGraphDialog by remember { mutableStateOf(false) }
     var showOpenExistingGraphDialog by remember { mutableStateOf(false) }
 
@@ -142,7 +135,7 @@ fun StartingScreen(onGraphCreated: (Graph<*>) -> Unit) {
 }
 
 @Composable
-fun CreateNewGraphDialog(onDismiss: () -> Unit, onCreate: (Graph<*>) -> Unit) {
+fun CreateNewGraphDialog(onDismiss: () -> Unit, onCreate: (Graph<*, *>) -> Unit) {
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text("Create New Graph") },
@@ -164,7 +157,7 @@ fun CreateNewGraphDialog(onDismiss: () -> Unit, onCreate: (Graph<*>) -> Unit) {
 }
 
 @Composable
-fun OpenExistingGraphDialog(onDismiss: () -> Unit, onOpen: (Graph<*>) -> Unit) {
+fun OpenExistingGraphDialog(onDismiss: () -> Unit, onOpen: (Graph<*, *>) -> Unit) {
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text("Open Existing Graph") },

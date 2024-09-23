@@ -1,9 +1,10 @@
 package model.graphs
 
 import kotlinx.serialization.Serializable
+import model.functionality.MinSpanTreeFinder
 
 @Serializable
-open class UndirectedWeightedGraph<T> : AbstractGraph<T>(), GraphUndirected<T>, GraphWeighted<T> {
+open class UndirectedWeightedGraph<T> : AbstractGraph<T, WeightedEdge<T>>(), GraphUndirected<T, WeightedEdge<T>>, GraphWeighted<T> {
     fun addEdge(vertex1: Vertex<T>, vertex2: Vertex<T>, weight: Double) {
         require(adjList.containsKey(vertex1))
         require(adjList.containsKey(vertex2))
@@ -21,18 +22,9 @@ open class UndirectedWeightedGraph<T> : AbstractGraph<T>(), GraphUndirected<T>, 
             adjList.getOrPut(vertex2) { HashSet() }.add(WeightedEdge(vertex2, vertex1, weight))
         }
     }
-//    open fun addEdge(key1: T, key2: T) {
-//        addEdge(Vertex(key1), Vertex(key2))
-//    }
-
-//    open fun addEdges(vararg edges: UnweightedEdge<T>) {
-//        for (edge in edges) {
-//            addEdge(edge)
-//        }
-//    }
 
     override fun findMinSpanTree(): Set<Edge<T>>? {
-        TODO()
+        return MinSpanTreeFinder(this).mstSearch()
     }
 
     override fun runLeidenMethod(): HashSet<HashSet<Vertex<T>>> {

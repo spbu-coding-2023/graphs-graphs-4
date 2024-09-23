@@ -34,18 +34,4 @@ class VertexSerializer<T> : KSerializer<Vertex<T>> {
             else -> Vertex(key.toString() as T)
         }
     }
-
-    /*inline fun <reified T> test(decoder: Decoder) : T {
-        return when (T::class) {
-            String::class -> decoder.decodeString() as T
-            Int::class -> decoder.decodeInt() as T
-            Float::class -> decoder.decodeFloat() as T
-            Double::class -> decoder.decodeDouble() as T
-            Long::class -> decoder.decodeLong() as T
-            Short::class -> decoder.decodeShort() as T
-            Boolean::class -> decoder.decodeBoolean() as T
-            Byte::class -> decoder.decodeByte() as T
-            else -> throw SerializationException("Unsupported type ${T::class}.")
-        }
-    }*/
 }

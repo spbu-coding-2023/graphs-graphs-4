@@ -3,12 +3,13 @@ package viewmodel.graphs
 import androidx.compose.runtime.State
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import model.graphs.Edge
 import model.graphs.Graph
 import model.graphs.Vertex
 
 
-class GraphViewModel<T>(
-    graph: Graph<T>,
+class GraphViewModel<T, E: Edge<T>>(
+    graph: Graph<T, E>,
     showVerticesLabels: State<Boolean>,
     showEdgesLabels: State<Boolean>,
     showVerticesDistanceLabels: State<Boolean>,

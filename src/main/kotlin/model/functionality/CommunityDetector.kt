@@ -1,15 +1,12 @@
 package model.functionality
 
-import model.graphs.GraphUndirected
-import model.graphs.UndirectedGraph
-import model.graphs.UnweightedEdge
-import model.graphs.Vertex
+import model.graphs.*
 import java.lang.Math.random
 import kotlin.math.exp
 import kotlin.math.pow
 
-class CommunityDetector<T>(
-    var graph: GraphUndirected<T>,
+class CommunityDetector<T, E: Edge<T>>(
+    var graph: GraphUndirected<T, E>,
     private var resolution: Double,
     private var randomness: Double
 ) {
@@ -23,9 +20,9 @@ class CommunityDetector<T>(
         return output
     }
 
-    private fun <E> maintainPartition(
-        partition: List<HashSet<Vertex<E>>>,
-        currGraph: GraphUndirected<T>
+    private fun maintainPartition(
+        partition: List<java.util.HashSet<Vertex<T>>>,
+        currGraph: GraphUndirected<T, E>
     ): HashSet<HashSet<Vertex<T>>> {
         // проверить создается ли то что надо
         val newPartition: MutableList<HashSet<Vertex<T>>> = MutableList(partition.size) { hashSetOf() }
@@ -61,7 +58,7 @@ class CommunityDetector<T>(
         return flatten(partition)
     }
 
-    private fun moveNodesFast(graph: GraphUndirected<T>, partition: HashSet<HashSet<Vertex<T>>>) {
+    private fun moveNodesFast(graph: GraphUndirected<T, E>, partition: HashSet<HashSet<Vertex<T>>>) {
         val vertexQueue = graph.vertices().toMutableList()
         vertexQueue.shuffle()
 
@@ -108,7 +105,7 @@ class CommunityDetector<T>(
         partition.removeIf { it.size == 0 }
     }
 
-    private fun quality(graph: GraphUndirected<T>, partition: HashSet<HashSet<Vertex<T>>>): Double {
+    private fun quality(graph: GraphUndirected<T, E>, partition: HashSet<HashSet<Vertex<T>>>): Double {
         var sum = 0.0
 
         for (community in partition) {
@@ -119,7 +116,7 @@ class CommunityDetector<T>(
         return sum
     }
 
-    internal fun countEdges(currGraph: GraphUndirected<T>, set1: HashSet<Vertex<T>>, set2: Set<Vertex<T>>): Int {
+    internal fun countEdges(currGraph: GraphUndirected<T, E>, set1: HashSet<Vertex<T>>, set2: Set<Vertex<T>>): Int {
         var count = 0
 
         for (u in set1) {
@@ -138,9 +135,9 @@ class CommunityDetector<T>(
     }
 
     internal fun aggregateGraph(
-        graph: GraphUndirected<T>,
+        graph: GraphUndirected<T, E>,
         partition: HashSet<HashSet<Vertex<T>>>
-    ): GraphUndirected<T> {
+    ): GraphUndirected<T, E> {
         val newGraph = UndirectedGraph<HashSet<Vertex<T>>>()
 
         for (community in partition) {
@@ -165,11 +162,11 @@ class CommunityDetector<T>(
 
         // ANY UndirectedGraph is GraphUndirected
         @Suppress("UNCHECKED_CAST")
-        return newGraph as GraphUndirected<T>
+        return newGraph as GraphUndirected<T, E>
     }
 
     private fun refinePartition(
-        graph: GraphUndirected<T>,
+        graph: GraphUndirected<T, E>,
         partition: HashSet<HashSet<Vertex<T>>>
     ): HashSet<HashSet<Vertex<T>>> {
         var refinedPartition = initPartition(graph)
@@ -219,7 +216,7 @@ class CommunityDetector<T>(
     }
 
     private fun mergeNodesSubset(
-        graph: GraphUndirected<T>,
+        graph: GraphUndirected<T, E>,
         partition: HashSet<HashSet<Vertex<T>>>,
         subset: HashSet<Vertex<T>>
     ): HashSet<HashSet<Vertex<T>>> {
@@ -319,7 +316,7 @@ class CommunityDetector<T>(
         return partition
     }
 
-    internal fun initPartition(graph: GraphUndirected<T>): HashSet<HashSet<Vertex<T>>> {
+    internal fun initPartition(graph: GraphUndirected<T, E>): HashSet<HashSet<Vertex<T>>> {
         return graph.vertices().map { hashSetOf(it) }.toHashSet()
     }
 }

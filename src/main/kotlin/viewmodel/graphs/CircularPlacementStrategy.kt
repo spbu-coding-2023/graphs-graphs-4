@@ -63,8 +63,13 @@ class CircularPlacementStrategy : RepresentationStrategy {
 
     override fun <T> highlightSCC(scc: Set<Set<Vertex<T>>>, vararg vertices: VertexViewModel<T>) {
         for (component in scc) {
+            println(component)
             val array = Array(256) { it }
             val color = Color(array.random(), array.random(), array.random())
+
+            for (vertex in vertices) {
+                if (vertex.value in component) vertex.color = color
+            }
         }
     }
 
@@ -73,6 +78,7 @@ class CircularPlacementStrategy : RepresentationStrategy {
         for (edge in minSpanTree) {
             val u = edge.from
             val v = edge.to
+
             for (edgeVM in edges) {
                 if (edgeVM.u.value == u && edgeVM.v.value == v) {
                     edgeVM.color = color

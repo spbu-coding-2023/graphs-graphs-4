@@ -2,9 +2,9 @@ package model.graphs
 
 import model.functionality.BridgeFinder
 
-interface GraphUndirected<T> : Graph<T> {
-    fun findBridges(): Set<Edge<T>> {
-        return BridgeFinder<T>().findBridges(this)
+interface GraphUndirected<T, E: Edge<T>> : Graph<T, E> {
+    fun findBridges(): Set<E> {
+        return BridgeFinder<T, E>().findBridges(this)
     }
 
     fun findMinSpanTree(): Set<Edge<T>>?

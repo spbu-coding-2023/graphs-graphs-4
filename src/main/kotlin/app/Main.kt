@@ -3,11 +3,7 @@ package app
 import StartingScreen
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Shapes
-import androidx.compose.material.Typography
-import androidx.compose.material.darkColors
-import androidx.compose.material.lightColors
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,7 +25,7 @@ import viewmodel.graphs.CircularPlacementStrategy
 @Suppress("FunctionNaming")
 fun App() {
     val darkTheme = remember { mutableStateOf(false) }
-    val currentGraph = remember { mutableStateOf<Graph<*>?>(null) }
+    val currentGraph = remember { mutableStateOf<Graph<*, *>?>(null) }
     val mainScreenViewModel = remember(currentGraph.value) {
         currentGraph.value?.let { MainScreenViewModel(it, CircularPlacementStrategy()) }
     }
