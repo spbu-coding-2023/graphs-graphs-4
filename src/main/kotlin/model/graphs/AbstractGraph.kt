@@ -1,9 +1,15 @@
 package model.graphs
 
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
+@Serializable
 abstract class AbstractGraph<T, E: Edge<T>> : Graph<T, E> {
+    @SerialName("graph")
     var adjList: HashMap<Vertex<T>, HashSet<E>> = HashMap()
         internal set
 
+    @SerialName("size")
     protected var _size: Int = 0
     override val size: Int
         get() = _size
