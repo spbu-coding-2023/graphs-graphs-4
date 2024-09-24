@@ -17,10 +17,6 @@ class VertexSerializer<T> : KSerializer<Vertex<T>> {
 
     override fun deserialize(decoder: Decoder): Vertex<T> {
         val key = decoder.decodeString()
-        return when {
-            null != key.toLongOrNull() -> Vertex(key.toLong() as T)
-            null != key.toDoubleOrNull() -> Vertex(key.toDouble() as T)
-            else -> Vertex(key.toString() as T)
-        }
+        return Vertex(key.toInt() as T)
     }
 }
