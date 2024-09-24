@@ -15,4 +15,9 @@ data class WeightedEdge<T>(override val from: Vertex<T>, override val to: Vertex
             ((from == other.from && to == other.to) ||
                 (from == other.to && to == other.from))
     }
+
+    override fun hashCode(): Int {
+        val result = weight.hashCode() + 31 * from.hashCode() + 31 * 31 * to.hashCode()
+        return result
+    }
 }
