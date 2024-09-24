@@ -15,4 +15,8 @@ data class Vertex<T>(val key: T) {
     override fun toString(): String {
         return "Vertex($key)"
     }
+
+    override fun hashCode(): Int {
+        return key?.hashCode() ?: 0
+    }
 }
