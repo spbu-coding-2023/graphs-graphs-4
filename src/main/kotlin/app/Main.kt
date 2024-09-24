@@ -25,9 +25,11 @@ import viewmodel.graphs.CircularPlacementStrategy
 @Suppress("FunctionNaming")
 fun App() {
     val darkTheme = remember { mutableStateOf(false) }
-    val currentGraph = remember { mutableStateOf<Graph<*, *>?>(null) }
+    val currentGraph = remember { mutableStateOf<Graph<Int, *>?>(null) }
     val mainScreenViewModel = remember(currentGraph.value) {
-        currentGraph.value?.let { MainScreenViewModel(it, CircularPlacementStrategy()) }
+        currentGraph.value?.let { MainScreenViewModel(it, CircularPlacementStrategy(),) { createdGraph ->
+            currentGraph.value = createdGraph }
+        }
     }
 
     GraphAppTheme(darkTheme.value) {

@@ -1,7 +1,6 @@
 package model.functionality.iograph
 
 import kotlinx.serialization.KSerializer
-import kotlinx.serialization.SerializationException
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.descriptors.SerialDescriptor
@@ -13,17 +12,7 @@ class VertexSerializer<T> : KSerializer<Vertex<T>> {
     override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("Vertex", PrimitiveKind.STRING)
 
     override fun serialize(encoder: Encoder, value: Vertex<T>) {
-        when (val key = value.key) {
-            is String -> encoder.encodeString(key)
-            is Int -> encoder.encodeInt(key)
-            is Float -> encoder.encodeFloat(key)
-            is Double -> encoder.encodeDouble(key)
-            is Long -> encoder.encodeLong(key)
-            is Short -> encoder.encodeShort(key)
-            is Boolean -> encoder.encodeBoolean(key)
-            is Byte -> encoder.encodeByte(key)
-            else -> throw SerializationException("Unknown key $key")
-        }
+        encoder.encodeString(value.key.toString())
     }
 
     override fun deserialize(decoder: Decoder): Vertex<T> {

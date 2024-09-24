@@ -4,7 +4,10 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
 import kotlinx.serialization.json.encodeToStream
-import model.graphs.*
+import model.graphs.DirectedGraph
+import model.graphs.DirectedWeightedGraph
+import model.graphs.UndirectedGraph
+import model.graphs.UndirectedWeightedGraph
 import java.io.File
 
 class ReadWriteIntGraph {
@@ -16,7 +19,28 @@ class ReadWriteIntGraph {
     }
 
     @OptIn(ExperimentalSerializationApi::class)
-    fun <E: Edge<Int>> write(file: File, graph: UndirectedGraph<Int>) {
+    fun writeUGraph(file: File, graph: UndirectedGraph<Int>) {
+        val output = file.outputStream()
+        format.encodeToStream(graph, output)
+        output.close()
+    }
+
+    @OptIn(ExperimentalSerializationApi::class)
+    fun writeDGraph(file: File, graph: DirectedGraph<Int>) {
+        val output = file.outputStream()
+        format.encodeToStream(graph, output)
+        output.close()
+    }
+
+    @OptIn(ExperimentalSerializationApi::class)
+    fun writeUWGraph(file: File, graph: UndirectedWeightedGraph<Int>) {
+        val output = file.outputStream()
+        format.encodeToStream(graph, output)
+        output.close()
+    }
+
+    @OptIn(ExperimentalSerializationApi::class)
+    fun writeDWGraph(file: File, graph: DirectedWeightedGraph<Int>) {
         val output = file.outputStream()
         format.encodeToStream(graph, output)
         output.close()

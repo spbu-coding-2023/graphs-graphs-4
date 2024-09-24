@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import model.functionality.iograph.GraphType
 import model.graphs.Edge
 import model.graphs.GraphDirected
 import model.graphs.GraphUndirected
@@ -21,9 +22,9 @@ import viewmodel.MainScreenViewModel
 
 @Suppress("FunctionNaming")
 @Composable
-fun <T, E: Edge<T>> MainScreen(viewModel: MainScreenViewModel<T, E>, darkTheme: MutableState<Boolean>) {
+fun <E: Edge<Int>> MainScreen(viewModel: MainScreenViewModel<E>, darkTheme: MutableState<Boolean>) {
     var showMenu by remember { mutableStateOf(false) }
-    var showGraph by remember { mutableStateOf(false) }
+    var showChooseGraphTypeDialog by remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
@@ -37,15 +38,11 @@ fun <T, E: Edge<T>> MainScreen(viewModel: MainScreenViewModel<T, E>, darkTheme: 
                     }
 
                     AppDropdownMenu(showMenu, onDismiss = { showMenu = false }) {
-                        DropdownMenuItem(onClick = { showGraph = true }) {
-                            Text("New Graph")
+                        DropdownMenuItem(onClick = { showChooseGraphTypeDialog = true }) {
+                            Text("Open Graph")
                         }
 
-                            DropdownMenuItem(onClick = { TODO() }) {
-                                Text("Open Graph")
-                            }
-
-                        DropdownMenuItem(onClick = { TODO() }) {
+                        DropdownMenuItem(onClick = { viewModel.saveGraph() }) {
                             Text("Save Graph")
                         }
 
@@ -65,8 +62,65 @@ fun <T, E: Edge<T>> MainScreen(viewModel: MainScreenViewModel<T, E>, darkTheme: 
     ) {
         MainContent(viewModel)
     }
+
+    if (showChooseGraphTypeDialog) {
+        OpenChooseGraphTypeDialog(onDismiss = { showChooseGraphTypeDialog = false }, viewModel)
+    }
 }
 
+@Composable
+fun <E: Edge<Int>>OpenChooseGraphTypeDialog(onDismiss: () -> Unit, viewModel: MainScreenViewModel<E>) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(text = "Choose graph type") },
+        text = { Text(text = "Please select one of the options below:") },
+        buttons = {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Button(
+                    onClick = {
+                        viewModel.openGraph(GraphType.UNDIRECTED_GRAPH)
+                        onDismiss()
+                              },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(text = "Undirected Graph")
+                }
+                Button(
+                    onClick = {
+                        viewModel.openGraph(GraphType.DIRECTED_GRAPH)
+                        onDismiss()
+                              },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(text = "Directed Graph")
+                }
+                Button(
+                    onClick = {
+                        viewModel.openGraph(GraphType.UNDIRECTED_WEIGHTED_GRAPH)
+                        onDismiss()
+                              },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(text = "Weighted Undirected Graph")
+                }
+                Button(
+                    onClick = {
+                        viewModel.openGraph(GraphType.DIRECTED_WEIGHTED_GRAPH)
+                        onDismiss()
+                              },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(text = "Weighted Directed Graph")
+                }
+            }
+        }
+    )
+}
 
 @Suppress("FunctionNaming")
 @Composable
@@ -80,8 +134,8 @@ fun AppDropdownMenu(expanded: Boolean, onDismiss: () -> Unit, content: @Composab
 
 @Suppress("FunctionNaming")
 @Composable
-fun <T, E: Edge<T>> MainContent(
-    viewModel: MainScreenViewModel<T, E>,
+fun <E: Edge<Int>> MainContent(
+    viewModel: MainScreenViewModel<E>,
 ) {
     Row(horizontalArrangement = Arrangement.spacedBy(20.dp)) {
         Surface(
@@ -109,8 +163,8 @@ fun <T, E: Edge<T>> MainContent(
 
 @Suppress("FunctionNaming")
 @Composable
-fun <T, E: Edge<T>> ToolPanel(
-    viewModel: MainScreenViewModel<T, E>,
+fun <E: Edge<Int>> ToolPanel(
+    viewModel: MainScreenViewModel<E>,
     modifier: Modifier = Modifier,
 ) {
 
@@ -128,7 +182,7 @@ fun <T, E: Edge<T>> ToolPanel(
             color = MaterialTheme.colors.onSurface
         )
 
-        if (viewModel.graph is GraphUndirected<*, *>) {
+        if (viewModel.graph is GraphUndirected<Int, *>) {
             var needBridges by remember { mutableStateOf(false) }
             var resolution by remember { mutableStateOf("") }
             var randomness by remember { mutableStateOf("") }
@@ -202,7 +256,7 @@ fun <T, E: Edge<T>> ToolPanel(
             }
         }
 
-        if (viewModel.graph is GraphDirected<*, *>) {
+        if (viewModel.graph is GraphDirected<Int, *>) {
             Button(
                 onClick = { viewModel.highlightSCC() },
                 colors = ButtonDefaults.buttonColors(
