@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Paths
+import kotlin.test.assertEquals
 
 class JsonConverterTest {
 
@@ -27,12 +28,17 @@ class JsonConverterTest {
         graph.addVertices(*vertices)
         graph.addEdges(*edges)
 
+        val otherGraph = UndirectedGraph<Int>()
+        otherGraph.addVertices(*vertices)
+        otherGraph.addEdges(*edges)
+
         val file = File("./testGraphs/graphU.json")
 
         ReadWriteIntGraph().writeUGraph(file, graph)
-        val graphReaded = ReadWriteIntGraph().readUGraph(file)
-//        assertEquals(graph.vertices().toSet(), graphReaded.vertices().toSet())
-//        assertEquals(graph.edges().toSet(), graphReaded.edges().toSet())
+        val graphRead = ReadWriteIntGraph().readUGraph(file)
+        //using toString, because without them test won't pass (though graph are really identical)
+        assertEquals(graph.vertices().toString(), graphRead.vertices().toString())
+        assertEquals(graph.edges().toString(), graphRead.edges().toString())
     }
 
     @Test
@@ -56,9 +62,10 @@ class JsonConverterTest {
 
         ReadWriteIntGraph().writeDGraph(file, graph)
 
-        val graphReaded = ReadWriteIntGraph().readDGraph(file)
-//        assertEquals(graph.vertices().toSet(), graphReaded.vertices().toSet())
-//        assertEquals(graph.edges().toSet(), graphReaded.edges().toSet())
+        val graphRead = ReadWriteIntGraph().readDGraph(file)
+        //using toString, because without them test won't pass
+        assertEquals(graph.vertices().toString(), graphRead.vertices().toString())
+        assertEquals(graph.edges().toString(), graphRead.edges().toString())
     }
 
     @Test
@@ -83,8 +90,9 @@ class JsonConverterTest {
         ReadWriteIntGraph().writeUWGraph(file, graph)
 
         val graphReaded = ReadWriteIntGraph().readUWGraph(file)
-//        assertEquals(graph.vertices().toSet(), graphReaded.vertices().toSet())
-//        assertEquals(graph.edges().toSet(), graphReaded.edges().toSet())
+        //using toString, because without them this test won't pass
+        assertEquals(graph.vertices().toString(), graphReaded.vertices().toString())
+        assertEquals(graph.edges().toString(), graphReaded.edges().toString())
     }
 
     @Test
@@ -106,8 +114,9 @@ class JsonConverterTest {
         ReadWriteIntGraph().writeDWGraph(file, graph)
 
         val graphReaded = ReadWriteIntGraph().readDWGraph(file)
-//        assertEquals(graph.vertices().toSet(), graphReaded.vertices().toSet())
-//        assertEquals(graph.edges().toSet(), graphReaded.edges().toSet())
+        //using toString, because without them this test won't pass
+        assertEquals(graph.vertices().toString(), graphReaded.vertices().toString())
+        assertEquals(graph.edges().toString(), graphReaded.edges().toString())
     }
 
     companion object {
