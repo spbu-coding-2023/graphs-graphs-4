@@ -11,6 +11,27 @@ import java.nio.file.Paths
 import kotlin.test.assertEquals
 
 class JsonConverterTest {
+    companion object {
+        @JvmStatic
+        @BeforeAll
+        fun createTestDirectory() {
+            val directoryPath = Paths.get("./testGraphs")
+            if (!Files.exists(directoryPath)) {
+                Files.createDirectory(directoryPath)
+            }
+        }
+
+
+        //COMMENT THIS FUNCTION IF YOU WANT testGraphs DIRECTORY (all test graphs saved here)
+        @JvmStatic
+        @AfterAll
+        fun deleteTestDirectory() {
+            val directoryPath = Paths.get("./testGraphs")
+            if (Files.exists(directoryPath)) {
+                directoryPath.toFile().deleteRecursively()
+            }
+        }
+    }
 
     @Test
     fun jsonUndirectedReadWriteTest() {
@@ -89,10 +110,10 @@ class JsonConverterTest {
 
         ReadWriteIntGraph().writeUWGraph(file, graph)
 
-        val graphReaded = ReadWriteIntGraph().readUWGraph(file)
+        val graphRead = ReadWriteIntGraph().readUWGraph(file)
         //using toString, because without them this test won't pass
-        assertEquals(graph.vertices().toString(), graphReaded.vertices().toString())
-        assertEquals(graph.edges().toString(), graphReaded.edges().toString())
+        assertEquals(graph.vertices().toString(), graphRead.vertices().toString())
+        assertEquals(graph.edges().toString(), graphRead.edges().toString())
     }
 
     @Test
@@ -113,31 +134,9 @@ class JsonConverterTest {
 
         ReadWriteIntGraph().writeDWGraph(file, graph)
 
-        val graphReaded = ReadWriteIntGraph().readDWGraph(file)
+        val graphRead = ReadWriteIntGraph().readDWGraph(file)
         //using toString, because without them this test won't pass
-        assertEquals(graph.vertices().toString(), graphReaded.vertices().toString())
-        assertEquals(graph.edges().toString(), graphReaded.edges().toString())
-    }
-
-    companion object {
-        @JvmStatic
-        @BeforeAll
-        fun createTestDirectory() {
-            val directoryPath = Paths.get("./testGraphs")
-            if (!Files.exists(directoryPath)) {
-                Files.createDirectory(directoryPath)
-            }
-        }
-
-
-        //COMMENT THIS FUNCTION IF YOU WANT testGraphs DIRECTORY (all test graphs saved here)
-        @JvmStatic
-        @AfterAll
-        fun deleteTestDirectory() {
-            val directoryPath = Paths.get("./testGraphs")
-            if (Files.exists(directoryPath)) {
-                directoryPath.toFile().deleteRecursively()
-            }
-        }
+        assertEquals(graph.vertices().toString(), graphRead.vertices().toString())
+        assertEquals(graph.edges().toString(), graphRead.edges().toString())
     }
 }
