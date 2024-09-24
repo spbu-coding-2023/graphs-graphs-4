@@ -21,18 +21,16 @@ import viewmodel.MainScreenViewModel
 import viewmodel.graphs.CircularPlacementStrategy
 
 @Composable
-@Preview
-@Suppress("FunctionNaming")
-fun App() {
+fun app() {
     val darkTheme = remember { mutableStateOf(false) }
     val currentGraph = remember { mutableStateOf<Graph<Int, *>?>(null) }
     val mainScreenViewModel = remember(currentGraph.value) {
-        currentGraph.value?.let { MainScreenViewModel(it, CircularPlacementStrategy(),) { createdGraph ->
+        currentGraph.value?.let { MainScreenViewModel(it, CircularPlacementStrategy()) { createdGraph ->
             currentGraph.value = createdGraph }
         }
     }
 
-    GraphAppTheme(darkTheme.value) {
+    graphAppTheme(darkTheme.value) {
         if (currentGraph.value == null) {
             StartingScreen { createdGraph ->
                 currentGraph.value = createdGraph
@@ -48,7 +46,7 @@ fun App() {
 @Preview
 @Suppress("FunctionNaming")
 @Composable
-fun GraphAppTheme(darkTheme: Boolean, content: @Composable () -> Unit) {
+fun graphAppTheme(darkTheme: Boolean, content: @Composable () -> Unit) {
     val darkThemeColors = darkColors(
         primary = Color(80, 60, 60),
         secondary = Color(126, 99, 99),
@@ -91,6 +89,6 @@ fun main() = application {
     Window(
         onCloseRequest = ::exitApplication,
     ) {
-        App()
+        app()
     }
 }
