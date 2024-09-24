@@ -49,7 +49,6 @@ class ReadWriteIntGraph {
     @OptIn(ExperimentalSerializationApi::class)
     fun readUGraph(file: File): UndirectedGraph<Int> {
         val input = file.inputStream()
-        println("stream: $input")
         val graph = format.decodeFromStream<UndirectedGraph<Int>>(input)
         input.close()
 
@@ -59,7 +58,6 @@ class ReadWriteIntGraph {
     @OptIn(ExperimentalSerializationApi::class)
     fun readDGraph(file: File): DirectedGraph<Int> {
         val input = file.inputStream()
-        println("stream: $input")
         val graph = format.decodeFromStream<DirectedGraph<Int>>(input)
         input.close()
 
@@ -69,7 +67,6 @@ class ReadWriteIntGraph {
     @OptIn(ExperimentalSerializationApi::class)
     fun readUWGraph(file: File): UndirectedWeightedGraph<Int> {
         val input = file.inputStream()
-        println("stream: $input")
         val graph = format.decodeFromStream<UndirectedWeightedGraph<Int>>(input)
         input.close()
 
@@ -79,7 +76,6 @@ class ReadWriteIntGraph {
     @OptIn(ExperimentalSerializationApi::class)
     fun readDWGraph(file: File): DirectedWeightedGraph<Int> {
         val input = file.inputStream()
-        println("stream: $input")
         val graph = format.decodeFromStream<DirectedWeightedGraph<Int>>(input)
         input.close()
 
