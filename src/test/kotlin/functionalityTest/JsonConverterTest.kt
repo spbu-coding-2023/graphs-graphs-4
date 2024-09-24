@@ -2,6 +2,7 @@ package functionalityTest
 
 import model.functionality.iograph.ReadWriteIntGraph
 import model.graphs.*
+import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import java.io.File
@@ -113,13 +114,21 @@ class JsonConverterTest {
         @JvmStatic
         @BeforeAll
         fun createTestDirectory() {
-            Files.createDirectory(Paths.get("./testGraphs"))
+            val directoryPath = Paths.get("./testGraphs")
+            if (!Files.exists(directoryPath)) {
+                Files.createDirectory(directoryPath)
+            }
         }
 
-//        @JvmStatic
-//        @AfterAll
-//        fun deleteTestDirectory() {
-//            Files.delete(Paths.get("./testGraphs/"))
-//        }
+
+        //COMMENT THIS FUNCTION IF YOU WANT testGraphs DIRECTORY (all test graphs saved here)
+        @JvmStatic
+        @AfterAll
+        fun deleteTestDirectory() {
+            val directoryPath = Paths.get("./testGraphs")
+            if (Files.exists(directoryPath)) {
+                directoryPath.toFile().deleteRecursively()
+            }
+        }
     }
 }
