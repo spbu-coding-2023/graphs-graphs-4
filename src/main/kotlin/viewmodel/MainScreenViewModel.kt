@@ -57,7 +57,7 @@ class MainScreenViewModel<E: Edge<Int>>(
                 GraphType.UNDIRECTED_GRAPH -> ReadWriteIntGraph().readUGraph(file)
                 GraphType.DIRECTED_GRAPH -> ReadWriteIntGraph().readDGraph(file)
                 GraphType.UNDIRECTED_WEIGHTED_GRAPH -> ReadWriteIntGraph().readUWGraph(file)
-                GraphType.DIRECTED_WEIGHTED_GRAPH -> ReadWriteIntGraph().readDGraph(file)
+                GraphType.DIRECTED_WEIGHTED_GRAPH -> ReadWriteIntGraph().readDWGraph(file)
             }
 
             onGraphCreated(graph)
