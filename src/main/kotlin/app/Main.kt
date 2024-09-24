@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import model.graphs.Graph
-import view.MainScreen
+import view.mainScreen
 import viewmodel.MainScreenViewModel
 import viewmodel.graphs.CircularPlacementStrategy
 
@@ -37,7 +37,7 @@ fun app() {
             }
         } else {
             mainScreenViewModel?.let {
-                MainScreen(viewModel = it, darkTheme = darkTheme)
+                mainScreen(viewModel = it, darkTheme = darkTheme)
             }
         }
     }
