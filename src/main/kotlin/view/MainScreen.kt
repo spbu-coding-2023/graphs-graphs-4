@@ -20,9 +20,8 @@ import model.graphs.GraphWeighted
 import view.graphs.GraphView
 import viewmodel.MainScreenViewModel
 
-@Suppress("FunctionNaming")
 @Composable
-fun <E: Edge<Int>> MainScreen(viewModel: MainScreenViewModel<E>, darkTheme: MutableState<Boolean>) {
+fun <E: Edge<Int>> mainScreen(viewModel: MainScreenViewModel<E>, darkTheme: MutableState<Boolean>) {
     var showMenu by remember { mutableStateOf(false) }
     var showChooseGraphTypeDialog by remember { mutableStateOf(false) }
 
@@ -37,7 +36,7 @@ fun <E: Edge<Int>> MainScreen(viewModel: MainScreenViewModel<E>, darkTheme: Muta
                         Icon(Icons.Filled.Menu, contentDescription = "Main Menu")
                     }
 
-                    AppDropdownMenu(showMenu, onDismiss = { showMenu = false }) {
+                    appDropdownMenu(showMenu, onDismiss = { showMenu = false }) {
                         DropdownMenuItem(onClick = { showChooseGraphTypeDialog = true }) {
                             Text("Open Graph")
                         }
@@ -60,16 +59,16 @@ fun <E: Edge<Int>> MainScreen(viewModel: MainScreenViewModel<E>, darkTheme: Muta
             )
         }
     ) {
-        MainContent(viewModel)
+        mainContent(viewModel)
     }
 
     if (showChooseGraphTypeDialog) {
-        OpenChooseGraphTypeDialog(onDismiss = { showChooseGraphTypeDialog = false }, viewModel)
+        openChooseGraphTypeDialog(onDismiss = { showChooseGraphTypeDialog = false }, viewModel)
     }
 }
 
 @Composable
-fun <E: Edge<Int>>OpenChooseGraphTypeDialog(onDismiss: () -> Unit, viewModel: MainScreenViewModel<E>) {
+fun <E: Edge<Int>>openChooseGraphTypeDialog(onDismiss: () -> Unit, viewModel: MainScreenViewModel<E>) {
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text(text = "Choose graph type") },
@@ -122,9 +121,8 @@ fun <E: Edge<Int>>OpenChooseGraphTypeDialog(onDismiss: () -> Unit, viewModel: Ma
     )
 }
 
-@Suppress("FunctionNaming")
 @Composable
-fun AppDropdownMenu(expanded: Boolean, onDismiss: () -> Unit, content: @Composable ColumnScope.() -> Unit) {
+fun appDropdownMenu(expanded: Boolean, onDismiss: () -> Unit, content: @Composable ColumnScope.() -> Unit) {
     DropdownMenu(
         expanded = expanded,
         onDismissRequest = onDismiss,
@@ -132,9 +130,8 @@ fun AppDropdownMenu(expanded: Boolean, onDismiss: () -> Unit, content: @Composab
     )
 }
 
-@Suppress("FunctionNaming")
 @Composable
-fun <E: Edge<Int>> MainContent(
+fun <E: Edge<Int>> mainContent(
     viewModel: MainScreenViewModel<E>,
 ) {
     Row(horizontalArrangement = Arrangement.spacedBy(20.dp)) {
@@ -150,7 +147,7 @@ fun <E: Edge<Int>> MainContent(
         Column(
             modifier = Modifier.width(370.dp),
         ) {
-            ToolPanel(
+            toolPanel(
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxHeight()
@@ -161,9 +158,8 @@ fun <E: Edge<Int>> MainContent(
     }
 }
 
-@Suppress("FunctionNaming")
 @Composable
-fun <E: Edge<Int>> ToolPanel(
+fun <E: Edge<Int>> toolPanel(
     viewModel: MainScreenViewModel<E>,
     modifier: Modifier = Modifier,
 ) {
@@ -292,40 +288,19 @@ fun <E: Edge<Int>> ToolPanel(
             }
         }
 
-
-//        Button(
-//            onClick = viewModel::highlightMinSpanTree,
-//            enabled = true,
-//            modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
-//        ) {
-//            Icon(Icons.Default.Search, contentDescription = "Find the shortest distance")
-//            Spacer(modifier = Modifier.width(8.dp))
-//            Text(text = "Find Min Span Tree")
-//        }
-
-//        Button(
-//            onClick = viewModel::highlightSCC,
-//            enabled = true,
-//            modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
-//        ) {
-//            Icon(Icons.Default.Search, contentDescription = "Find the shortest distance")
-//            Spacer(modifier = Modifier.width(8.dp))
-//            Text(text = "Find SCC")
-//        }
-
-        ToggleRow(
+        toggleRow(
             label = "Show Vertices Labels",
             checked = viewModel.showVerticesLabels.value,
             onCheckedChange = { viewModel.showVerticesLabels.value = it }
         )
 
-        ToggleRow(
+        toggleRow(
             label = "Show Edges Labels",
             checked = viewModel.showEdgesLabels.value,
             onCheckedChange = { viewModel.showEdgesLabels.value = it }
         )
 
-        ToggleRow(
+        toggleRow(
             label = "Show Distance Labels",
             checked = viewModel.showVerticesDistanceLabels.value,
             onCheckedChange = { viewModel.showVerticesDistanceLabels.value = it }
@@ -335,7 +310,7 @@ fun <E: Edge<Int>> ToolPanel(
 
 @Suppress("FunctionNaming")
 @Composable
-fun ToggleRow(label: String, checked: Boolean, onCheckedChange: (Boolean) -> Unit) {
+fun toggleRow(label: String, checked: Boolean, onCheckedChange: (Boolean) -> Unit) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.padding(vertical = 8.dp)
