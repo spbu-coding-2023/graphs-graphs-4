@@ -20,4 +20,8 @@ data class WeightedEdge<T>(override val from: Vertex<T>, override val to: Vertex
         val result = weight.hashCode() + 31 * from.hashCode() + 31 * 31 * to.hashCode()
         return result
     }
+
+    fun toUnweightedEdge(): UnweightedEdge<T> {
+        return UnweightedEdge(from, to)
+    }
 }
