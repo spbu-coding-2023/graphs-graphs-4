@@ -3,21 +3,25 @@ package viewmodel
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
+import model.functionality.iograph.GraphType
+import model.functionality.iograph.ReadWriteIntGraph
 import model.graphs.*
 import viewmodel.graphs.GraphViewModel
 import viewmodel.graphs.RepresentationStrategy
+import java.awt.FileDialog
+import java.awt.Frame
 import java.io.File
 import kotlin.system.exitProcess
 
-class MainScreenViewModel<T, E: Edge<T>>(
-    var graph: Graph<T, E>,
-    private val representationStrategy: RepresentationStrategy
+class MainScreenViewModel<E: Edge<Int>>(
+    var graph: Graph<Int, E>,
+    private val representationStrategy: RepresentationStrategy,
+    val onGraphCreated: (Graph<Int, *>) -> Unit
 ) {
     val showVerticesLabels = mutableStateOf(false)
     val showVerticesDistanceLabels = mutableStateOf(false)
     val showEdgesLabels = mutableStateOf(false)
     var graphViewModel = GraphViewModel(graph, showVerticesLabels, showEdgesLabels, showVerticesDistanceLabels)
-    var file: File? = null
 
     @Suppress("MagicNumber")
     private val width = 800.0
@@ -41,17 +45,40 @@ class MainScreenViewModel<T, E: Edge<T>>(
         representationStrategy.highlight(graphViewModel.vertices)
     }
 
-//    fun openFile() {
-//        val dialog = FileDialog(Frame(), "Select Graph File", FileDialog.LOAD)
-//        dialog.isVisible = true
-//        if (dialog.file != null) {
-//            file = File("${dialog.directory}${dialog.file}")
-//            val graphType = ReadWriteGraph().findType(file!!) ?: return
-//            graph = ReadWriteGraph().read(file!!)
-//            graphViewModel = GraphViewModel(graph, showVerticesLabels, showEdgesLabels, showVerticesDistanceLabels)
-//        }
-//
-//    }
+    fun openGraph(type: GraphType) {
+        val dialog = FileDialog(Frame(), "Select Graph File", FileDialog.LOAD)
+        dialog.isVisible = true
+
+        val fileName = dialog.file
+        if (fileName != null) {
+            val file = File(dialog.directory, fileName)
+
+            val graph = when (type) {
+                GraphType.UNDIRECTED_GRAPH -> ReadWriteIntGraph().readUGraph(file)
+                GraphType.DIRECTED_GRAPH -> ReadWriteIntGraph().readDGraph(file)
+                GraphType.UNDIRECTED_WEIGHTED_GRAPH -> ReadWriteIntGraph().readUWGraph(file)
+                GraphType.DIRECTED_WEIGHTED_GRAPH -> ReadWriteIntGraph().readDGraph(file)
+            }
+
+            onGraphCreated(graph)
+        }
+    }
+
+    fun saveGraph() {
+        var file = File("./graph.json")
+
+        var num = 0
+        while (file.exists()) {
+            file = File("./${++num}graph.json")
+        }
+
+        when (graph) {
+            is DirectedGraph -> ReadWriteIntGraph().writeDGraph(file, graph as DirectedGraph)
+            is UndirectedGraph -> ReadWriteIntGraph().writeUGraph(file, graph as UndirectedGraph)
+            is UndirectedWeightedGraph -> ReadWriteIntGraph().writeUWGraph(file, graph as UndirectedWeightedGraph)
+            is DirectedWeightedGraph -> ReadWriteIntGraph().writeDWGraph(file, graph as DirectedWeightedGraph)
+        }
+    }
 
     fun highlightSCC() {
         if (graph is GraphDirected) {
@@ -78,7 +105,7 @@ class MainScreenViewModel<T, E: Edge<T>>(
     @Composable
     fun showBridges() {
         if (graph is GraphUndirected) {
-            val bridges = (graph as GraphUndirected<T, E>).findBridges()
+            val bridges = (graph as GraphUndirected<Int, E>).findBridges()
 
             representationStrategy.highlightBridges(graphViewModel.edges, bridges)
 
@@ -88,7 +115,7 @@ class MainScreenViewModel<T, E: Edge<T>>(
     fun findCommunities(randomness: String, resolution: String) {
         if (graph is GraphUndirected) {
             val communities =
-                (graph as GraphUndirected<T, E>).runLeidenMethod(randomness.toDouble(), resolution.toDouble())
+                (graph as GraphUndirected<Int, E>).runLeidenMethod(randomness.toDouble(), resolution.toDouble())
             println(communities)
             graphViewModel.indexCommunities(communities)
 
@@ -98,7 +125,7 @@ class MainScreenViewModel<T, E: Edge<T>>(
     fun findDistanceBellman() {
         if (graph is GraphWeighted) {
             val labels =
-                graphViewModel.currentVertex?.let { (graph as GraphWeighted<T>).findDistancesBellman(it.value) }
+                graphViewModel.currentVertex?.let { (graph as GraphWeighted<Int>).findDistancesBellman(it.value) }
 
             graphViewModel.vertices.forEach {
                 it.distanceLabel = (labels?.get(it.value)).toString()

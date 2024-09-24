@@ -8,8 +8,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import model.functionality.iograph.ReadWriteIntGraph
 import model.graphs.Graph
 import model.graphs.UndirectedGraph
+import java.awt.FileDialog
+import java.awt.Frame
+import java.io.File
+
 
 val sampleGraph = UndirectedGraph<Int>().apply {
     for (i in 1..34) {
@@ -100,8 +105,9 @@ val sampleGraph = UndirectedGraph<Int>().apply {
 
 
 @Composable
-fun StartingScreen(onGraphCreated: (Graph<*, *>) -> Unit) {
+fun StartingScreen(onGraphCreated: (Graph<Int, *>) -> Unit) {
     var showCreateNewGraphDialog by remember { mutableStateOf(false) }
+    var showChooseGraphTypeDialog by remember { mutableStateOf(false) }
     var showOpenExistingGraphDialog by remember { mutableStateOf(false) }
 
 
@@ -129,13 +135,107 @@ fun StartingScreen(onGraphCreated: (Graph<*, *>) -> Unit) {
     if (showOpenExistingGraphDialog) {
         OpenExistingGraphDialog(onDismiss = { showOpenExistingGraphDialog = false }, onOpen = { graph ->
             showOpenExistingGraphDialog = false
-            onGraphCreated(graph)
+            showChooseGraphTypeDialog = true
         })
+    }
+
+    if (showChooseGraphTypeDialog) {
+        OpenChooseGraphTypeDialog(
+            onDismiss =  { showChooseGraphTypeDialog = false },
+            onButton1Click = {
+                    val dialog = FileDialog(Frame(), "Select Graph File", FileDialog.LOAD)
+                    dialog.isVisible = true
+                    if (dialog.file != null) {
+                        val graph = ReadWriteIntGraph().readUGraph(File(dialog.directory, dialog.file))
+                        onGraphCreated(graph)
+                    }
+
+                    showChooseGraphTypeDialog = false
+            },
+            onButton2Click = {
+                val dialog = FileDialog(Frame(), "Select Graph File", FileDialog.LOAD)
+                dialog.isVisible = true
+                if (dialog.file != null) {
+                    val graph = ReadWriteIntGraph().readDGraph(File(dialog.directory, dialog.file))
+                    onGraphCreated(graph)
+                }
+
+                showChooseGraphTypeDialog = false
+            },
+            onButton3Click = {
+                val dialog = FileDialog(Frame(), "Select Graph File", FileDialog.LOAD)
+                dialog.isVisible = true
+                if (dialog.file != null) {
+                    val graph = ReadWriteIntGraph().readUWGraph(File(dialog.directory, dialog.file))
+                    onGraphCreated(graph)
+                }
+
+                showChooseGraphTypeDialog = false
+            },
+            onButton4Click = {
+                val dialog = FileDialog(Frame(), "Select Graph File", FileDialog.LOAD)
+                dialog.isVisible = true
+                if (dialog.file != null) {
+                    val graph = ReadWriteIntGraph().readDWGraph(File(dialog.directory, dialog.file))
+                    onGraphCreated(graph)
+                }
+
+                showChooseGraphTypeDialog = false
+            }
+        )
     }
 }
 
 @Composable
-fun CreateNewGraphDialog(onDismiss: () -> Unit, onCreate: (Graph<*, *>) -> Unit) {
+fun OpenChooseGraphTypeDialog(
+    onDismiss: () -> Unit,
+    onButton1Click: () -> Unit,
+    onButton2Click: () -> Unit,
+    onButton3Click: () -> Unit,
+    onButton4Click: () -> Unit
+    ) {
+        AlertDialog(
+            onDismissRequest = onDismiss,
+            title = { Text(text = "Choose graph type") },
+            text = { Text(text = "Please select one of the options below:") },
+            buttons = {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Button(
+                        onClick = onButton1Click,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(text = "Undirected Graph")
+                    }
+                    Button(
+                        onClick = onButton2Click,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(text = "Directed Graph")
+                    }
+                    Button(
+                        onClick = onButton3Click,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(text = "Weighted Undirected Graph")
+                    }
+                    Button(
+                        onClick = onButton4Click,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(text = "Weighted Directed Graph")
+                    }
+                }
+            }
+        )
+    }
+
+@Composable
+fun CreateNewGraphDialog(onDismiss: () -> Unit, onCreate: (Graph<Int, *>) -> Unit) {
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text("Create New Graph") },
