@@ -178,6 +178,20 @@ fun <E: Edge<Int>> toolPanel(
             color = MaterialTheme.colors.onSurface
         )
 
+        Button(
+            onClick = { viewModel.useForceAtlas2Layout() },
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = MaterialTheme.colors.secondary,
+                contentColor = MaterialTheme.colors.onSurface,
+            ),
+            enabled = true,
+            modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
+        ) {
+            Icon(Icons.Default.Search, contentDescription = "ForceAtlas2")
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(text = "ForceAtlas2")
+        }
+
         if (viewModel.graph is GraphUndirected<Int, *>) {
             var needBridges by remember { mutableStateOf(false) }
             var resolution by remember { mutableStateOf("") }

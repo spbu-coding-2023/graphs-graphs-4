@@ -8,6 +8,7 @@ import model.functionality.iograph.ReadWriteIntGraph
 import model.graphs.*
 import viewmodel.graphs.GraphViewModel
 import viewmodel.graphs.RepresentationStrategy
+import viewmodel.placement.ForceAtlas2Placement
 import java.awt.FileDialog
 import java.awt.Frame
 import java.io.File
@@ -120,6 +121,10 @@ class MainScreenViewModel<E: Edge<Int>>(
             graphViewModel.indexCommunities(communities)
 
         } else throw IllegalArgumentException("leiden method does not support directed graphs")
+    }
+
+    fun useForceAtlas2Layout() {
+        ForceAtlas2Placement(graphViewModel).place(width, height, 1)
     }
 
     fun findDistanceBellman() {
