@@ -5,6 +5,9 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class WeightedEdge<T>(override val from: Vertex<T>, override val to: Vertex<T>, var weight: Double = 0.0) : Edge<T> {
     override var copies: Int = 1
+    override fun reverse(): Edge<T> {
+        return WeightedEdge(to, from, weight)
+    }
 
     override fun compareTo(other: Edge<T>): Int {
         return if (other is WeightedEdge<T>) weight.compareTo(other.weight) else 1
