@@ -24,4 +24,8 @@ data class WeightedEdge<T>(override val from: Vertex<T>, override val to: Vertex
     fun toUnweightedEdge(): UnweightedEdge<T> {
         return UnweightedEdge(from, to)
     }
+
+    override fun toString(): String {
+        return "($from, $to, $weight)"
+    }
 }

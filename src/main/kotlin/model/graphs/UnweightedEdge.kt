@@ -15,4 +15,8 @@ data class UnweightedEdge<T>(override val from: Vertex<T>, override val to: Vert
             ((from == other.from && to == other.to) ||
                 (from == other.to && to == other.from))
     }
+
+    override fun toString(): String {
+        return "($from, $to)"
+    }
 }
