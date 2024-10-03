@@ -28,7 +28,7 @@ fun <E: Edge<Int>> mainScreen(viewModel: MainScreenViewModel<E>, darkTheme: Muta
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Graph the Graph") },
+                title = { Text("GraphApp") },
                 backgroundColor = MaterialTheme.colors.primary,
                 contentColor = MaterialTheme.colors.onPrimary,
                 navigationIcon = {
