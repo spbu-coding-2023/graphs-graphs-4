@@ -53,7 +53,7 @@ abstract class AbstractGraph<T, E: Edge<T>> : Graph<T, E> {
         }
     }
 
-    fun addEdges(vararg edges: E) {
+    override fun addEdges(vararg edges: E) {
         for (edge in edges) {
             this.addEdge(edge)
         }

@@ -13,6 +13,8 @@ interface Graph<T, E: Edge<T>> : Iterable<Vertex<T>> {
 
     fun addEdge(edge: E)
 
+    fun addEdges(vararg edges: E)
+
     fun vertices(): Set<Vertex<T>>
 
     fun edges(): Set<E>

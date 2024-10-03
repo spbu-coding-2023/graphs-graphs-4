@@ -21,6 +21,10 @@ open class UndirectedGraph<T> : AbstractGraph<T, UnweightedEdge<T>>(), GraphUndi
         }
     }
 
+    override fun addEdge(edge: UnweightedEdge<T>) {
+        addEdge(edge.from, edge.to)
+    }
+
     // добавляет одно конкретное ребро, пока надо только алг поиска
     // сообществ
     fun addSingleEdge(edge: UnweightedEdge<T>) {
