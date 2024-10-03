@@ -33,19 +33,5 @@ fun <T> EdgeView(
                 cap = StrokeCap.Round
             )
         }
-
-//        if (viewModel.islWeightLabelVisible) {
-//            Text(
-//                modifier = Modifier
-//                    .offset(
-//                        viewModel.u.x + (viewModel.v.x - viewModel.u.x) / 2,
-//                        viewModel.u.y + (viewModel.v.y - viewModel.u.y) / 2
-//                    )
-//                    .background(MaterialTheme.colors.surface, RoundedCornerShape(4.dp))
-//                    .padding(4.dp),
-//                text = viewModel.label,
-//                style = MaterialTheme.typography.caption.copy(color = MaterialTheme.colors.onSurface)
-//            )
-//        }
     }
 }

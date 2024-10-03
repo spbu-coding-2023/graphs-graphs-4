@@ -7,8 +7,8 @@ data class ForceAtlas2VertexLayout<T>(
     var dltX: Double = 0.0,
     var dltY: Double = 0.0,
 ) {
-    fun addForces(Fx: Double, Fy: Double) {
-        dltX += Fx
-        dltY += Fy
+    fun addForces(xF: Double, yF: Double) {
+        dltX += xF
+        dltY += yF
     }
 }

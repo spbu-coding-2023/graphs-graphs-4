@@ -2,7 +2,6 @@ package viewmodel
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.graphics.Color
 import model.functionality.iograph.GraphType
 import model.functionality.iograph.ReadWriteIntGraph
 import model.graphs.*
@@ -22,7 +21,7 @@ class MainScreenViewModel<E: Edge<Int>>(
     val showVerticesLabels = mutableStateOf(false)
     val showVerticesDistanceLabels = mutableStateOf(false)
     val showEdgesLabels = mutableStateOf(false)
-    var graphViewModel = GraphViewModel(graph, showVerticesLabels, showEdgesLabels, showVerticesDistanceLabels)
+    var graphViewModel = GraphViewModel(graph, showVerticesLabels, showVerticesDistanceLabels)
 
     @Suppress("MagicNumber")
     private val width = 800.0
@@ -32,18 +31,6 @@ class MainScreenViewModel<E: Edge<Int>>(
 
     init {
         representationStrategy.place(width, height, graphViewModel.vertices)
-    }
-
-    fun resetGraphView() {
-        representationStrategy.place(width, height, graphViewModel.vertices)
-        graphViewModel.edges.forEach {
-            it.color = Color.Black
-            it.width = 3.toFloat()
-        }
-    }
-
-    fun setVerticesColor() {
-        representationStrategy.highlight(graphViewModel.vertices)
     }
 
     fun openGraph(type: GraphType) {
@@ -124,7 +111,7 @@ class MainScreenViewModel<E: Edge<Int>>(
     }
 
     fun useForceAtlas2Layout() {
-        ForceAtlas2Placement(graphViewModel).place(width, height, 1)
+        ForceAtlas2Placement(graphViewModel).place(1)
     }
 
     fun findDistanceBellman() {
@@ -137,5 +124,4 @@ class MainScreenViewModel<E: Edge<Int>>(
             }
         }
     }
-
 }

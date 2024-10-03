@@ -10,13 +10,7 @@ class ForceAtlas2Placement<T, E: Edge<T>>(graph: GraphViewModel<T, E>) {
     private val vertices = graph.vertices
     private val edges = graph.edges
 
-    private var speed = 1.0
-    private var gravity = 1.0
-
-
     fun place(
-        width: Double,
-        height: Double,
         amount: Int) {
         for (round in 1..amount) {
             val placement = mutableSetOf<ForceAtlas2VertexLayout<T>>()
@@ -28,9 +22,9 @@ class ForceAtlas2Placement<T, E: Edge<T>>(graph: GraphViewModel<T, E>) {
                     val repulseForce = findRepForce(u, v)
                     val attractionForce = if (edges.any { it.u == u && it.v == v }) findAttForce(u, v) else 0.0
                     val force = attractionForce - repulseForce
-                    val xDist = (u.x - v.x).value.toDouble()
-                    val yDist = (u.y - v.y).value.toDouble()
-                    val dist = sqrt(xDist * xDist + yDist * yDist)
+//                  val xDist = (u.x - v.x).value.toDouble()
+//                  val yDist = (u.y - v.y).value.toDouble()
+//                  val dist = sqrt(xDist * xDist + yDist * yDist)
                     val forceXProj = force //* xDist
                     val forceYProj = force //* yDist
 
@@ -52,11 +46,6 @@ class ForceAtlas2Placement<T, E: Edge<T>>(graph: GraphViewModel<T, E>) {
             }
         }
     }
-
-    fun placeFA2() {
-
-    }
-
 
     private fun findAttForce(
         u: VertexViewModel<T>,
