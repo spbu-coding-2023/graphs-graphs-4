@@ -22,19 +22,16 @@ class ForceAtlas2Placement<T, E : Edge<T>>(graph: GraphViewModel<T, E>, width: F
                 val forceAtlas2Vertex = ForceAtlas2VertexLayout(u)
 
                 for (v in vertices) {
-                    val repulseForce = findRepForce(u, v)
-                    val attractionForce = if (edges.any { it.u == u && it.v == v }) findAttForce(u, v) else 0f
-                    val force = attractionForce - repulseForce
-//                  val xDist = (u.x - v.x).value.toDouble()
-//                  val yDist = (u.y - v.y).value.toDouble()
-//                  val dist = sqrt(xDist * xDist + yDist * yDist)
-                    val forceXProj = force //* xDist
-                    val forceYProj = force //* yDist
+                    val repulseForce = applyRepForce(u, v)
+                    val attractionForce =
+                        if (edges.any { it.u == u && it.v == v }) applyAttForce(u, v) else Pair(0f, 0f)
+                    val gravityForce = applyGravForce(u)
 
-                    forceAtlas2Vertex.addForces(forceXProj, forceYProj)
+                    forceAtlas2Vertex.addForces(repulseForce, attractionForce)
                     println()
                 }
 
+                //forceAtlas2Vertex.addForces(applyGravForce(u))
                 placement.add(forceAtlas2Vertex)
             }
 
@@ -63,11 +60,11 @@ class ForceAtlas2Placement<T, E : Edge<T>>(graph: GraphViewModel<T, E>, width: F
     private fun applyAttForce(
         u: VertexViewModel<T>,
         v: VertexViewModel<T>,
-    ) {
+    ): Pair<Float, Float> {
         val force = findAttForce(u, v)
         val dest = Pair(v.x, v.y)
 
-        applyForce(u, dest, force)
+        return applyForce(u, dest, force)
     }
 
     private fun findGravForce(
@@ -80,12 +77,12 @@ class ForceAtlas2Placement<T, E : Edge<T>>(graph: GraphViewModel<T, E>, width: F
 
     private fun applyGravForce(
         v: VertexViewModel<T>,
-    ) {
+    ): Pair<Float, Float> {
         val force = findGravForce(v)
         val xCenter = center.first.dp
         val yCenter = center.second.dp
 
-        applyForce(v, Pair(xCenter, yCenter), force)
+        return applyForce(v, Pair(xCenter, yCenter), force)
     }
 
     private fun applyForce(
@@ -93,16 +90,16 @@ class ForceAtlas2Placement<T, E : Edge<T>>(graph: GraphViewModel<T, E>, width: F
         dest: Pair<Dp, Dp>,
         force: Float,
         isNegative: Boolean = false,
-    ): Pair<Dp, Dp> {
+    ): Pair<Float, Float> {
         val xDest = dest.first
         val yDest = dest.second
 
-        val xDlt = if (isNegative) if (v.x > xDest) v.x + (v.x - xDest) * force else v.x - (v.x - xDest) * force
-        else if (v.x > xDest) v.x - (v.x - xDest) * force else v.x + (v.x - xDest) * force
+        val xDlt = if (isNegative) if (v.x > xDest) (v.x - xDest) * force else -(v.x - xDest) * force
+        else if (v.x > xDest) -(v.x - xDest) * force else (v.x - xDest) * force
         val yDlt = if (isNegative) if (v.y > yDest) v.y + (v.y - xDest) * force else v.y - (v.y - xDest) * force
         else if (v.y > yDest) v.y - (v.y - xDest) * force else v.y + (v.y - xDest) * force
 
-        return Pair(xDlt, yDlt)
+        return Pair(xDlt.value, yDlt.value)
     }
 
     private fun findRepForce(
@@ -126,11 +123,11 @@ class ForceAtlas2Placement<T, E : Edge<T>>(graph: GraphViewModel<T, E>, width: F
     private fun applyRepForce(
         u: VertexViewModel<T>,
         v: VertexViewModel<T>,
-    ) {
+    ): Pair<Float, Float> {
         val force = findRepForce(u, v)
         val destination = Pair(v.x, v.y)
 
-        applyForce(u, destination, force, isNegative = true)
+        return applyForce(u, destination, force, isNegative = true)
     }
 
     private fun findDistance(
