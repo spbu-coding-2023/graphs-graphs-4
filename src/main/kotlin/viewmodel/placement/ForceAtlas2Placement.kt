@@ -1,14 +1,17 @@
 package viewmodel.placement
 
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import model.graphs.Edge
 import viewmodel.graphs.GraphViewModel
 import viewmodel.graphs.VertexViewModel
 import kotlin.math.sqrt
 
-class ForceAtlas2Placement<T, E: Edge<T>>(graph: GraphViewModel<T, E>) {
+class ForceAtlas2Placement<T, E : Edge<T>>(graph: GraphViewModel<T, E>, width: Float = 800f, height: Float = 600f) {
     private val vertices = graph.vertices
     private val edges = graph.edges
+
+    private val center = Pair(width / 2, height / 2)
 
     fun place(
         amount: Int) {
@@ -55,6 +58,43 @@ class ForceAtlas2Placement<T, E: Edge<T>>(graph: GraphViewModel<T, E>) {
         print("att: $force ")
 
         return force
+    }
+
+    private fun findGravForce(
+        v: VertexViewModel<T>
+    ): Dp {
+        val force = findVertexMass(v).dp
+
+        return force
+    }
+
+    private fun applyGravForce(
+        v: VertexViewModel<T>,
+    ) {
+        val force = findGravForce(v)
+        val xCenter = center.first.dp
+        val yCenter = center.second.dp
+
+        val xDist = (v.x - xCenter).value
+        val yDist = (v.y - yCenter).value
+        val distance = sqrt(xDist * xDist + yDist * yDist).dp
+
+        applyForce(v, distance, Pair(xCenter, yCenter), force)
+    }
+
+    private fun applyForce(
+        v: VertexViewModel<T>,
+        dist: Dp,
+        dest: Pair<Dp, Dp>,
+        force: Dp,
+        isNegative: Boolean = false,
+    ) {
+        val coef = if (isNegative) (dist + force) / dist else (dist - force) / dist
+        val xDest = dest.first
+        val yDest = dest.second
+
+        v.x = if (v.x > xDest) xDest + v.x * coef else xDest - v.x * coef
+        v.y = if (v.y > yDest) yDest + v.y * coef else yDest - v.y * coef
     }
 
     private fun findRepForce(
