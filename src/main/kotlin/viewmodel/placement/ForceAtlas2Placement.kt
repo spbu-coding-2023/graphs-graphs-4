@@ -60,6 +60,17 @@ class ForceAtlas2Placement<T, E : Edge<T>>(graph: GraphViewModel<T, E>, width: F
         return force
     }
 
+    private fun applyAttForce(
+        u: VertexViewModel<T>,
+        v: VertexViewModel<T>,
+    ) {
+        val force = findAttForce(u, v).dp
+        val distance = findDistance(u, v).dp
+        val dest = Pair(v.x, v.y)
+
+        applyForce(u, distance, dest, force)
+    }
+
     private fun findGravForce(
         v: VertexViewModel<T>
     ): Dp {
@@ -113,6 +124,17 @@ class ForceAtlas2Placement<T, E : Edge<T>>(graph: GraphViewModel<T, E>, width: F
         print("rep: $force ")
 
         return force
+    }
+
+    private fun applyRepForce(
+        u: VertexViewModel<T>,
+        v: VertexViewModel<T>,
+    ) {
+        val force = findRepForce(u, v).dp
+        val distance = findDistance(u, v).dp
+        val destination = Pair(v.x, v.y)
+
+        applyForce(u, distance, destination, force, isNegative = true)
     }
 
     private fun findDistance(
