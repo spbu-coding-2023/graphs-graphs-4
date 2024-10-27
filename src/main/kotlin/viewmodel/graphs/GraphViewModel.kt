@@ -2,6 +2,8 @@ package viewmodel.graphs
 
 import androidx.compose.runtime.State
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.AwaitPointerEventScope
+import androidx.compose.ui.input.pointer.PointerEvent
 import androidx.compose.ui.unit.dp
 import model.graphs.Edge
 import model.graphs.Graph
@@ -13,6 +15,14 @@ class GraphViewModel<T, E: Edge<T>>(
     showVerticesLabels: State<Boolean>,
     showVerticesDistanceLabels: State<Boolean>,
 ) {
+    val onScroll: AwaitPointerEventScope.(event: PointerEvent) -> Unit = {
+        val vScale = if (it.changes.first().scrollDelta.y > 0) 1.dp else -1.dp
+        val eScale = vScale / 5
+
+        vertices.forEach { v -> v.onScroll(vScale) }
+        edges.forEach { e -> e.onScroll(eScale) }
+    }
+
     var currentVertex: VertexViewModel<T>? = null
     private var biggestIndexCommunity = 0
 

@@ -8,6 +8,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.max
 import model.graphs.Vertex
 
 @Suppress("LongParameterList")
@@ -17,10 +18,17 @@ class VertexViewModel<V>(
     internal val value: Vertex<V>,
     private val keyLabelVisibility: State<Boolean>,
     private val distanceLabelVisibility: State<Boolean>,
-    val radius: Dp = 25.dp
+    radius: Dp = 20.dp
 ) {
     var isSelected by mutableStateOf(false)
     var color by mutableStateOf(Color.Unspecified)
+
+    private var _radius = mutableStateOf(radius)
+    var radius: Dp
+        get() = _radius.value
+        set(value) {
+            _radius.value = max(10.dp, value)
+        }
 
     private var _x = mutableStateOf(x)
     var x: Dp
@@ -50,5 +58,9 @@ class VertexViewModel<V>(
     fun onDrag(offset: Offset) {
         _x.value += offset.x.dp
         _y.value += offset.y.dp
+    }
+
+    fun onScroll(scale: Dp) {
+        radius += scale
     }
 }
