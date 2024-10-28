@@ -15,22 +15,7 @@ class MinSpanTreeFinder<T, E: Edge<T>>(private val graph: GraphUndirected<T, E>)
 
         while (spanningTreeVertices.size != graph.size) {
             //step 2: search edge that connects different connection components
-            var minEdge: E? = null
-
-            for (vertex in spanningTreeVertices) {
-                val edges = graph.edges()
-
-                for (edge in edges) {
-                    val u = edge.from
-                    val v = edge.to
-
-                    if (//we want edge that connects vertex presented in spanning tree and vertex that isn't in tree
-                        ((vertex == u && !spanningTreeVertices.contains(v))
-                        || (vertex == v && !spanningTreeVertices.contains(u)))
-                        && (minEdge == null || minEdge > edge)
-                        ) minEdge = edge
-                }
-            }
+            val minEdge = findMinEdge(graph.edges(), spanningTreeVertices)
 
             //step 3: add this edge and adjacent vertex in spanning tree
             if (minEdge != null) {
@@ -43,5 +28,24 @@ class MinSpanTreeFinder<T, E: Edge<T>>(private val graph: GraphUndirected<T, E>)
         }
 
         return spanningTreeEdges
+    }
+
+    private fun findMinEdge(edges: Set<E>, spanningTreeVertices: MutableSet<Vertex<T>>): E? {
+        var minEdge: E? = null
+
+        for (vertex in spanningTreeVertices) {
+            for (edge in edges) {
+                val u = edge.from
+                val v = edge.to
+
+                if (//we want edge that connects vertex presented in spanning tree and vertex that isn't in tree
+                    ((vertex == u && !spanningTreeVertices.contains(v))
+                        || (vertex == v && !spanningTreeVertices.contains(u)))
+                    && (minEdge == null || minEdge > edge)
+                ) minEdge = edge
+            }
+        }
+
+        return minEdge
     }
 }

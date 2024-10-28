@@ -42,7 +42,6 @@ class ForceAtlas2Placement<T, E : Edge<T>>(graphVM: GraphViewModel<T, E>) {
                 placement.add(forceAtlas2Vertex)
             }
 
-            println("Now we are changing graph layout")
             placement.forEach { it.applyForces() }
         }
     }
@@ -56,13 +55,11 @@ class ForceAtlas2Placement<T, E : Edge<T>>(graphVM: GraphViewModel<T, E>) {
         if (!graph.areConnected(u.value, v.value)) return 0f
 
         val distance = findDistance(u, v, considerOverlapping)
-        print("dist: $distance ")
         val force = when {
             distance < 0 -> 0f
             isLinLog -> log2(1f + distance)
             else -> distance
         }
-        print("att: $force ")
 
         return force
     }
@@ -124,7 +121,6 @@ class ForceAtlas2Placement<T, E : Edge<T>>(graphVM: GraphViewModel<T, E>) {
         val distance = findDistance(u, v)
 
         val force = if (distance > 0f) uMass * vMass / distance else uMass * vMass
-        print("rep: $force ")
 
         return kRep * force
     }
@@ -148,7 +144,6 @@ class ForceAtlas2Placement<T, E : Edge<T>>(graphVM: GraphViewModel<T, E>) {
         val xDist = (v.x - u.x).value
         val yDist = (v.y - u.y).value
         val distance = sqrt(xDist * xDist + yDist * yDist)
-        //print("dist: $distance")
 
         return if (considerOverlapping) {
             val uSize = u.radius.value
@@ -167,7 +162,6 @@ class ForceAtlas2Placement<T, E : Edge<T>>(graphVM: GraphViewModel<T, E>) {
         for (edge in edges) {
             if (vertex == edge.u) mass++
         }
-        print("mass: $mass ")
 
         return mass
     }
