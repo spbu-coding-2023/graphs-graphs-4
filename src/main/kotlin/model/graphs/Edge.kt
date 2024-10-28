@@ -6,4 +6,8 @@ interface Edge<T> : Comparable<Edge<T>> {
     var copies: Int
 
     fun reverse(): Edge<T>
+
+    fun contains(v: Vertex<T>): Boolean {
+        return from == v || to == v
+    }
 }
