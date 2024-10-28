@@ -20,7 +20,7 @@
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
-[![graph.png](https://i.postimg.cc/hG4yfbs8/graph.png)](https://postimg.cc/PCcz7DBN)
+![graphApp](images/graphApp.png)
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- GETTING STARTED -->
