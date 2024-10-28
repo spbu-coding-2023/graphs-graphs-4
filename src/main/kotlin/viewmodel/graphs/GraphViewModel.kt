@@ -11,7 +11,7 @@ import model.graphs.Vertex
 
 
 class GraphViewModel<T, E: Edge<T>>(
-    graph: Graph<T, E>,
+    val graph: Graph<T, E>,
     showVerticesLabels: State<Boolean>,
     showVerticesDistanceLabels: State<Boolean>,
 ) {
