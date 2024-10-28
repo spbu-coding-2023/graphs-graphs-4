@@ -5,16 +5,21 @@ import androidx.compose.ui.unit.dp
 import model.graphs.Edge
 import viewmodel.graphs.GraphViewModel
 import viewmodel.graphs.VertexViewModel
+import kotlin.math.log2
 import kotlin.math.sqrt
 
-class ForceAtlas2Placement<T, E : Edge<T>>(graph: GraphViewModel<T, E>, width: Float = 800f, height: Float = 600f) {
-    private val vertices = graph.vertices
-    private val edges = graph.edges
+class ForceAtlas2Placement<T, E : Edge<T>>(graphVM: GraphViewModel<T, E>, width: Float = 800f, height: Float = 600f) {
+    private val vertices = graphVM.vertices
+    private val edges = graphVM.edges
+    private val graph = graphVM.graph
 
     private val center = Pair(width / 2, height / 2)
 
     fun place(
-        amount: Int) {
+        amount: Int = 10,
+        kGrav: Float = 1f,
+        kRep: Float = 1f,
+    ) {
         for (round in 1..amount) {
             val placement = mutableSetOf<ForceAtlas2VertexLayout<T>>()
 
@@ -22,16 +27,17 @@ class ForceAtlas2Placement<T, E : Edge<T>>(graph: GraphViewModel<T, E>, width: F
                 val forceAtlas2Vertex = ForceAtlas2VertexLayout(u)
 
                 for (v in vertices) {
-                    val repulseForce = applyRepForce(u, v)
-                    val attractionForce =
-                        if (edges.any { it.u == u && it.v == v }) applyAttForce(u, v) else Pair(0f, 0f)
-                    val gravityForce = applyGravForce(u)
+                    if (u != v) {
+                        val repulseForce = applyRepForce(u, v, kRep)
+                        val attractionForce = applyAttForce(u, v)
 
-                    forceAtlas2Vertex.addForces(repulseForce, attractionForce)
+                        forceAtlas2Vertex.addForces(repulseForce, attractionForce)
+                    }
                     println()
                 }
 
-                forceAtlas2Vertex.addForces(applyGravForce(u))
+                val gravityForce = applyGravForce(u, kGrav)
+                forceAtlas2Vertex.addForces(gravityForce)
                 placement.add(forceAtlas2Vertex)
             }
 
@@ -42,9 +48,19 @@ class ForceAtlas2Placement<T, E : Edge<T>>(graph: GraphViewModel<T, E>, width: F
 
     private fun findAttForce(
         u: VertexViewModel<T>,
-        v: VertexViewModel<T>
+        v: VertexViewModel<T>,
+        isLinLog: Boolean = true,
+        considerOverlapping: Boolean = true
     ): Float {
-        val force = findDistance(u, v)
+        if (!graph.areConnected(u.value, v.value)) return 0f
+
+        val distance = findDistance(u, v, considerOverlapping)
+        print("dist: $distance ")
+        val force = when {
+            distance < 0 -> 0f
+            isLinLog -> log2(1f + distance)
+            else -> distance
+        }
         print("att: $force ")
 
         return force
@@ -53,25 +69,29 @@ class ForceAtlas2Placement<T, E : Edge<T>>(graph: GraphViewModel<T, E>, width: F
     private fun applyAttForce(
         u: VertexViewModel<T>,
         v: VertexViewModel<T>,
+        isLinLog: Boolean = true,
+        considerOverlapping: Boolean = true
     ): Pair<Float, Float> {
-        val force = findAttForce(u, v)
+        val force = findAttForce(u, v, isLinLog, considerOverlapping)
         val dest = Pair(v.x, v.y)
 
         return applyForce(u, dest, force)
     }
 
     private fun findGravForce(
-        v: VertexViewModel<T>
+        v: VertexViewModel<T>,
+        kGrav: Float,
     ): Float {
         val force = findVertexMass(v)
 
-        return force
+        return kGrav * force
     }
 
     private fun applyGravForce(
         v: VertexViewModel<T>,
+        kGrav: Float,
     ): Pair<Float, Float> {
-        val force = findGravForce(v)
+        val force = findGravForce(v, kGrav)
         val xCenter = center.first.dp
         val yCenter = center.second.dp
 
@@ -87,37 +107,33 @@ class ForceAtlas2Placement<T, E : Edge<T>>(graph: GraphViewModel<T, E>, width: F
         val xDest = dest.first
         val yDest = dest.second
 
-        val xDlt = if (isNegative) if (v.x > xDest) (v.x - xDest) * force else -(v.x - xDest) * force
-        else if (v.x > xDest) -(v.x - xDest) * force else (v.x - xDest) * force
-        val yDlt = if (isNegative) if (v.y > yDest) v.y + (v.y - xDest) * force else v.y - (v.y - xDest) * force
-        else if (v.y > yDest) v.y - (v.y - xDest) * force else v.y + (v.y - xDest) * force
+        val xDlt = if (isNegative) -(xDest - v.x) * force else (xDest - v.x) * force
+        val yDlt = if (isNegative) -(yDest - v.y) * force else (yDest - v.y) * force
 
         return Pair(xDlt.value, yDlt.value)
     }
 
     private fun findRepForce(
         u: VertexViewModel<T>,
-        v: VertexViewModel<T>
+        v: VertexViewModel<T>,
+        kRep: Float,
     ): Float {
         val uMass = findVertexMass(u)
         val vMass = findVertexMass(v)
         val distance = findDistance(u, v)
 
-        val force = when {
-            distance > 0f -> uMass * vMass / distance
-            distance < 0f -> uMass * vMass
-            else -> 0f
-        }
+        val force = if (distance > 0f) uMass * vMass / distance else uMass * vMass
         print("rep: $force ")
 
-        return force
+        return kRep * force
     }
 
     private fun applyRepForce(
         u: VertexViewModel<T>,
         v: VertexViewModel<T>,
+        kRep: Float,
     ): Pair<Float, Float> {
-        val force = findRepForce(u, v)
+        val force = findRepForce(u, v, kRep)
         val destination = Pair(v.x, v.y)
 
         return applyForce(u, destination, force, isNegative = true)
@@ -126,18 +142,19 @@ class ForceAtlas2Placement<T, E : Edge<T>>(graph: GraphViewModel<T, E>, width: F
     private fun findDistance(
         u: VertexViewModel<T>,
         v: VertexViewModel<T>,
-        considerOverlapping: Boolean = false
+        considerOverlapping: Boolean = true
     ): Float {
         val xDist = (v.x - u.x).value
         val yDist = (v.y - u.y).value
         val distance = sqrt(xDist * xDist + yDist * yDist)
+        //print("dist: $distance")
 
         return if (considerOverlapping) {
             val uSize = u.radius.value
             val vSize = v.radius.value
             val distanceWithoutOverlapping = distance - uSize - vSize
 
-            distanceWithoutOverlapping
+            distanceWithoutOverlapping  //can be negative!
         } else {
             distance
         }
