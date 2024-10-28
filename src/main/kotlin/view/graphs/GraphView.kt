@@ -10,6 +10,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.dp
 import model.graphs.Edge
 import model.graphs.Vertex
@@ -29,7 +30,11 @@ fun <T, E: Edge<T>> GraphView(
             .background(MaterialTheme.colors.background)
             .padding(16.dp)
             .onPointerEvent(PointerEventType.Scroll, onEvent = viewModel.onScroll)
+            .onSizeChanged { size ->
+                viewModel.graphSize.value = size
+            }
     ) {
+
         viewModel.edges.forEach { edge ->
             EdgeView(edge)
         }

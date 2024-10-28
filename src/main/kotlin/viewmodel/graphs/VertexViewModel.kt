@@ -7,9 +7,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.max
 import model.graphs.Vertex
+
+enum class VertexSize(val size: Dp) {
+    MIN(1.dp),
+    START(24.dp),
+    MAX(96.dp),
+    SIZE_SCALE((17f / 16).dp),
+    POS_SCALE((1f / 16).dp)
+}
 
 @Suppress("LongParameterList")
 class VertexViewModel<V>(
@@ -18,7 +26,7 @@ class VertexViewModel<V>(
     internal val value: Vertex<V>,
     private val keyLabelVisibility: State<Boolean>,
     private val distanceLabelVisibility: State<Boolean>,
-    radius: Dp = 20.dp
+    radius: Dp = VertexSize.START.size
 ) {
     var isSelected by mutableStateOf(false)
     var color by mutableStateOf(Color.Unspecified)
@@ -27,7 +35,7 @@ class VertexViewModel<V>(
     var radius: Dp
         get() = _radius.value
         set(value) {
-            _radius.value = max(10.dp, value)
+            if (value in VertexSize.MIN.size..VertexSize.MAX.size) _radius.value = value
         }
 
     private var _x = mutableStateOf(x)
@@ -60,7 +68,18 @@ class VertexViewModel<V>(
         _y.value += offset.y.dp
     }
 
-    fun onScroll(scale: Dp) {
-        radius += scale
+    fun onScroll(yScaleDlt: Float, center: IntOffset) {
+        val xDlt = (center.x.dp - x) * VertexSize.POS_SCALE.size.value
+        val yDlt = (center.y.dp - y) * VertexSize.POS_SCALE.size.value
+
+        if (yScaleDlt > 0) {
+            //radius /= VertexSize.SIZE_SCALE.size.value
+            x += xDlt
+            y += yDlt
+        } else {
+            //radius *= VertexSize.SIZE_SCALE.size.value
+            x -= xDlt
+            y -= yDlt
+        }
     }
 }
