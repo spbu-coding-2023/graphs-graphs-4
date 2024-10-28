@@ -1,6 +1,7 @@
 package viewmodel.placement
 
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.center
 import androidx.compose.ui.unit.dp
 import model.graphs.Edge
 import viewmodel.graphs.GraphViewModel
@@ -8,15 +9,15 @@ import viewmodel.graphs.VertexViewModel
 import kotlin.math.log2
 import kotlin.math.sqrt
 
-class ForceAtlas2Placement<T, E : Edge<T>>(graphVM: GraphViewModel<T, E>, width: Float = 800f, height: Float = 600f) {
+class ForceAtlas2Placement<T, E : Edge<T>>(graphVM: GraphViewModel<T, E>) {
     private val vertices = graphVM.vertices
     private val edges = graphVM.edges
     private val graph = graphVM.graph
 
-    private val center = Pair(width / 2, height / 2)
+    private val center = graphVM.graphSize.value.center
 
     fun place(
-        amount: Int = 10,
+        amount: Int = 1,
         kGrav: Float = 1f,
         kRep: Float = 1f,
     ) {
@@ -92,8 +93,8 @@ class ForceAtlas2Placement<T, E : Edge<T>>(graphVM: GraphViewModel<T, E>, width:
         kGrav: Float,
     ): Pair<Float, Float> {
         val force = findGravForce(v, kGrav)
-        val xCenter = center.first.dp
-        val yCenter = center.second.dp
+        val xCenter = center.x.dp
+        val yCenter = center.y.dp
 
         return applyForce(v, Pair(xCenter, yCenter), force)
     }
