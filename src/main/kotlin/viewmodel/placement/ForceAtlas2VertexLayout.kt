@@ -1,5 +1,6 @@
 package viewmodel.placement
 
+import androidx.compose.ui.unit.dp
 import viewmodel.graphs.VertexViewModel
 
 data class ForceAtlas2VertexLayout<T>(
@@ -12,5 +13,10 @@ data class ForceAtlas2VertexLayout<T>(
             dltX += force.first
             dltY += force.second
         }
+    }
+
+    fun applyForces() {
+        vertex.x += dltX.dp
+        vertex.y += dltY.dp
     }
 }

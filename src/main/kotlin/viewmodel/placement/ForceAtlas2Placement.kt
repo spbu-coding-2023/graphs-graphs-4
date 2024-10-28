@@ -31,19 +31,12 @@ class ForceAtlas2Placement<T, E : Edge<T>>(graph: GraphViewModel<T, E>, width: F
                     println()
                 }
 
-                //forceAtlas2Vertex.addForces(applyGravForce(u))
+                forceAtlas2Vertex.addForces(applyGravForce(u))
                 placement.add(forceAtlas2Vertex)
             }
 
             println("Now we are changing graph layout")
-            for (forceAtlas2Vertex in placement) {
-                val vertex = forceAtlas2Vertex.vertex
-                val dltX = forceAtlas2Vertex.dltX
-                val dltY = forceAtlas2Vertex.dltY
-
-                vertex.y += dltX.dp
-                vertex.x += dltY.dp
-            }
+            placement.forEach { it.applyForces() }
         }
     }
 
