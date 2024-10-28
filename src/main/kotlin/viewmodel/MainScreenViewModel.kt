@@ -2,12 +2,12 @@ package viewmodel
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.graphics.Color
 import model.functionality.iograph.GraphType
 import model.functionality.iograph.ReadWriteIntGraph
 import model.graphs.*
 import viewmodel.graphs.GraphViewModel
 import viewmodel.graphs.RepresentationStrategy
+import viewmodel.placement.ForceAtlas2Placement
 import java.awt.FileDialog
 import java.awt.Frame
 import java.io.File
@@ -21,7 +21,7 @@ class MainScreenViewModel<E: Edge<Int>>(
     val showVerticesLabels = mutableStateOf(false)
     val showVerticesDistanceLabels = mutableStateOf(false)
     val showEdgesLabels = mutableStateOf(false)
-    var graphViewModel = GraphViewModel(graph, showVerticesLabels, showEdgesLabels, showVerticesDistanceLabels)
+    var graphViewModel = GraphViewModel(graph, showVerticesLabels, showVerticesDistanceLabels)
 
     @Suppress("MagicNumber")
     private val width = 800.0
@@ -31,18 +31,6 @@ class MainScreenViewModel<E: Edge<Int>>(
 
     init {
         representationStrategy.place(width, height, graphViewModel.vertices)
-    }
-
-    fun resetGraphView() {
-        representationStrategy.place(width, height, graphViewModel.vertices)
-        graphViewModel.edges.forEach {
-            it.color = Color.Black
-            it.width = 3.toFloat()
-        }
-    }
-
-    fun setVerticesColor() {
-        representationStrategy.highlight(graphViewModel.vertices)
     }
 
     fun openGraph(type: GraphType) {
@@ -122,6 +110,10 @@ class MainScreenViewModel<E: Edge<Int>>(
         } else throw IllegalArgumentException("leiden method does not support directed graphs")
     }
 
+    fun useForceAtlas2Layout() {
+        ForceAtlas2Placement(graphViewModel).place()
+    }
+
     fun findDistanceBellman() {
         if (graph is GraphWeighted) {
             val labels =
@@ -132,5 +124,4 @@ class MainScreenViewModel<E: Edge<Int>>(
             }
         }
     }
-
 }

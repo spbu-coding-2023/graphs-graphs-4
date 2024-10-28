@@ -5,6 +5,9 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class UnweightedEdge<T>(override val from: Vertex<T>, override val to: Vertex<T>) : Edge<T> {
     override var copies: Int = 1
+    override fun reverse(): Edge<T> {
+        return UnweightedEdge(to, from)
+    }
 
     override fun compareTo(other: Edge<T>): Int {
         return if (this == other) 0 else -1
@@ -14,5 +17,14 @@ data class UnweightedEdge<T>(override val from: Vertex<T>, override val to: Vert
         return other is UnweightedEdge<*> &&
             ((from == other.from && to == other.to) ||
                 (from == other.to && to == other.from))
+    }
+
+    override fun toString(): String {
+        return "($from, $to)"
+    }
+
+    override fun hashCode(): Int {
+        val result = from.hashCode() + 31 * to.hashCode()
+        return result
     }
 }

@@ -76,17 +76,19 @@ class CircularPlacementStrategy : RepresentationStrategy {
     override fun <T> highlightMinSpanTree(minSpanTree: Set<Edge<T>>, vararg edges: EdgeViewModel<T>) {
         val color = Color.Blue
         for (edge in minSpanTree) {
-            val u = edge.from
-            val v = edge.to
+            val u1 = edge.from
+            val v1 = edge.to
 
             for (edgeVM in edges) {
-                if (edgeVM.u.value == u && edgeVM.v.value == v) {
+                val u2 = edgeVM.u.value
+                val v2 = edgeVM.v.value
+
+                if ((u1 == u2) && (v1 == v2) || ((u1 == v2) && (v1 == u2))) {
                     edgeVM.color = color
-                    edgeVM.width = 6.toFloat()
+                    edgeVM.width = 6f
                 }
             }
         }
-
     }
 
     override fun <T> colorVertices(vararg vertices: VertexViewModel<T>, color: Color) {

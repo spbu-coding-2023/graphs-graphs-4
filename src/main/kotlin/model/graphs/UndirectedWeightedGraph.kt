@@ -23,6 +23,10 @@ open class UndirectedWeightedGraph<T> : AbstractGraph<T, WeightedEdge<T>>(), Gra
         }
     }
 
+    override fun addEdge(edge: WeightedEdge<T>) {
+        addEdge(edge.from, edge.to, edge.weight)
+    }
+
     override fun findMinSpanTree(): Set<Edge<T>>? {
         return MinSpanTreeFinder(this).mstSearch()
     }

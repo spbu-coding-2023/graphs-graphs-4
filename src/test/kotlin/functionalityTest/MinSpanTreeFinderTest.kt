@@ -3,6 +3,7 @@ package functionalityTest
 import model.graphs.UndirectedWeightedGraph
 import model.graphs.Vertex
 import model.graphs.WeightedEdge
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import kotlin.test.Test
@@ -10,12 +11,12 @@ import kotlin.test.assertEquals
 
 class MinSpanTreeFinderTest {
     private lateinit var graphInt: UndirectedWeightedGraph<Int>
-    private lateinit var expectedTree: MutableSet<WeightedEdge<Int>>
+    private lateinit var expectedEdges: MutableSet<WeightedEdge<Int>>
 
     @BeforeEach
     fun setup() {
         graphInt = UndirectedWeightedGraph()
-        expectedTree = mutableSetOf()
+        expectedEdges = mutableSetOf()
     }
 
     @DisplayName("Impossible to find spanning tree (graph is not connected).")
@@ -49,9 +50,14 @@ class MinSpanTreeFinderTest {
         graphInt.addVertices(*vertices)
         graphInt.addEdges(*edges)
 
-        expectedTree = mutableSetOf(*edges)
+        for (edge in edges) {
+            expectedEdges.add(edge)
+        }
+        val actualEdges = graphInt.findMinSpanTree()
 
-        //assertEquals(expectedTree.sorted(), graphInt.findMinSpanTree())
+        for (edge in expectedEdges) {
+            assertTrue(actualEdges!!.contains(edge) || actualEdges.contains(edge.reverse()))
+        }
     }
 
     @DisplayName("Find minimal spanning tree in shamrock.")
@@ -73,16 +79,19 @@ class MinSpanTreeFinderTest {
         graphInt.addVertices(*vertices)
         graphInt.addEdges(*edges)
 
-        expectedTree = mutableSetOf(
+        expectedEdges = mutableSetOf(
             WeightedEdge(vertices[0], vertices[2], 2.0),
             WeightedEdge(vertices[0], vertices[3], 1.0),
             WeightedEdge(vertices[0], vertices[5], 1.0),
             WeightedEdge(vertices[0], vertices[6], 2.0),
             WeightedEdge(vertices[1], vertices[2], 1.0),
             WeightedEdge(vertices[3], vertices[4], 2.0),
-
             )
 
-        //assertEquals(expectedTree.sorted(), graphInt.findMinSpanTree())
+        val actualEdges = graphInt.findMinSpanTree()
+
+        for (edge in expectedEdges) {
+            assertTrue(actualEdges!!.contains(edge) || actualEdges.contains(edge.reverse()))
+        }
     }
 }

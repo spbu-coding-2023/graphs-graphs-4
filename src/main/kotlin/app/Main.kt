@@ -88,6 +88,7 @@ fun graphAppTheme(darkTheme: Boolean, content: @Composable () -> Unit) {
 fun main() = application {
     Window(
         onCloseRequest = ::exitApplication,
+        title = "GraphApp"
     ) {
         app()
     }

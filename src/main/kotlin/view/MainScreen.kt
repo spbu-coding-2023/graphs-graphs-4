@@ -28,7 +28,7 @@ fun <E: Edge<Int>> mainScreen(viewModel: MainScreenViewModel<E>, darkTheme: Muta
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Graph the Graph") },
+                title = { Text("GraphApp") },
                 backgroundColor = MaterialTheme.colors.primary,
                 contentColor = MaterialTheme.colors.onPrimary,
                 navigationIcon = {
@@ -177,6 +177,20 @@ fun <E: Edge<Int>> toolPanel(
             modifier = Modifier.padding(bottom = 16.dp),
             color = MaterialTheme.colors.onSurface
         )
+
+        Button(
+            onClick = { viewModel.useForceAtlas2Layout() },
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = MaterialTheme.colors.secondary,
+                contentColor = MaterialTheme.colors.onSurface,
+            ),
+            enabled = true,
+            modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
+        ) {
+            Icon(Icons.Default.Search, contentDescription = "ForceAtlas2")
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(text = "ForceAtlas2")
+        }
 
         if (viewModel.graph is GraphUndirected<Int, *>) {
             var needBridges by remember { mutableStateOf(false) }

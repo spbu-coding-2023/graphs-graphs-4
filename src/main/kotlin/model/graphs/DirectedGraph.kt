@@ -12,6 +12,10 @@ class DirectedGraph<T> : AbstractGraph<T, UnweightedEdge<T>>(), GraphDirected<T,
         adjList.getOrPut(vertex1) { HashSet() }.add(UnweightedEdge(vertex1, vertex2))
     }
 
+    override fun addEdge(edge: UnweightedEdge<T>) {
+        addEdge(edge.from, edge.to)
+    }
+
     override fun findSCC(): Set<Set<Vertex<T>>> {
         return StrConCompFinder(this).sccSearch()
     }

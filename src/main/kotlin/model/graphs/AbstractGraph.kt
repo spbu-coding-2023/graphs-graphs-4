@@ -14,6 +14,11 @@ abstract class AbstractGraph<T, E: Edge<T>> : Graph<T, E> {
     override val size: Int
         get() = _size
 
+    override fun areConnected(u: Vertex<T>, v: Vertex<T>): Boolean {
+        return (adjList[u]?.any { it.contains(v) } ?: false)
+            || (adjList[v]?.any { it.contains(u) } ?: false)
+    }
+
     override fun addVertex(key: T): Vertex<T> {
         for (v in adjList.keys) {
             if (v.key == key) {
@@ -53,7 +58,7 @@ abstract class AbstractGraph<T, E: Edge<T>> : Graph<T, E> {
         }
     }
 
-    fun addEdges(vararg edges: E) {
+    override fun addEdges(vararg edges: E) {
         for (edge in edges) {
             this.addEdge(edge)
         }
