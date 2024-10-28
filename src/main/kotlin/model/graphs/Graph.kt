@@ -19,6 +19,8 @@ interface Graph<T, E: Edge<T>> : Iterable<Vertex<T>> {
 
     fun edges(): Set<E>
 
+    fun areConnected(u: Vertex<T>, v: Vertex<T>): Boolean
+
     override fun iterator(): Iterator<Vertex<T>> {
         return this.vertices().iterator()
     }
