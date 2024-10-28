@@ -111,7 +111,7 @@ class MainScreenViewModel<E: Edge<Int>>(
     }
 
     fun useForceAtlas2Layout() {
-        ForceAtlas2Placement(graphViewModel).place(1)
+        ForceAtlas2Placement(graphViewModel).place()
     }
 
     fun findDistanceBellman() {
