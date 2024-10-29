@@ -6,7 +6,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import model.graphs.Graph
-import view.graphAppTheme
+import view.AppTheme
 import view.screens.StartingScreen
 import view.screens.mainScreen
 import viewmodel.graphs.CircularPlacementStrategy
@@ -30,7 +30,7 @@ fun app() {
         currentGraph.value?.let { MainScreenViewModel(it, CircularPlacementStrategy(), currentGraph, darkTheme) }
     }
 
-    graphAppTheme(darkTheme.value) {
+    AppTheme(darkTheme.value) {
         if (currentGraph.value == null) {
             StartingScreen(StartingScreenViewModel(currentGraph))
         } else {

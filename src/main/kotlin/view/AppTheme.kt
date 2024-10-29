@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun graphAppTheme(darkTheme: Boolean, content: @Composable () -> Unit) {
+fun AppTheme(darkTheme: Boolean, content: @Composable () -> Unit) {
     val darkThemeColors = darkColors(
         primary = Color(80, 60, 60),
         secondary = Color(126, 99, 99),
