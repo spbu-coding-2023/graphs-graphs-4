@@ -35,27 +35,37 @@ class MainScreenViewModel<E: Edge<Int>>(
     val showVerticesDistanceLabels = mutableStateOf(false)
     val showEdgesLabels = mutableStateOf(false)
     var showDropdownMenu = mutableStateOf(false)
-    var showChooseGraphTypeDialog = mutableStateOf(false)
+    val showChooseGraphTypeDialog = mutableStateOf(false)
+    val showOpenExistingGraphDialog = mutableStateOf(false)
     var graphViewModel = GraphViewModel(graph, showVerticesLabels, showVerticesDistanceLabels)
 
     init {
         representationStrategy.place(WIDTH, HEIGHT, graphViewModel.vertices)
     }
 
+    fun openChooseDialog() {
+        showChooseGraphTypeDialog.value = true
+        closeOpenDialog()   //openDialog -> chooseDialog
+    }
+
+    fun openOpenDialog() {
+        showOpenExistingGraphDialog.value = true
+    }
+
+    fun closeChooseDialog() {
+        showChooseGraphTypeDialog.value = false
+    }
+
+    fun closeOpenDialog() {
+        showOpenExistingGraphDialog.value = false
+    }
+
     fun showMenu() {
         showDropdownMenu.value = true
     }
 
-    fun showChooseDialog() {
-        showChooseGraphTypeDialog.value = true
-    }
-
     fun closeMenu() {
         showDropdownMenu.value = false
-    }
-
-    fun closeChooseGraphTypeDialog() {
-        showChooseGraphTypeDialog.value = false
     }
 
     fun changeTheme() {

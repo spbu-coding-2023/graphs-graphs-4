@@ -3,7 +3,6 @@ package view.screens
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -52,6 +51,7 @@ import viewmodel.screens.MainScreenViewModel
 @Composable
 fun <E : Edge<Int>> mainScreen(viewModel: MainScreenViewModel<E>) {
     val showMenu by remember { viewModel.showDropdownMenu }
+    val showOpenDialog by remember { viewModel.showOpenExistingGraphDialog }
     val showChooseDialog by remember { viewModel.showChooseGraphTypeDialog }
 
     Scaffold(
@@ -65,7 +65,7 @@ fun <E : Edge<Int>> mainScreen(viewModel: MainScreenViewModel<E>) {
                         Icon(Icons.Filled.Menu, contentDescription = "Main Menu")
                     }
                     DropdownMenu(expanded = showMenu, onDismissRequest = viewModel::closeMenu) {
-                        DropdownMenuItem(onClick = viewModel::showChooseDialog) { Text("Open Graph") }
+                        DropdownMenuItem(onClick = viewModel::openOpenDialog) { Text("Open Graph") }
                         DropdownMenuItem(onClick = viewModel::saveGraph) { Text("Save Graph") }
                         DropdownMenuItem(onClick = viewModel::changeTheme) { Text("Toggle Theme") }
                         Divider()
@@ -78,72 +78,10 @@ fun <E : Edge<Int>> mainScreen(viewModel: MainScreenViewModel<E>) {
         mainContent(viewModel)
     }
 
-    if (showChooseDialog) {
-        openChooseGraphTypeDialog(onDismiss = { /*showChooseDialog = false*/ }, viewModel)
+    when {
+        showOpenDialog -> OpenExistingGraphDialog(viewModel)
+        showChooseDialog -> OpenChooseGraphTypeDialog(viewModel)
     }
-}
-
-@Composable
-fun <E: Edge<Int>>openChooseGraphTypeDialog(onDismiss: () -> Unit, viewModel: MainScreenViewModel<E>) {
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text(text = "Choose graph type") },
-        text = { Text(text = "Please select one of the options below:") },
-        buttons = {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Button(
-                    onClick = {
-                        viewModel.openGraph(GraphType.UNDIRECTED_GRAPH)
-                        onDismiss()
-                              },
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(text = "Undirected Graph")
-                }
-                Button(
-                    onClick = {
-                        viewModel.openGraph(GraphType.DIRECTED_GRAPH)
-                        onDismiss()
-                              },
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(text = "Directed Graph")
-                }
-                Button(
-                    onClick = {
-                        viewModel.openGraph(GraphType.UNDIRECTED_WEIGHTED_GRAPH)
-                        onDismiss()
-                              },
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(text = "Weighted Undirected Graph")
-                }
-                Button(
-                    onClick = {
-                        viewModel.openGraph(GraphType.DIRECTED_WEIGHTED_GRAPH)
-                        onDismiss()
-                              },
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(text = "Weighted Directed Graph")
-                }
-            }
-        }
-    )
-}
-
-@Composable
-fun appDropdownMenu(expanded: Boolean, onDismiss: () -> Unit, content: @Composable ColumnScope.() -> Unit) {
-    DropdownMenu(
-        expanded = expanded,
-        onDismissRequest = onDismiss,
-        content = content
-    )
 }
 
 @Composable
@@ -334,5 +272,56 @@ fun toggleRow(label: String, checked: Boolean, onCheckedChange: (Boolean) -> Uni
             modifier = Modifier.padding(start = 8.dp),
             color = MaterialTheme.colors.onSurface
         )
+    }
+}
+
+//next UI element are copy-pastes from starting screen
+//it's bad, I just don't have time for it
+//moreover, there's more copy-paste in main screen VM
+//to make it work with these functions
+@Composable
+fun <E : Edge<Int>> OpenExistingGraphDialog(viewModel: MainScreenViewModel<E>) {
+    AlertDialog(
+        onDismissRequest = viewModel::closeOpenDialog,
+        title = { Text("Open Existing Graph") },
+        text = { Text("Would you like to open an existing graph?") },
+        confirmButton = {
+            Button(onClick = viewModel::openChooseDialog) { Text("Open") }
+        },
+        dismissButton = {
+            Button(onClick = viewModel::closeOpenDialog) { Text("Cancel") }
+        }
+    )
+}
+
+@Composable
+fun <E : Edge<Int>> OpenChooseGraphTypeDialog(viewModel: MainScreenViewModel<E>) {
+    AlertDialog(
+        onDismissRequest = { viewModel.closeChooseDialog() },
+        title = { Text(text = "Choose graph type") },
+        text = { Text(text = "Please select one of the options below:") },
+        buttons = {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                OpenGraphButton(GraphType.UNDIRECTED_GRAPH, viewModel)
+                OpenGraphButton(GraphType.DIRECTED_GRAPH, viewModel)
+                OpenGraphButton(GraphType.UNDIRECTED_WEIGHTED_GRAPH, viewModel)
+                OpenGraphButton(GraphType.DIRECTED_WEIGHTED_GRAPH, viewModel)
+            }
+        }
+    )
+}
+
+@Composable
+fun <E : Edge<Int>> OpenGraphButton(type: GraphType, viewModel: MainScreenViewModel<E>) {
+    Button(
+        onClick = { viewModel.openGraph(type) },
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Text(text = type.string)
     }
 }
