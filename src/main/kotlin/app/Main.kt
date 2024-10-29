@@ -34,9 +34,7 @@ fun app() {
 
     graphAppTheme(darkTheme.value) {
         if (currentGraph.value == null) {
-            StartingScreen(StartingScreenViewModel { createdGraph ->
-                currentGraph.value = createdGraph
-            })
+            StartingScreen(StartingScreenViewModel(currentGraph))
         } else {
             mainScreenViewModel?.let {
                 mainScreen(viewModel = it, darkTheme = darkTheme)

@@ -1,5 +1,6 @@
 package viewmodel.screens
 
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import model.functionality.iograph.GraphType
 import model.functionality.iograph.ReadWriteIntGraph
@@ -12,7 +13,9 @@ import java.awt.Frame
 import java.io.File
 import kotlin.random.Random
 
-class StartingScreenViewModel(val onGraphCreated: (Graph<Int, *>) -> Unit) {
+class StartingScreenViewModel(
+    private val currentGraph: MutableState<Graph<Int, *>?>
+) {
     val showCreateNewGraphDialog = mutableStateOf(false)
     val showChooseGraphTypeDialog = mutableStateOf(false)
     val showOpenExistingGraphDialog = mutableStateOf(false)
@@ -60,7 +63,7 @@ class StartingScreenViewModel(val onGraphCreated: (Graph<Int, *>) -> Unit) {
             }
         }
 
-        onGraphCreated(randomGraph)
+        currentGraph.value = randomGraph
     }
 
     fun openGraph(type: GraphType) {
@@ -79,7 +82,6 @@ class StartingScreenViewModel(val onGraphCreated: (Graph<Int, *>) -> Unit) {
             GraphType.DIRECTED_GRAPH -> jsonParser.readDGraph(file)
         }
 
-        showChooseGraphTypeDialog.value = false
-        onGraphCreated(graph)
+        currentGraph.value = graph
     }
 }
