@@ -8,7 +8,7 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import model.graphs.Graph
 import view.graphAppTheme
-import view.mainScreen
+import view.screens.mainScreen
 import viewmodel.MainScreenViewModel
 import viewmodel.graphs.CircularPlacementStrategy
 
