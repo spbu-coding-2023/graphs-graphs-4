@@ -4,7 +4,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import model.functionality.iograph.GraphType
 import model.functionality.iograph.ReadWriteIntGraph
-import model.graphs.*
+import model.graphs.DirectedGraph
+import model.graphs.DirectedWeightedGraph
+import model.graphs.Edge
+import model.graphs.Graph
+import model.graphs.GraphDirected
+import model.graphs.GraphUndirected
+import model.graphs.GraphWeighted
+import model.graphs.UndirectedGraph
+import model.graphs.UndirectedWeightedGraph
 import viewmodel.graphs.GraphViewModel
 import viewmodel.graphs.RepresentationStrategy
 import viewmodel.placement.ForceAtlas2Placement

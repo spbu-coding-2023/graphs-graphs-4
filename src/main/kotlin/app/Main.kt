@@ -1,6 +1,5 @@
 package app
 
-import StartingScreen
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -8,6 +7,7 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import model.graphs.Graph
 import view.graphAppTheme
+import view.screens.StartingScreen
 import view.screens.mainScreen
 import viewmodel.graphs.CircularPlacementStrategy
 import viewmodel.screens.MainScreenViewModel
