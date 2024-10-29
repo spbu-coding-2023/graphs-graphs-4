@@ -5,9 +5,12 @@ import model.functionality.iograph.GraphType
 import model.functionality.iograph.ReadWriteIntGraph
 import model.graphs.Graph
 import model.graphs.UndirectedGraph
+import model.graphs.UnweightedEdge
+import model.graphs.Vertex
 import java.awt.FileDialog
 import java.awt.Frame
 import java.io.File
+import kotlin.random.Random
 
 val SAMPLE_GRAPH = UndirectedGraph<Int>().apply {
     for (i in 1..34) {
@@ -127,8 +130,26 @@ class StartingScreenViewModel(val onGraphCreated: (Graph<Int, *>) -> Unit) {
     }
 
     fun createGraph() {
-        val newGraph = SAMPLE_GRAPH
-        onGraphCreated(newGraph)
+        val randomGraph = UndirectedGraph<Int>()
+        val amount = Random.nextInt(2, 64)
+        val degree = Random.nextInt(1, amount * 2)
+        println("a: $amount d: $degree")
+
+        for (vertex in 1..amount) {
+            randomGraph.addVertex(vertex)
+        }
+        println(randomGraph.size)
+
+        for (edge in 0..degree) {
+            val u = Vertex(Random.nextInt(amount))
+            val v = Vertex(Random.nextInt(amount))
+
+            if (randomGraph.contains(u) && randomGraph.contains(v)) {
+                randomGraph.addEdge(UnweightedEdge(u, v))
+            }
+        }
+
+        onGraphCreated(randomGraph)
     }
 
     fun openGraph(type: GraphType) {
