@@ -82,18 +82,19 @@ class MainScreenViewModel<E: Edge<Int>>(
     }
 
     fun saveGraph() {
-        var file = File("./graph.json")
+        val dialog = FileDialog(Frame(), "Select Graph File", FileDialog.SAVE)
+        dialog.isVisible = true
 
-        var num = 0
-        while (file.exists()) {
-            file = File("./${++num}graph.json")
-        }
+        dialog.file ?: return
+
+        val jsonParser = ReadWriteIntGraph()
+        val file = File(dialog.directory, "${dialog.file}.json")
 
         when (graph) {
-            is DirectedGraph -> ReadWriteIntGraph().writeDGraph(file, graph as DirectedGraph)
-            is UndirectedGraph -> ReadWriteIntGraph().writeUGraph(file, graph as UndirectedGraph)
-            is UndirectedWeightedGraph -> ReadWriteIntGraph().writeUWGraph(file, graph as UndirectedWeightedGraph)
-            is DirectedWeightedGraph -> ReadWriteIntGraph().writeDWGraph(file, graph as DirectedWeightedGraph)
+            is DirectedGraph -> jsonParser.writeDGraph(file, graph as DirectedGraph)
+            is UndirectedGraph -> jsonParser.writeUGraph(file, graph as UndirectedGraph)
+            is UndirectedWeightedGraph -> jsonParser.writeUWGraph(file, graph as UndirectedWeightedGraph)
+            is DirectedWeightedGraph -> jsonParser.writeDWGraph(file, graph as DirectedWeightedGraph)
         }
     }
 
