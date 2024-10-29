@@ -1,4 +1,4 @@
-package viewmodel
+package viewmodel.screens
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf

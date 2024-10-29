@@ -18,7 +18,7 @@ import model.graphs.GraphDirected
 import model.graphs.GraphUndirected
 import model.graphs.GraphWeighted
 import view.graphs.GraphView
-import viewmodel.MainScreenViewModel
+import viewmodel.screens.MainScreenViewModel
 
 @Composable
 fun <E: Edge<Int>> mainScreen(viewModel: MainScreenViewModel<E>, darkTheme: MutableState<Boolean>) {

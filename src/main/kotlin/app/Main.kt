@@ -9,8 +9,8 @@ import androidx.compose.ui.window.application
 import model.graphs.Graph
 import view.graphAppTheme
 import view.screens.mainScreen
-import viewmodel.MainScreenViewModel
 import viewmodel.graphs.CircularPlacementStrategy
+import viewmodel.screens.MainScreenViewModel
 
 fun main() = application {
     Window(
