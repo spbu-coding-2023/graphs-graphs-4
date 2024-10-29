@@ -32,7 +32,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,6 +40,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import model.functionality.GraphAlgorithms
 import model.functionality.iograph.GraphType
 import model.graphs.Edge
 import model.graphs.GraphDirected
@@ -50,9 +50,9 @@ import view.graphs.GraphView
 import viewmodel.screens.MainScreenViewModel
 
 @Composable
-fun <E: Edge<Int>> mainScreen(viewModel: MainScreenViewModel<E>, darkTheme: MutableState<Boolean>) {
-    var showMenu by remember { mutableStateOf(false) }
-    var showChooseGraphTypeDialog by remember { mutableStateOf(false) }
+fun <E : Edge<Int>> mainScreen(viewModel: MainScreenViewModel<E>) {
+    val showMenu by remember { viewModel.showDropdownMenu }
+    val showChooseDialog by remember { viewModel.showChooseGraphTypeDialog }
 
     Scaffold(
         topBar = {
@@ -61,28 +61,15 @@ fun <E: Edge<Int>> mainScreen(viewModel: MainScreenViewModel<E>, darkTheme: Muta
                 backgroundColor = MaterialTheme.colors.primary,
                 contentColor = MaterialTheme.colors.onPrimary,
                 navigationIcon = {
-                    IconButton(onClick = { showMenu = true }) {
+                    IconButton(onClick = viewModel::showMenu) {
                         Icon(Icons.Filled.Menu, contentDescription = "Main Menu")
                     }
-
-                    appDropdownMenu(showMenu, onDismiss = { showMenu = false }) {
-                        DropdownMenuItem(onClick = { showChooseGraphTypeDialog = true }) {
-                            Text("Open Graph")
-                        }
-
-                        DropdownMenuItem(onClick = { viewModel.saveGraph() }) {
-                            Text("Save Graph")
-                        }
-
-                        DropdownMenuItem(onClick = { darkTheme.value = !darkTheme.value }) {
-                            Text("Toggle Theme")
-                        }
-
+                    DropdownMenu(expanded = showMenu, onDismissRequest = viewModel::closeMenu) {
+                        DropdownMenuItem(onClick = viewModel::showChooseDialog) { Text("Open Graph") }
+                        DropdownMenuItem(onClick = viewModel::saveGraph) { Text("Save Graph") }
+                        DropdownMenuItem(onClick = viewModel::changeTheme) { Text("Toggle Theme") }
                         Divider()
-
-                        DropdownMenuItem(onClick = { viewModel.closeApp() }) {
-                            Text("Exit")
-                        }
+                        DropdownMenuItem(onClick = viewModel::closeApp) { Text("Exit") }
                     }
                 }
             )
@@ -91,8 +78,8 @@ fun <E: Edge<Int>> mainScreen(viewModel: MainScreenViewModel<E>, darkTheme: Muta
         mainContent(viewModel)
     }
 
-    if (showChooseGraphTypeDialog) {
-        openChooseGraphTypeDialog(onDismiss = { showChooseGraphTypeDialog = false }, viewModel)
+    if (showChooseDialog) {
+        openChooseGraphTypeDialog(onDismiss = { /*showChooseDialog = false*/ }, viewModel)
     }
 }
 
@@ -172,7 +159,6 @@ fun <E: Edge<Int>> mainContent(
         ) {
             GraphView(viewModel.graphViewModel)
         }
-
         Column(
             modifier = Modifier.width(370.dp),
         ) {
@@ -181,18 +167,14 @@ fun <E: Edge<Int>> mainContent(
                     .weight(1f)
                     .fillMaxHeight()
                     .background(MaterialTheme.colors.secondary),
-                viewModel = viewModel,
+                viewModel = viewModel
             )
         }
     }
 }
 
 @Composable
-fun <E: Edge<Int>> toolPanel(
-    viewModel: MainScreenViewModel<E>,
-    modifier: Modifier = Modifier,
-) {
-
+fun <E : Edge<Int>> toolPanel(modifier: Modifier, viewModel: MainScreenViewModel<E>) {
     Column(
         modifier = modifier
             .fillMaxHeight()
@@ -206,26 +188,14 @@ fun <E: Edge<Int>> toolPanel(
             modifier = Modifier.padding(bottom = 16.dp),
             color = MaterialTheme.colors.onSurface
         )
-
-        Button(
-            onClick = { viewModel.useForceAtlas2Layout() },
-            colors = ButtonDefaults.buttonColors(
-                backgroundColor = MaterialTheme.colors.secondary,
-                contentColor = MaterialTheme.colors.onSurface,
-            ),
-            enabled = true,
-            modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
-        ) {
-            Icon(Icons.Default.Search, contentDescription = "ForceAtlas2")
-            Spacer(modifier = Modifier.width(8.dp))
-            Text(text = "ForceAtlas2")
-        }
+        toolButton(GraphAlgorithms.LAYOUT, viewModel::useForceAtlas2Layout)
 
         if (viewModel.graph is GraphUndirected<Int, *>) {
             var needBridges by remember { mutableStateOf(false) }
             var resolution by remember { mutableStateOf("") }
             var randomness by remember { mutableStateOf("") }
 
+            //toolButton(GraphAlgorithms.BRIDGES, viewModel::showBridges)
             Button(
                 onClick = { needBridges = true },
                 colors = ButtonDefaults.buttonColors(
@@ -265,7 +235,7 @@ fun <E: Edge<Int>> toolPanel(
             }
 
 
-
+            //toolButton(GraphAlgorithms.COMMUNITIES, viewModel::findCommunities)
             Button(
                 onClick = { viewModel.findCommunities(randomness, resolution) },
                 colors = ButtonDefaults.buttonColors(
@@ -280,37 +250,14 @@ fun <E: Edge<Int>> toolPanel(
                 Text(text = "Find Communities")
             }
 
-            Button(
-                onClick = { viewModel.highlightMinSpanTree() },
-                colors = ButtonDefaults.buttonColors(
-                    backgroundColor = MaterialTheme.colors.secondary,
-                    contentColor = MaterialTheme.colors.onSurface,
-                ),
-                enabled = true,
-                modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
-            ) {
-                Icon(Icons.Default.Search, contentDescription = "Find Minimal Spanning Tree")
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(text = "Find Minimal Spanning Tree")
-            }
+            toolButton(GraphAlgorithms.MINIMAL_SPANNING_TREE, viewModel::highlightMinSpanTree)
         }
 
         if (viewModel.graph is GraphDirected<Int, *>) {
-            Button(
-                onClick = { viewModel.highlightSCC() },
-                colors = ButtonDefaults.buttonColors(
-                    backgroundColor = MaterialTheme.colors.secondary,
-                    contentColor = MaterialTheme.colors.onSurface,
-                ),
-                enabled = true,
-                modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
-            ) {
-                Icon(Icons.Default.Search, contentDescription = "Find Strong Connection Components")
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(text = "Find Strong Connection Components")
-            }
+            toolButton(GraphAlgorithms.STRONG_CONNECTION_COMPONENTS, viewModel::highlightSCC)
         }
 
+        //toolButton(GraphAlgorithms.SHORTEST_DISTANCE, viewModel::findDistanceBellman)
         if (viewModel.graph is GraphWeighted<*>) {
             Button(
                 onClick = {
@@ -331,6 +278,7 @@ fun <E: Edge<Int>> toolPanel(
             }
         }
 
+        //Эти тоглы засунуть в ModalDrawer
         toggleRow(
             label = "Show Vertices Labels",
             checked = viewModel.showVerticesLabels.value,
@@ -348,6 +296,23 @@ fun <E: Edge<Int>> toolPanel(
             checked = viewModel.showVerticesDistanceLabels.value,
             onCheckedChange = { viewModel.showVerticesDistanceLabels.value = it }
         )
+    }
+}
+
+@Composable
+fun toolButton(type: GraphAlgorithms, algorithm: () -> Unit) {
+    Button(
+        onClick = algorithm,
+        colors = ButtonDefaults.buttonColors(
+            backgroundColor = MaterialTheme.colors.secondary,
+            contentColor = MaterialTheme.colors.onSurface,
+        ),
+        enabled = true,
+        modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
+    ) {
+        Icon(Icons.Default.Search, contentDescription = type.string)
+        Spacer(modifier = Modifier.width(8.dp))
+        Text(text = type.string)
     }
 }
 

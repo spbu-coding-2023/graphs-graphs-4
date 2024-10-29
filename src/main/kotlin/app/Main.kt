@@ -27,9 +27,7 @@ fun app() {
     val darkTheme = remember { mutableStateOf(false) }
     val currentGraph = remember { mutableStateOf<Graph<Int, *>?>(null) }
     val mainScreenViewModel = remember(currentGraph.value) {
-        currentGraph.value?.let { MainScreenViewModel(it, CircularPlacementStrategy()) { createdGraph ->
-            currentGraph.value = createdGraph }
-        }
+        currentGraph.value?.let { MainScreenViewModel(it, CircularPlacementStrategy(), currentGraph, darkTheme) }
     }
 
     graphAppTheme(darkTheme.value) {
@@ -37,7 +35,7 @@ fun app() {
             StartingScreen(StartingScreenViewModel(currentGraph))
         } else {
             mainScreenViewModel?.let {
-                mainScreen(viewModel = it, darkTheme = darkTheme)
+                mainScreen(viewModel = it)
             }
         }
     }

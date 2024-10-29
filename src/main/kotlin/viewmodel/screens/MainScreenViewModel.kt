@@ -1,6 +1,7 @@
 package viewmodel.screens
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import model.functionality.iograph.GraphType
 import model.functionality.iograph.ReadWriteIntGraph
@@ -21,43 +22,63 @@ import java.awt.Frame
 import java.io.File
 import kotlin.system.exitProcess
 
+const val WIDTH = 800.0
+const val HEIGHT = 600.0
+
 class MainScreenViewModel<E: Edge<Int>>(
     var graph: Graph<Int, E>,
     private val representationStrategy: RepresentationStrategy,
-    val onGraphCreated: (Graph<Int, *>) -> Unit
+    private val currentGraph: MutableState<Graph<Int, *>?>,
+    private val darkTheme: MutableState<Boolean>
 ) {
     val showVerticesLabels = mutableStateOf(false)
     val showVerticesDistanceLabels = mutableStateOf(false)
     val showEdgesLabels = mutableStateOf(false)
+    var showDropdownMenu = mutableStateOf(false)
+    var showChooseGraphTypeDialog = mutableStateOf(false)
     var graphViewModel = GraphViewModel(graph, showVerticesLabels, showVerticesDistanceLabels)
 
-    @Suppress("MagicNumber")
-    private val width = 800.0
-
-    @Suppress("MagicNumber")
-    private val height = 600.0
-
     init {
-        representationStrategy.place(width, height, graphViewModel.vertices)
+        representationStrategy.place(WIDTH, HEIGHT, graphViewModel.vertices)
+    }
+
+    fun showMenu() {
+        showDropdownMenu.value = true
+    }
+
+    fun showChooseDialog() {
+        showChooseGraphTypeDialog.value = true
+    }
+
+    fun closeMenu() {
+        showDropdownMenu.value = false
+    }
+
+    fun closeChooseGraphTypeDialog() {
+        showChooseGraphTypeDialog.value = false
+    }
+
+    fun changeTheme() {
+        darkTheme.value = !darkTheme.value
     }
 
     fun openGraph(type: GraphType) {
         val dialog = FileDialog(Frame(), "Select Graph File", FileDialog.LOAD)
         dialog.isVisible = true
 
-        val fileName = dialog.file
-        if (fileName != null) {
-            val file = File(dialog.directory, fileName)
+        dialog.file ?: return
 
-            val graph = when (type) {
-                GraphType.UNDIRECTED_GRAPH -> ReadWriteIntGraph().readUGraph(file)
-                GraphType.DIRECTED_GRAPH -> ReadWriteIntGraph().readDGraph(file)
-                GraphType.UNDIRECTED_WEIGHTED_GRAPH -> ReadWriteIntGraph().readUWGraph(file)
-                GraphType.DIRECTED_WEIGHTED_GRAPH -> ReadWriteIntGraph().readDWGraph(file)
-            }
+        val jsonParser = ReadWriteIntGraph()
+        val file = File(dialog.directory, dialog.file)
 
-            onGraphCreated(graph)
+        val graph = when (type) {
+            GraphType.UNDIRECTED_WEIGHTED_GRAPH -> jsonParser.readUWGraph(file)
+            GraphType.UNDIRECTED_GRAPH -> jsonParser.readUGraph(file)
+            GraphType.DIRECTED_WEIGHTED_GRAPH -> jsonParser.readDWGraph(file)
+            GraphType.DIRECTED_GRAPH -> jsonParser.readDGraph(file)
         }
+
+        currentGraph.value = graph
     }
 
     fun saveGraph() {
