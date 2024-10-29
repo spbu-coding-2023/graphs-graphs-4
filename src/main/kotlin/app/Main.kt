@@ -11,6 +11,7 @@ import view.graphAppTheme
 import view.screens.mainScreen
 import viewmodel.graphs.CircularPlacementStrategy
 import viewmodel.screens.MainScreenViewModel
+import viewmodel.screens.StartingScreenViewModel
 
 fun main() = application {
     Window(
@@ -33,9 +34,9 @@ fun app() {
 
     graphAppTheme(darkTheme.value) {
         if (currentGraph.value == null) {
-            StartingScreen { createdGraph ->
+            StartingScreen(StartingScreenViewModel { createdGraph ->
                 currentGraph.value = createdGraph
-            }
+            })
         } else {
             mainScreenViewModel?.let {
                 mainScreen(viewModel = it, darkTheme = darkTheme)
