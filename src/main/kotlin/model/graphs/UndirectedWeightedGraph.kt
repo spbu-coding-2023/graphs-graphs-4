@@ -1,6 +1,7 @@
 package model.graphs
 
 import kotlinx.serialization.Serializable
+import model.functionality.CommunityDetector
 import model.functionality.MinSpanTreeFinder
 
 @Serializable
@@ -32,6 +33,6 @@ open class UndirectedWeightedGraph<T> : AbstractGraph<T, WeightedEdge<T>>(), Gra
     }
 
     override fun runLeidenMethod(RANDOMNESS: Double, RESOLUTION: Double): HashSet<HashSet<Vertex<T>>> {
-        TODO("Not yet implemented")
+        return CommunityDetector(this, RESOLUTION, RANDOMNESS).leiden()
     }
 }
