@@ -16,7 +16,6 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
-import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.dp
 import model.graphs.Edge
 import model.graphs.Vertex
@@ -38,9 +37,6 @@ fun <T, E: Edge<T>> GraphView(
             .onPointerEvent(PointerEventType.Scroll, onEvent = viewModel.onScroll)
             .onDrag { offset ->
                 viewModel.onDrag(offset)
-            }
-            .onSizeChanged { size ->
-                viewModel.graphSize.value = size
             }
     ) {
 
