@@ -1,6 +1,7 @@
 package model.graphs
 
 import kotlinx.serialization.Serializable
+import model.functionality.JohnsonAlg
 
 @Serializable
 class DirectedWeightedGraph<T> : AbstractGraph<T>(), GraphDirected<T>, GraphWeighted<T> {
@@ -13,6 +14,10 @@ class DirectedWeightedGraph<T> : AbstractGraph<T>(), GraphDirected<T>, GraphWeig
 
     override fun findSCC(): Set<Set<Vertex<T>>> {
         return emptySet()//StrConCompFinder(this as DirectedGraph<T>).sccSearch()
+    }
+
+    override fun findCycles(startNode: Vertex<T>): HashSet<List<Vertex<T>>> {
+        return JohnsonAlg<T>(this).findCycles(startNode)
     }
 
 //    override fun findMinSpanTree(): Set<Edge<T>>? {

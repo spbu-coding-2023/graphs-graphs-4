@@ -3,6 +3,7 @@ package model.functionality
 import model.graphs.GraphWeighted
 import model.graphs.Vertex
 import model.graphs.WeightedEdge
+import java.util.*
 import kotlin.Double.Companion.NEGATIVE_INFINITY
 import kotlin.Double.Companion.POSITIVE_INFINITY
 
@@ -51,46 +52,40 @@ class ShortestPathFinder<T>(private val graph: GraphWeighted<T>) {
         return dist
     }
 
-//    @Suppress("NestedBlockDepth")
-//    fun dijkstra(start: Vertex<T>): Map<Vertex<T>, Double> {
-//        val dist: MutableMap<Vertex<T>, Double> = mutableMapOf()
-//        graph.vertices().forEach {
-//            dist[it] = POSITIVE_INFINITY
-//        }
-//        val priorityQueue = PriorityQueue<Pair<Vertex<T>, Double>>(compareBy { it.second })
-//
-//        dist[start] = 0.0
-//        priorityQueue.add(Pair(start, 0.0))
-//
-//        while (priorityQueue.isNotEmpty()) {
-//            val (current, currentDist) = priorityQueue.poll()
-//
-//            var weight: Number
-//            var neighbor: Vertex<T>
-//
-//            for (child in graph.getNeighbors(current)) {
-//
-//                @Suppress("DuplicatedCode")
-//                if (child is Pair<*, *>) {
-//                    weight = child.second as Number
-//                    neighbor = child.first as Vertex<T>
-//                } else {
-//                    weight = 1
-//                    neighbor = child as Vertex<T>
-//                }
-//
-//                val next = neighbor
-//                val nextDist: Double = currentDist.plus(weight).toDouble()
-//
-//                dist[next]?.let {
-//                    if (nextDist < it) {
-//                        dist[next] = nextDist
-//                        priorityQueue.add(Pair(next, nextDist))
-//                    }
-//                }
-//            }
-//        }
-//
-//        return dist
-//    }
+    fun dijkstra(start: Vertex<T>): Map<Vertex<T>, Double> {
+        val dist: MutableMap<Vertex<T>, Double> = mutableMapOf()
+        graph.vertices().forEach {
+            dist[it] = POSITIVE_INFINITY
+        }
+        val priorityQueue = PriorityQueue<Pair<Vertex<T>, Double>>(compareBy { it.second })
+
+        dist[start] = 0.0
+        priorityQueue.add(Pair(start, 0.0))
+
+        while (priorityQueue.isNotEmpty()) {
+            val (current, currentDist) = priorityQueue.poll()
+
+            var weight: Number
+            var neighbor: Vertex<T>
+
+            for (child in graph.getNeighbors(current)) {
+                child as WeightedEdge
+                neighbor = child.to
+                weight = child.weight
+                require(weight >= 0)
+
+                val next = neighbor
+                val nextDist: Double = currentDist.plus(weight).toDouble()
+
+                dist[next]?.let {
+                    if (nextDist < it) {
+                        dist[next] = nextDist
+                        priorityQueue.add(Pair(next, nextDist))
+                    }
+                }
+            }
+        }
+
+        return dist
+    }
 }

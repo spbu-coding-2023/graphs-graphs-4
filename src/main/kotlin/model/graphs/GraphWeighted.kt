@@ -8,7 +8,7 @@ interface GraphWeighted<T> : Graph<T> {
         return output
     }
 
-//    fun findDistancesDijkstra(start: Vertex<T>): Map<Vertex<T>, Double> {
-//      return ShortestPathFinder(this).dijkstra(start)
-//    }
+    fun findDistancesDijkstra(start: Vertex<T>): Map<Vertex<T>, Double> {
+      return ShortestPathFinder(this).dijkstra(start)
+    }
 }

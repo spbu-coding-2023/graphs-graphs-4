@@ -65,4 +65,5 @@ abstract class AbstractGraph<T> : Graph<T> {
 
         return edges
     }
+
 }

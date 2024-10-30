@@ -1,6 +1,7 @@
 package model.graphs
 
 import kotlinx.serialization.Serializable
+import model.functionality.JohnsonAlg
 
 @Serializable
 class DirectedGraph<T> : AbstractGraph<T>(), GraphDirected<T> {
@@ -9,6 +10,10 @@ class DirectedGraph<T> : AbstractGraph<T>(), GraphDirected<T> {
         require(adjList.containsKey(vertex2))
 
         adjList.getOrPut(vertex1) { HashSet() }.add(UnweightedEdge(vertex1, vertex2))
+    }
+
+    override fun findCycles(startNode: Vertex<T>): HashSet<List<Vertex<T>>> {
+        return JohnsonAlg<T>(this).findCycles(startNode)
     }
 
 //    fun addEdge(key1: T, key2: T) {
