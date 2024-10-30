@@ -1,7 +1,14 @@
 package functionalityTest
 
 import model.functionality.iograph.ReadWriteIntGraph
-import model.graphs.*
+import model.graphs.DirectedGraph
+import model.graphs.DirectedWeightedGraph
+import model.graphs.UndirectedGraph
+import model.graphs.UndirectedWeightedGraph
+import model.graphs.UnweightedEdge
+import model.graphs.Vertex
+import model.graphs.WeightedEdge
+
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
