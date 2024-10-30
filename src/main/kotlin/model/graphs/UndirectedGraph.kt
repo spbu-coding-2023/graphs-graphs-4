@@ -39,8 +39,8 @@ open class UndirectedGraph<T> : AbstractGraph<T, UnweightedEdge<T>>(), GraphUndi
         return MinSpanTreeFinder(this).mstSearch()
     }
 
-    override fun runLeidenMethod(RANDOMNESS: Double, RESOLUTION: Double): HashSet<HashSet<Vertex<T>>> {
-        return CommunityDetector(this, RESOLUTION, RANDOMNESS).leiden()
+    override fun runLeidenMethod(randomness: Double, resolution: Double): HashSet<HashSet<Vertex<T>>> {
+        return CommunityDetector(this, resolution, randomness).leiden()
     }
 
 }
