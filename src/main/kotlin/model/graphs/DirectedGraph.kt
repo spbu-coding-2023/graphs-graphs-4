@@ -1,7 +1,10 @@
 package model.graphs
 
 import kotlinx.serialization.Serializable
+import model.functionality.DistanceRank
+import model.functionality.JohnsonAlg
 import model.functionality.StrConCompFinder
+import model.functionality.TarjanSCC
 
 @Serializable
 class DirectedGraph<T> :
@@ -13,6 +16,12 @@ class DirectedGraph<T> :
 
         adjList.getOrPut(vertex1) { HashSet() }.add(UnweightedEdge(vertex1, vertex2))
     }
+
+
+    override fun findCycles(startNode: Vertex<T>): HashSet<List<Vertex<T>>> {
+        return JohnsonAlg(this).findCycles(startNode)
+    }
+
 
     override fun addEdge(edge: UnweightedEdge<T>) {
         addEdge(edge.from, edge.to)

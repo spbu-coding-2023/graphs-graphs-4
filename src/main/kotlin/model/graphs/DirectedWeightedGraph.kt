@@ -1,6 +1,7 @@
 package model.graphs
 
 import kotlinx.serialization.Serializable
+import model.functionality.JohnsonAlg
 import model.functionality.StrConCompFinder
 
 @Serializable
@@ -18,6 +19,11 @@ class DirectedWeightedGraph<T> :
     override fun addEdge(edge: WeightedEdge<T>) {
         addEdge(edge.from, edge.to, edge.weight)
     }
+
+    override fun findCycles(startNode: Vertex<T>): HashSet<List<Vertex<T>>> {
+        return JohnsonAlg(this).findCycles(startNode)
+    }
+
 
     override fun findSCC(): Set<Set<Vertex<T>>> {
         return StrConCompFinder(this).sccSearch()
