@@ -29,6 +29,7 @@ class MainScreenViewModel<E: Edge<Int>>(
     var showDropdownMenu = mutableStateOf(false)
     val showChooseGraphTypeDialog = mutableStateOf(false)
     val showOpenExistingGraphDialog = mutableStateOf(false)
+    val toStartingScreen = mutableStateOf(false)
     var graphViewModel = GraphViewModel(graph, showVerticesLabels, showVerticesDistanceLabels)
     var resolutionInput = mutableStateOf("")
     var randomnessInput = mutableStateOf("")
@@ -76,6 +77,14 @@ class MainScreenViewModel<E: Edge<Int>>(
 
     fun changeTheme() {
         darkTheme.value = !darkTheme.value
+    }
+
+    fun openToStartingScreenDialog() {
+        toStartingScreen.value = true
+    }
+
+    fun closeToStartingScreenDialog() {
+        toStartingScreen.value = false
     }
 
     fun openGraph(type: GraphType) {
@@ -136,5 +145,9 @@ class MainScreenViewModel<E: Edge<Int>>(
                 it.distanceLabel = (labels?.get(it.value)).toString()
             }
         }
+    }
+
+    fun toStartingScreen() {
+        currentGraph.value = null
     }
 }
