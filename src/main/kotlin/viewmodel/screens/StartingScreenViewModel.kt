@@ -51,7 +51,7 @@ class StartingScreenViewModel(
             randomGraph.addVertex(vertex)
         }
 
-        for (edge in 0..degree) {
+        repeat(degree) {
             val u = Vertex(Random.nextInt(amount))
             val v = Vertex(Random.nextInt(amount))
 

@@ -14,7 +14,9 @@ class CommunityDetector<T, M : Edge<T>>(
     private var resolution: Double,
     private var randomness: Double
 ) {
-    internal fun <K> flatten(partition: HashSet<HashSet<Vertex<K>>>): HashSet<HashSet<Vertex<T>>> {
+    internal fun <K> flatten(
+        partition: HashSet<HashSet<Vertex<K>>>
+    ): HashSet<HashSet<Vertex<T>>> {
         val output = HashSet<HashSet<Vertex<T>>>()
 
         for (community in partition) {
@@ -60,7 +62,10 @@ class CommunityDetector<T, M : Edge<T>>(
         return flatten(partition)
     }
 
-    private fun moveNodesFast(graph: GraphUndirected<T, M>, partition: HashSet<HashSet<Vertex<T>>>) {
+    private fun moveNodesFast(
+        graph: GraphUndirected<T, M>,
+        partition: HashSet<HashSet<Vertex<T>>>
+    ) {
         val vertexQueue = graph.vertices().toMutableList()
         vertexQueue.shuffle()
 
@@ -73,41 +78,43 @@ class CommunityDetector<T, M : Edge<T>>(
             var bestCommunity = partition.find { it.contains(currentVertex) }
             val originalCommunity = bestCommunity
 
-            if (bestCommunity != null) {
-                bestCommunity.remove(currentVertex)
+            require(bestCommunity != null) { "Community that contains currentVertex must exist." }
+            bestCommunity.remove(currentVertex)
 
-                partition.add(hashSetOf())
+            partition.add(hashSetOf())
 
-                // Determine the best community for currentVertex
+            // Determine the best community for currentVertex
 
-                for (community in partition) {
-                    community.add(currentVertex)
+            for (community in partition) {
+                community.add(currentVertex)
 
-                    val currentQuality = quality(graph, partition)
-                    community.remove(currentVertex)
+                val currentQuality = quality(graph, partition)
+                community.remove(currentVertex)
 
-                    if (currentQuality - startingQuality >= max) {
-                        max = currentQuality - startingQuality
-                        bestCommunity = community
+                if (currentQuality - startingQuality >= max) {
+                    max = currentQuality - startingQuality
+                    bestCommunity = community
+                }
+            }
+
+            bestCommunity?.add(currentVertex)
+
+            if (bestCommunity != originalCommunity) {
+                for (edge in graph.getNeighbors(currentVertex)) {
+                    if (bestCommunity?.contains(edge.to) == false) {
+                        vertexQueue.add(edge.to)
                     }
                 }
-
-                bestCommunity?.add(currentVertex)
-
-                if (bestCommunity != originalCommunity) {
-                    for (edge in graph.getNeighbors(currentVertex)) {
-                        if (bestCommunity?.contains(edge.to) == false) {
-                            vertexQueue.add(edge.to)
-                        }
-                    }
-                }
-            } else throw IllegalArgumentException("Community that contains currentVertex must exist.")
+            }
         }
 
         partition.removeIf { it.size == 0 }
     }
 
-    private fun quality(graph: GraphUndirected<T, M>, partition: HashSet<HashSet<Vertex<T>>>): Double {
+    private fun quality(
+        graph: GraphUndirected<T, M>,
+        partition: HashSet<HashSet<Vertex<T>>>
+    ): Double {
         var sum = 0.0
 
         for (community in partition) {
@@ -118,7 +125,10 @@ class CommunityDetector<T, M : Edge<T>>(
         return sum
     }
 
-    internal fun countEdges(currGraph: GraphUndirected<T, M>, set1: HashSet<Vertex<T>>, set2: Set<Vertex<T>>): Int {
+    internal fun countEdges(
+        currGraph: GraphUndirected<T, M>,
+        set1: HashSet<Vertex<T>>, set2: Set<Vertex<T>>
+    ): Int {
         var count = 0
 
         for (u in set1) {
@@ -192,7 +202,10 @@ class CommunityDetector<T, M : Edge<T>>(
         return hashSetOf(vertex) as HashSet<Vertex<T>>
     }
 
-    private fun unpack(vertices: HashSet<Vertex<T>>, vertex: Vertex<Collection<*>>): HashSet<Vertex<T>> {
+    private fun unpack(
+        vertices: HashSet<Vertex<T>>,
+        vertex: Vertex<Collection<*>>
+    ): HashSet<Vertex<T>> {
         for (element in vertex.key) {
             element as Vertex<*>
             if (element.key is Collection<*>) {
@@ -207,7 +220,9 @@ class CommunityDetector<T, M : Edge<T>>(
         return vertices
     }
 
-    internal fun <E> flatCommunity(community: HashSet<Vertex<E>>): HashSet<Vertex<T>> {
+    internal fun <E> flatCommunity(
+        community: HashSet<Vertex<E>>
+    ): HashSet<Vertex<T>> {
         val output: HashSet<Vertex<T>> = hashSetOf()
 
         for (vertex in community) {
@@ -253,7 +268,9 @@ class CommunityDetector<T, M : Edge<T>>(
                         val communitySize = flatCommunity(community).size
                         val edges = countEdges(graph, community, subset.minus(community))
 
-                        if (edges >= (resolution * communitySize * (flatCommunity(subset).size) - communitySize)) {
+                        val communityRank = resolution * communitySize *
+                            (flatCommunity(subset).size) - communitySize
+                        if (edges >= communityRank) {
                             wellConnectedCommunities.add(community)
                         }
                     }
@@ -292,9 +309,8 @@ class CommunityDetector<T, M : Edge<T>>(
                     for (community in wellConnectedCommunities) {
                         val x = qualityProbability[community]
 
-                        if (x != null) {
-                            totalWeight += x
-                        } else throw Exception("qualityProbability != null")
+                        require(x != null) { "qualityProbability != null" }
+                        totalWeight += x
                     }
 
                     val randomNumber = random() * totalWeight
@@ -302,9 +318,8 @@ class CommunityDetector<T, M : Edge<T>>(
                     val key = keyList.maxOrNull() ?: qualityProbability.values.min()
                     val newCommunity = qualityProbability.entries.find { it.value == key }?.key
 
-                    if (newCommunity != null) {
-                        partition.find { it == newCommunity }?.add(vertex)
-                    } else throw Exception("Failed to assign newCommunity.")
+                    require(newCommunity != null) { "Failed to assign newCommunity." }
+                    partition.find { it == newCommunity }?.add(vertex)
                 } else {
                     originalCommunity.add(vertex)
                 }
@@ -314,7 +329,9 @@ class CommunityDetector<T, M : Edge<T>>(
         return partition
     }
 
-    internal fun initPartition(graph: GraphUndirected<T, M>): HashSet<HashSet<Vertex<T>>> {
+    internal fun initPartition(
+        graph: GraphUndirected<T, M>
+    ): HashSet<HashSet<Vertex<T>>> {
         return graph.vertices().map { hashSetOf(it) }.toHashSet()
     }
 }

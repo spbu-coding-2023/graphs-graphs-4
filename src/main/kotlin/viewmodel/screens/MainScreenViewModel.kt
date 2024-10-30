@@ -89,19 +89,17 @@ class MainScreenViewModel<E: Edge<Int>>(
     }
 
     fun highlightSCC() {
-        if (graph is GraphDirected) {
-            val scc = (graph as GraphDirected).findSCC()
+        require(graph is GraphDirected) { "Unexpected graph type: ${graph::class.simpleName}." }
+        val scc = (graph as GraphDirected).findSCC()
 
-            representationStrategy.highlightSCC(scc, *graphViewModel.vertices.toTypedArray())
-        } else throw IllegalArgumentException("Unexpected graph type: ${graph::class.simpleName}.")
+        representationStrategy.highlightSCC(scc, *graphViewModel.vertices.toTypedArray())
     }
 
     fun highlightMinSpanTree() {
-        if (graph is GraphUndirected) {
-            val minSpanTree = (graph as GraphUndirected).findMinSpanTree() ?: return
+        require(graph is GraphUndirected) { "Unexpected graph type: ${graph::class.simpleName}." }
+        val minSpanTree = (graph as GraphUndirected).findMinSpanTree() ?: return
 
-            representationStrategy.highlightMinSpanTree(minSpanTree, *graphViewModel.edges.toTypedArray())
-        } else throw IllegalArgumentException("Unexpected graph type: ${graph::class.simpleName}.")
+        representationStrategy.highlightMinSpanTree(minSpanTree, *graphViewModel.edges.toTypedArray())
     }
 
     fun closeApp() {
@@ -109,22 +107,20 @@ class MainScreenViewModel<E: Edge<Int>>(
     }
 
     fun showBridges() {
-        if (graph is GraphUndirected) {
-            val bridges = (graph as GraphUndirected<Int, E>).findBridges()
+        require(graph is GraphUndirected) { "Unexpected graph type: ${graph::class.simpleName}." }
+        val bridges = (graph as GraphUndirected<Int, E>).findBridges()
 
-            representationStrategy.highlightBridges(graphViewModel.edges, bridges)
-        } else throw IllegalArgumentException("Unexpected graph type: ${graph::class.simpleName}.")
+        representationStrategy.highlightBridges(graphViewModel.edges, bridges)
     }
 
     fun findCommunities() {
-        if (graph is GraphUndirected) {
-            //need to make it more informative for user
-            val randomness = randomnessInput.value.toDoubleOrNull() ?: return
-            val resolution = resolutionInput.value.toDoubleOrNull() ?: return
-            val communities = (graph as GraphUndirected<Int, E>).runLeidenMethod(randomness, resolution)
+        require(graph is GraphUndirected) { "leiden method does not support directed graphs." }
+        //need to make it more informative for user
+        val randomness = randomnessInput.value.toDoubleOrNull() ?: return
+        val resolution = resolutionInput.value.toDoubleOrNull() ?: return
+        val communities = (graph as GraphUndirected<Int, E>).runLeidenMethod(randomness, resolution)
 
-            graphViewModel.indexCommunities(communities)
-        } else throw IllegalArgumentException("leiden method does not support directed graphs")
+        graphViewModel.indexCommunities(communities)
     }
 
     fun useForceAtlas2Layout() {

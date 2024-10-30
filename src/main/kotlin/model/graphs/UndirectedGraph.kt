@@ -5,7 +5,9 @@ import model.functionality.CommunityDetector
 import model.functionality.MinSpanTreeFinder
 
 @Serializable
-open class UndirectedGraph<T> : AbstractGraph<T, UnweightedEdge<T>>(), GraphUndirected<T, UnweightedEdge<T>> {
+open class UndirectedGraph<T> :
+    AbstractGraph<T, UnweightedEdge<T>>(),
+    GraphUndirected<T, UnweightedEdge<T>> {
     fun addEdge(vertex1: Vertex<T>, vertex2: Vertex<T>) {
         require(adjList.containsKey(vertex1))
         require(adjList.containsKey(vertex2))

@@ -3,7 +3,10 @@ package model.graphs
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class UnweightedEdge<T>(override val from: Vertex<T>, override val to: Vertex<T>) : Edge<T> {
+data class UnweightedEdge<T>(
+    override val from: Vertex<T>,
+    override val to: Vertex<T>
+) : Edge<T> {
     override var copies: Int = 1
     override fun reverse(): Edge<T> {
         return UnweightedEdge(to, from)

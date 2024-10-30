@@ -142,8 +142,8 @@ class CommunityDetectorTest {
             expectedEdges.first().copies = 119
             expectedEdges.last().copies = 40
 
-            assertEquals(expectedVertices, aggregatedGraph.vertices().toList() as List<Vertex<HashSet<Vertex<Int>>>>)
-            assertEquals(expectedEdges, aggregatedGraph.edges() as HashSet<UnweightedEdge<HashSet<Vertex<Int>>>>)
+            assertEquals(expectedVertices, aggregatedGraph.vertices().toList() as List<*>)
+            assertEquals(expectedEdges, aggregatedGraph.edges() as HashSet<*>)
         }
 
         @Test
