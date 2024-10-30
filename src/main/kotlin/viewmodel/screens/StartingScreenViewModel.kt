@@ -8,9 +8,6 @@ import model.graphs.Graph
 import model.graphs.UndirectedWeightedGraph
 import model.graphs.Vertex
 import model.graphs.WeightedEdge
-import java.awt.FileDialog
-import java.awt.Frame
-import java.io.File
 import kotlin.random.Random
 
 class StartingScreenViewModel(
@@ -67,20 +64,7 @@ class StartingScreenViewModel(
     }
 
     fun openGraph(type: GraphType) {
-        val dialog = FileDialog(Frame(), "Select Graph File", FileDialog.LOAD)
-        dialog.isVisible = true
-
-        dialog.file ?: return
-
-        val jsonParser = ReadWriteIntGraph()
-        val file = File(dialog.directory, dialog.file)
-
-        val graph = when (type) {
-            GraphType.UNDIRECTED_WEIGHTED_GRAPH -> jsonParser.readUWGraph(file)
-            GraphType.UNDIRECTED_GRAPH -> jsonParser.readUGraph(file)
-            GraphType.DIRECTED_WEIGHTED_GRAPH -> jsonParser.readDWGraph(file)
-            GraphType.DIRECTED_GRAPH -> jsonParser.readDGraph(file)
-        }
+        val graph = ReadWriteIntGraph().openGraph(type)
 
         currentGraph.value = graph
     }
