@@ -32,9 +32,7 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -126,67 +124,34 @@ fun <E : Edge<Int>> toolPanel(modifier: Modifier, viewModel: MainScreenViewModel
             modifier = Modifier.padding(bottom = 16.dp),
             color = MaterialTheme.colors.onSurface
         )
+
         toolButton(GraphAlgorithms.LAYOUT, viewModel::useForceAtlas2Layout)
 
         if (viewModel.graph is GraphUndirected<Int, *>) {
-            var needBridges by remember { mutableStateOf(false) }
-            var resolution by remember { mutableStateOf("") }
-            var randomness by remember { mutableStateOf("") }
+            val resolutionInput by remember { viewModel.resolutionInput }
+            val randomnessInput by remember { viewModel.randomnessInput }
 
-            //toolButton(GraphAlgorithms.BRIDGES, viewModel::showBridges)
-            Button(
-                onClick = { needBridges = true },
-                colors = ButtonDefaults.buttonColors(
-                    backgroundColor = MaterialTheme.colors.secondary,
-                    contentColor = MaterialTheme.colors.onSurface,
-                ),
-                enabled = true,
-                modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
-            ) {
-                Icon(Icons.Default.Search, contentDescription = "Find bridges")
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(text = "Find Bridges")
-            }
-
-            if (needBridges) {
-                needBridges = false
-
-                viewModel.showBridges()
-            }
+            toolButton(GraphAlgorithms.BRIDGES, viewModel::showBridges)
 
             Row {
                 TextField(
                     modifier = Modifier.weight(2f),
-                    value = randomness,
+                    value = randomnessInput,
                     placeholder = { Text("Enter x: Double > 0. Optimal value lies in [0.0005, 0.1]") },
-                    onValueChange = { randomness = it },
+                    onValueChange = viewModel::setRandomness,
                     label = { Text("Randomness") }
                 )
 
                 TextField(
                     modifier = Modifier.weight(2f),
-                    value = resolution,
+                    value = resolutionInput,
                     placeholder = { Text("Enter y: Double > 0. Higher resolution lead to more communities and lower resolutions lead to fewer communities.") },
-                    onValueChange = { resolution = it },
+                    onValueChange = viewModel::setResolution,
                     label = { Text("Resolution") },
                 )
             }
 
-
-            //toolButton(GraphAlgorithms.COMMUNITIES, viewModel::findCommunities)
-            Button(
-                onClick = { viewModel.findCommunities(randomness, resolution) },
-                colors = ButtonDefaults.buttonColors(
-                    backgroundColor = MaterialTheme.colors.secondary,
-                    contentColor = MaterialTheme.colors.onSurface,
-                ),
-                enabled = true,
-                modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
-            ) {
-                Icon(Icons.Default.Search, contentDescription = "Find Communities")
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(text = "Find Communities")
-            }
+            toolButton(GraphAlgorithms.COMMUNITIES, viewModel::findCommunities)
 
             toolButton(GraphAlgorithms.MINIMAL_SPANNING_TREE, viewModel::highlightMinSpanTree)
         }

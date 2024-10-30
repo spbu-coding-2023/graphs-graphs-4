@@ -1,6 +1,5 @@
 package viewmodel.screens
 
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import model.functionality.iograph.GraphType
@@ -31,9 +30,23 @@ class MainScreenViewModel<E: Edge<Int>>(
     val showChooseGraphTypeDialog = mutableStateOf(false)
     val showOpenExistingGraphDialog = mutableStateOf(false)
     var graphViewModel = GraphViewModel(graph, showVerticesLabels, showVerticesDistanceLabels)
+    var resolutionInput = mutableStateOf("")
+    var randomnessInput = mutableStateOf("")
 
     init {
         representationStrategy.place(WIDTH, HEIGHT, graphViewModel.vertices)
+    }
+
+    fun setResolution(value: String) {
+        if (value.toDoubleOrNull() != null || value.isEmpty()) {
+            resolutionInput.value = value
+        }
+    }
+
+    fun setRandomness(value: String) {
+        if (value.toDoubleOrNull() != null || value.isEmpty()) {
+            randomnessInput.value = value
+        }
     }
 
     fun openChooseDialog() {
@@ -78,42 +91,39 @@ class MainScreenViewModel<E: Edge<Int>>(
     fun highlightSCC() {
         if (graph is GraphDirected) {
             val scc = (graph as GraphDirected).findSCC()
+
             representationStrategy.highlightSCC(scc, *graphViewModel.vertices.toTypedArray())
-        }
+        } else throw IllegalArgumentException("Unexpected graph type: ${graph::class.simpleName}.")
     }
 
     fun highlightMinSpanTree() {
         if (graph is GraphUndirected) {
-            val minSpanTree = (graph as GraphUndirected).findMinSpanTree()
-            if (minSpanTree == null) {
-                return
-            } else {
-                representationStrategy.highlightMinSpanTree(minSpanTree, *graphViewModel.edges.toTypedArray())
-            }
-        }
+            val minSpanTree = (graph as GraphUndirected).findMinSpanTree() ?: return
+
+            representationStrategy.highlightMinSpanTree(minSpanTree, *graphViewModel.edges.toTypedArray())
+        } else throw IllegalArgumentException("Unexpected graph type: ${graph::class.simpleName}.")
     }
 
     fun closeApp() {
         exitProcess(0)
     }
 
-    @Composable
     fun showBridges() {
         if (graph is GraphUndirected) {
             val bridges = (graph as GraphUndirected<Int, E>).findBridges()
 
             representationStrategy.highlightBridges(graphViewModel.edges, bridges)
-
-        } else throw IllegalArgumentException("graph is directed!")
+        } else throw IllegalArgumentException("Unexpected graph type: ${graph::class.simpleName}.")
     }
 
-    fun findCommunities(randomness: String, resolution: String) {
+    fun findCommunities() {
         if (graph is GraphUndirected) {
-            val communities =
-                (graph as GraphUndirected<Int, E>).runLeidenMethod(randomness.toDouble(), resolution.toDouble())
-            println(communities)
-            graphViewModel.indexCommunities(communities)
+            //need to make it more informative for user
+            val randomness = randomnessInput.value.toDoubleOrNull() ?: return
+            val resolution = resolutionInput.value.toDoubleOrNull() ?: return
+            val communities = (graph as GraphUndirected<Int, E>).runLeidenMethod(randomness, resolution)
 
+            graphViewModel.indexCommunities(communities)
         } else throw IllegalArgumentException("leiden method does not support directed graphs")
     }
 
