@@ -2,6 +2,7 @@ package viewmodel.graphs
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.AwaitPointerEventScope
 import androidx.compose.ui.input.pointer.PointerEvent
@@ -28,6 +29,10 @@ class GraphViewModel<T, E: Edge<T>>(
         val yDlt = it.changes.first().scrollDelta.y
         vertices.forEach { v -> v.onScroll(yDlt, center) }
         edges.forEach { e -> e.onScroll(yDlt) }
+    }
+
+    fun onDrag(offset: Offset) {
+        vertices.forEach { v -> v.onDrag(offset) }
     }
 
     var currentVertex: VertexViewModel<T>? = null
