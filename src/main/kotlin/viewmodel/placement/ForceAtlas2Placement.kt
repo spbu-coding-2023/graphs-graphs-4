@@ -21,7 +21,7 @@ class ForceAtlas2Placement<T, E : Edge<T>>(graphVM: GraphViewModel<T, E>) {
         kGrav: Float = 1f,
         kRep: Float = 1f,
     ) {
-        for (round in 1..amount) {
+        repeat(amount) {
             val placement = mutableSetOf<ForceAtlas2VertexLayout<T>>()
 
             for (u in vertices) {

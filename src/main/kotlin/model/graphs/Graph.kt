@@ -15,6 +15,7 @@ interface Graph<T, E: Edge<T>> : Iterable<Vertex<T>> {
 
     fun addEdges(vararg edges: E)
 
+    //Нужно было свойствами, а не методами делать :(
     fun vertices(): Set<Vertex<T>>
 
     fun edges(): Set<E>

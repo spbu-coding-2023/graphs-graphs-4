@@ -3,7 +3,7 @@ package model.functionality
 import model.graphs.Edge
 import model.graphs.GraphDirected
 import model.graphs.Vertex
-import java.util.*
+import java.util.Stack
 import kotlin.math.min
 
 class StrConCompFinder<T, E: Edge<T>>(private val graph: GraphDirected<T, E>) {

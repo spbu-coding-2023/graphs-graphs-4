@@ -4,7 +4,9 @@ import kotlinx.serialization.Serializable
 import model.functionality.StrConCompFinder
 
 @Serializable
-class DirectedGraph<T> : AbstractGraph<T, UnweightedEdge<T>>(), GraphDirected<T, UnweightedEdge<T>> {
+class DirectedGraph<T> :
+    AbstractGraph<T, UnweightedEdge<T>>(),
+    GraphDirected<T, UnweightedEdge<T>> {
     fun addEdge(vertex1: Vertex<T>, vertex2: Vertex<T>) {
         require(adjList.containsKey(vertex1))
         require(adjList.containsKey(vertex2))

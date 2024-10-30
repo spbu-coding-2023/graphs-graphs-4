@@ -13,5 +13,5 @@ interface GraphUndirected<T, E: Edge<T>> : Graph<T, E> {
     // Resolution parameter x > 0 for community detection
     // Higher resolution -> more communities
     // Higher randomness -> more random node movements
-    fun runLeidenMethod(RANDOMNESS: Double, RESOLUTION: Double): HashSet<HashSet<Vertex<T>>>
+    fun runLeidenMethod(randomness: Double, resolution: Double): HashSet<HashSet<Vertex<T>>>
 }
