@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
@@ -17,6 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import model.functionality.iograph.GraphType
 import viewmodel.screens.StartingScreenViewModel
 
@@ -26,16 +28,25 @@ fun StartingScreen(viewModel: StartingScreenViewModel) {
     val showChooseGraphTypeDialog by remember { viewModel.showChooseGraphTypeDialog }
     val showOpenExistingGraphDialog by remember { viewModel.showOpenExistingGraphDialog }
 
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text("Welcome to GraphApp", style = MaterialTheme.typography.h1)
-            Spacer(modifier = Modifier.height(16.dp))
-            Button(onClick = viewModel::openCreateDialog) {
-                Text("Create New Graph")
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text("Welcome to GraphApp", style = MaterialTheme.typography.h1, fontSize = 48.sp)
+            Spacer(modifier = Modifier.height(128.dp))
+            Button(modifier = Modifier.width(360.dp).height(60.dp), onClick = viewModel::openCreateDialog) {
+                Text(text = "Create Graph", fontSize = 24.sp)
             }
-            Spacer(modifier = Modifier.height(8.dp))
-            Button(onClick = viewModel::openOpenDialog) {
-                Text("Open Existing Graph")
+            Spacer(modifier = Modifier.height(16.dp))
+            Button(modifier = Modifier.width(360.dp).height(60.dp), onClick = viewModel::openOpenDialog) {
+                Text(text = "Open Graph", fontSize = 24.sp)
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+            Button(modifier = Modifier.width(360.dp).height(60.dp), onClick = viewModel::closeApp) {
+                Text(text = "Exit", fontSize = 24.sp)
             }
         }
     }
