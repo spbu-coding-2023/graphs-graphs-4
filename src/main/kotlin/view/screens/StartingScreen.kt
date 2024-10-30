@@ -93,6 +93,7 @@ fun OpenGraphButton(type: GraphType, viewModel: StartingScreenViewModel) {
 @Composable
 fun CreateNewGraphDialog(viewModel: StartingScreenViewModel) {
     AlertDialog(
+        modifier = Modifier.width(330.dp),
         onDismissRequest = viewModel::closeCreateDialog,
         title = { Text("Create New Graph") },
         text = { Text("Would you like to create a new graph?") },
@@ -108,6 +109,7 @@ fun CreateNewGraphDialog(viewModel: StartingScreenViewModel) {
 @Composable
 fun OpenExistingGraphDialog(viewModel: StartingScreenViewModel) {
     AlertDialog(
+        modifier = Modifier.width(360.dp),
         onDismissRequest = viewModel::closeOpenDialog,
         title = { Text("Open Existing Graph") },
         text = { Text("Would you like to open an existing graph?") },
