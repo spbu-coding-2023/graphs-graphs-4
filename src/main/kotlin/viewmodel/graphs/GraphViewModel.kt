@@ -6,7 +6,6 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.AwaitPointerEventScope
 import androidx.compose.ui.input.pointer.PointerEvent
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import model.graphs.Edge
@@ -24,10 +23,8 @@ class GraphViewModel<T, E: Edge<T>>(
     val onScroll: AwaitPointerEventScope.(event: PointerEvent) -> Unit = {
         val position = it.changes.last().position
 
-        val center = IntOffset(position.x.toInt(), position.y.toInt())
-
         val yDlt = it.changes.first().scrollDelta.y
-        vertices.forEach { v -> v.onScroll(yDlt, center) }
+        vertices.forEach { v -> v.onScroll(yDlt, position) }
         edges.forEach { e -> e.onScroll(yDlt) }
     }
 

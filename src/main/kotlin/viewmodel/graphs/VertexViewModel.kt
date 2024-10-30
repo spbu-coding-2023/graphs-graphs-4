@@ -7,7 +7,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import model.graphs.Vertex
 
@@ -68,7 +67,7 @@ class VertexViewModel<V>(
         _y.value += offset.y.dp
     }
 
-    fun onScroll(yScaleDlt: Float, center: IntOffset) {
+    fun onScroll(yScaleDlt: Float, center: Offset) {
         val xDlt = (center.x.dp - x) * VertexSize.POS_SCALE.size.value
         val yDlt = (center.y.dp - y) * VertexSize.POS_SCALE.size.value
 
