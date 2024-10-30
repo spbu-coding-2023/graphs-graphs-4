@@ -12,12 +12,15 @@ import view.screens.mainScreen
 import viewmodel.graphs.CircularPlacementStrategy
 import viewmodel.screens.MainScreenViewModel
 import viewmodel.screens.StartingScreenViewModel
+import java.awt.Dimension
 
 fun main() = application {
     Window(
         onCloseRequest = ::exitApplication,
         title = "GraphApp"
     ) {
+        window.minimumSize = Dimension(800, 600)
+
         app()
     }
 }
