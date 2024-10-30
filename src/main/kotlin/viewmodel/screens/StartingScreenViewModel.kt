@@ -5,9 +5,9 @@ import androidx.compose.runtime.mutableStateOf
 import model.functionality.iograph.GraphType
 import model.functionality.iograph.ReadWriteIntGraph
 import model.graphs.Graph
-import model.graphs.UndirectedGraph
-import model.graphs.UnweightedEdge
+import model.graphs.UndirectedWeightedGraph
 import model.graphs.Vertex
+import model.graphs.WeightedEdge
 import java.awt.FileDialog
 import java.awt.Frame
 import java.io.File
@@ -46,7 +46,7 @@ class StartingScreenViewModel(
     }
 
     fun createGraph() {
-        val randomGraph = UndirectedGraph<Int>()
+        val randomGraph = UndirectedWeightedGraph<Int>()
         val amount = Random.nextInt(2, 64)
         val degree = Random.nextInt(1, amount * 2)
 
@@ -59,7 +59,7 @@ class StartingScreenViewModel(
             val v = Vertex(Random.nextInt(amount))
 
             if (randomGraph.contains(u) && randomGraph.contains(v)) {
-                randomGraph.addEdge(UnweightedEdge(u, v))
+                randomGraph.addEdge(WeightedEdge(u, v, Random.nextDouble(64.0)))
             }
         }
 
