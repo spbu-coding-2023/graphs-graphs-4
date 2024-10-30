@@ -1,7 +1,5 @@
 package viewmodel.graphs
 
-import androidx.compose.material.MaterialTheme
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import model.graphs.Edge
@@ -39,18 +37,23 @@ class CircularPlacementStrategy : RepresentationStrategy {
         TODO("Not yet implemented")
     }
 
-    @Composable
     override fun <T> highlightBridges(edges: Collection<EdgeViewModel<T>>, bridges: Set<Edge<T>>) {
         for (bridge in bridges) {
             val toColor = edges.find { ((it.v.value == bridge.to) && (it.u.value == bridge.from)) }
             val toColorSecond = edges.find { ((it.u.value == bridge.to) && (it.v.value == bridge.from)) }
 
             if (toColor != null) {
-                toColor.color = MaterialTheme.colors.secondaryVariant
-                toColor.width = 10.toFloat()
+                //earlier there was MaterialTheme.colors.secondaryVariant
+                //but then this class needs to be Composable
+                //I think to myself that it is strange
+                //because of that, I replace it with this color
+                val color = Color(134, 182, 246)
 
-                toColorSecond?.color = MaterialTheme.colors.secondaryVariant
-                toColorSecond?.width = 10.toFloat()
+                toColor.color = color
+                toColor.width = 10f
+
+                toColorSecond?.color = color
+                toColorSecond?.width = 10f
             } else throw NoSuchElementException("WE LOST AN EDGE!!!")
         }
     }
@@ -63,24 +66,32 @@ class CircularPlacementStrategy : RepresentationStrategy {
 
     override fun <T> highlightSCC(scc: Set<Set<Vertex<T>>>, vararg vertices: VertexViewModel<T>) {
         for (component in scc) {
+            println(component)
             val array = Array(256) { it }
             val color = Color(array.random(), array.random(), array.random())
+
+            for (vertex in vertices) {
+                if (vertex.value in component) vertex.color = color
+            }
         }
     }
 
     override fun <T> highlightMinSpanTree(minSpanTree: Set<Edge<T>>, vararg edges: EdgeViewModel<T>) {
         val color = Color.Blue
         for (edge in minSpanTree) {
-            val u = edge.from
-            val v = edge.to
+            val u1 = edge.from
+            val v1 = edge.to
+
             for (edgeVM in edges) {
-                if (edgeVM.u.value == u && edgeVM.v.value == v) {
+                val u2 = edgeVM.u.value
+                val v2 = edgeVM.v.value
+
+                if ((u1 == u2) && (v1 == v2) || ((u1 == v2) && (v1 == u2))) {
                     edgeVM.color = color
-                    edgeVM.width = 6.toFloat()
+                    edgeVM.width = 6f
                 }
             }
         }
-
     }
 
     override fun <T> colorVertices(vararg vertices: VertexViewModel<T>, color: Color) {

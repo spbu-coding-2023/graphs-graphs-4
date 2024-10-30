@@ -1,13 +1,10 @@
 package model.functionality
 
-import model.graphs.DirectedGraph
-import model.graphs.Edge
-import model.graphs.GraphDirected
-import model.graphs.Vertex
+import model.graphs.*
 import java.util.*
 import kotlin.math.min
 
-class JohnsonAlg<T>(val graph: GraphDirected<T>) {
+class JohnsonAlg<T, E: Edge<T>>(val graph: GraphDirected<T, E>) {
     private val stack = Stack<Vertex<T>>()
     private val blocked = mutableMapOf<Vertex<T>, Boolean>()
     private val blockedMap = mutableMapOf<Vertex<T>, MutableSet<Vertex<T>>>()
@@ -15,7 +12,7 @@ class JohnsonAlg<T>(val graph: GraphDirected<T>) {
 
 
     fun findCycles(startVertex: Vertex<T>): HashSet<List<Vertex<T>>> {
-        val relevantSCC = TarjanSCC<T>().findSCC(startVertex, graph)
+        val relevantSCC = TarjanSCC<T, E>().findSCC(startVertex, graph)
         startFindCycles(startVertex, relevantSCC)
         return allCycles
     }
@@ -89,7 +86,7 @@ class JohnsonAlg<T>(val graph: GraphDirected<T>) {
 
 }
 
-class TarjanSCC<T> {
+class TarjanSCC<T, E: Edge<T>> {
     val stack = Stack<Vertex<T>>()
     val num = mutableMapOf<Vertex<T>, Int>()
     val lowest = mutableMapOf<Vertex<T>, Int>()
@@ -97,7 +94,7 @@ class TarjanSCC<T> {
     val processed = hashSetOf<Vertex<T>>()
     var curIndex = 1
 
-    fun findSCC(vertex: Vertex<T>, graph: GraphDirected<T>): HashSet<Vertex<T>> {
+    fun findSCC(vertex: Vertex<T>, graph: GraphDirected<T, E>): HashSet<Vertex<T>> {
         return dfsTarjan(vertex, graph)
     }
 
@@ -108,7 +105,7 @@ class TarjanSCC<T> {
         return true
     }
 
-    fun findSCCs(graph: GraphDirected<T>): HashSet<HashSet<Vertex<T>>> {
+    fun findSCCs(graph: GraphDirected<T, E>): HashSet<HashSet<Vertex<T>>> {
         val allSCCs: HashSet<HashSet<Vertex<T>>> = HashSet<HashSet<Vertex<T>>>()
         for (v in graph.vertices()) {
             if (containsInAnySCC(allSCCs, v)) allSCCs.add(dfsTarjan(v, graph))
@@ -117,7 +114,7 @@ class TarjanSCC<T> {
     }
 
 
-    fun dfsTarjan(vertex: Vertex<T>, graph: GraphDirected<T>): HashSet<Vertex<T>> {
+    fun dfsTarjan(vertex: Vertex<T>, graph: GraphDirected<T, E>): HashSet<Vertex<T>> {
         num[vertex] = curIndex
         lowest[vertex] = curIndex
         curIndex++

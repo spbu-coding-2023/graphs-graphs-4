@@ -12,8 +12,8 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,12 +37,12 @@ fun <V> VertexView(
 ) {
     var color by remember { mutableStateOf(Color.Unspecified) }
 
-    if (viewModel.isSelected) {
-        color = Color(255, 166, 0)
+    color = if (viewModel.isSelected) {
+        Color(255, 166, 0)
     } else if (viewModel.color != Color.Unspecified) {
-        color = viewModel.color
+        viewModel.color
     } else {
-        color = MaterialTheme.colors.onBackground
+        MaterialTheme.colors.onBackground
     }
 
     Box(

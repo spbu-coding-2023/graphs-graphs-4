@@ -1,12 +1,23 @@
 package model.graphs
 
-abstract class AbstractGraph<T> : Graph<T> {
-    var adjList: HashMap<Vertex<T>, HashSet<Edge<T>>> = HashMap()
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
+@Serializable
+abstract class AbstractGraph<T, E: Edge<T>> : Graph<T, E> {
+    @SerialName("graph")
+    var adjList: HashMap<Vertex<T>, HashSet<E>> = HashMap()
         internal set
 
+    @SerialName("size")
     protected var _size: Int = 0
     override val size: Int
         get() = _size
+
+    override fun areConnected(u: Vertex<T>, v: Vertex<T>): Boolean {
+        return (adjList[u]?.any { it.contains(v) } ?: false)
+            || (adjList[v]?.any { it.contains(u) } ?: false)
+    }
 
     override fun addVertex(key: T): Vertex<T> {
         for (v in adjList.keys) {
@@ -47,16 +58,30 @@ abstract class AbstractGraph<T> : Graph<T> {
         }
     }
 
+    override fun addEdges(vararg edges: E) {
+        for (edge in edges) {
+            this.addEdge(edge)
+        }
+    }
+
+    override fun addEdge(edge: E) {
+        for (vertex in adjList.keys) {
+            if (edge.from == vertex) {
+                adjList[vertex]?.add(edge)
+            }
+        }
+    }
+
     override fun vertices(): Set<Vertex<T>> {
         return adjList.keys
     }
 
-    override fun getNeighbors(vertex: Vertex<T>): HashSet<Edge<T>> {
+    override fun getNeighbors(vertex: Vertex<T>): HashSet<E> {
         return adjList[vertex] ?: HashSet()
     }
 
-    override fun edges(): Set<Edge<T>> {
-        val edges = HashSet<Edge<T>>()
+    override fun edges(): Set<E> {
+        val edges = HashSet<E>()
         for (vertex in adjList.keys) {
             for (edge in adjList[vertex] ?: HashSet()) {
                 edges.add(edge)
@@ -65,5 +90,4 @@ abstract class AbstractGraph<T> : Graph<T> {
 
         return edges
     }
-
 }

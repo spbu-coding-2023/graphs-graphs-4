@@ -88,7 +88,7 @@ class DistRankTest {
         graph.addEdge(nodes[33], nodes[39])
 
 
-        val result = DistanceRank<Int>(graph).rank()
+        val result = DistanceRank(graph).rank()
         assertEquals(1, result)
         //assertEquals(1, TarjanSCC<Int>().findSCCs(graph))
     }

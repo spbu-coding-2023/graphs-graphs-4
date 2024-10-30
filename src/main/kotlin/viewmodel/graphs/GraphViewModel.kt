@@ -1,20 +1,37 @@
 package viewmodel.graphs
 
 import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.AwaitPointerEventScope
+import androidx.compose.ui.input.pointer.PointerEvent
+import androidx.compose.ui.unit.IntSize
+import androidx.compose.ui.unit.center
 import androidx.compose.ui.unit.dp
+import model.graphs.Edge
 import model.graphs.Graph
 import model.graphs.Vertex
 
 
-class GraphViewModel<T>(
-    graph: Graph<T>,
+class GraphViewModel<T, E: Edge<T>>(
+    val graph: Graph<T, E>,
     showVerticesLabels: State<Boolean>,
-    showEdgesLabels: State<Boolean>,
     showVerticesDistanceLabels: State<Boolean>,
 ) {
+    val graphSize = mutableStateOf(IntSize.Zero)
+
+    val onScroll: AwaitPointerEventScope.(event: PointerEvent) -> Unit = {
+        val center = graphSize.value.center
+
+        //print("${it} ")
+
+        val yDlt = it.changes.first().scrollDelta.y
+        vertices.forEach { v -> v.onScroll(yDlt, center) }
+        edges.forEach { e -> e.onScroll(yDlt) }
+    }
+
     var currentVertex: VertexViewModel<T>? = null
-    var biggestIndexCommunity = 0
+    private var biggestIndexCommunity = 0
 
     private val _vertices = graph.vertices().associateWith { v ->
         VertexViewModel(0.dp, 0.dp, v, showVerticesLabels, showVerticesDistanceLabels)
@@ -26,7 +43,7 @@ class GraphViewModel<T>(
         val snd = _vertices[e.to]
             ?: error("VertexView for ${e.to} not found")
 
-        EdgeViewModel(fst, snd, Color.Black, 4.toFloat(), e, showEdgesLabels)
+        EdgeViewModel(fst, snd, Color.Black, 4.toFloat())
     }
 
     // Color(78, 86, 129),

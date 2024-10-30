@@ -2,9 +2,13 @@ package model.graphs
 
 import kotlinx.serialization.Serializable
 import model.functionality.JohnsonAlg
+import model.functionality.StrConCompFinder
 
 @Serializable
-class DirectedWeightedGraph<T> : AbstractGraph<T>(), GraphDirected<T>, GraphWeighted<T> {
+class DirectedWeightedGraph<T> :
+    AbstractGraph<T, WeightedEdge<T>>(),
+    GraphDirected<T, WeightedEdge<T>>,
+    GraphWeighted<T> {
     fun addEdge(vertex1: Vertex<T>, vertex2: Vertex<T>, weight: Double) {
         require(adjList.containsKey(vertex1))
         require(adjList.containsKey(vertex2))
@@ -12,30 +16,16 @@ class DirectedWeightedGraph<T> : AbstractGraph<T>(), GraphDirected<T>, GraphWeig
         adjList.getOrPut(vertex1) { HashSet() }.add(WeightedEdge(vertex1, vertex2, weight))
     }
 
-    override fun findSCC(): Set<Set<Vertex<T>>> {
-        return emptySet()//StrConCompFinder(this as DirectedGraph<T>).sccSearch()
+    override fun addEdge(edge: WeightedEdge<T>) {
+        addEdge(edge.from, edge.to, edge.weight)
     }
 
     override fun findCycles(startNode: Vertex<T>): HashSet<List<Vertex<T>>> {
-        return JohnsonAlg<T>(this).findCycles(startNode)
+        return JohnsonAlg(this).findCycles(startNode)
     }
 
-//    override fun findMinSpanTree(): Set<Edge<T>>? {
-//        return MinSpanTreeFinder(this).mstSearch()
-//    }
 
-
-//    override fun addEdge(key1: T, key2: T, weight: NUMBER_TYPE) {
-//        addEdge(Vertex(key1), Vertex(key2), weight)
-//    }
-//
-//    override fun addEdge(edge: WeightedEdge<T, NUMBER_TYPE>) {
-//        addEdge(edge.from, edge.to, edge.weight)
-//    }
-//
-//    override fun addEdges(vararg edges: WeightedEdge<T, NUMBER_TYPE>) {
-//        for (edge in edges) {
-//            addEdge(edge)
-//        }
-//    }
+    override fun findSCC(): Set<Set<Vertex<T>>> {
+        return StrConCompFinder(this).sccSearch()
+    }
 }

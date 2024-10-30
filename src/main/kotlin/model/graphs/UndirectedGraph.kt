@@ -2,16 +2,12 @@ package model.graphs
 
 import kotlinx.serialization.Serializable
 import model.functionality.CommunityDetector
-
-// Resolution parameter x > 0 for community detection
-// Higher resolution -> more communities
-const val RESOLUTION = 0.02
-
-// Higher randomness -> more random node movements
-const val RANDOMNESS = 0.001
+import model.functionality.MinSpanTreeFinder
 
 @Serializable
-open class UndirectedGraph<T> : AbstractGraph<T>(), GraphUndirected<T> {
+open class UndirectedGraph<T> :
+    AbstractGraph<T, UnweightedEdge<T>>(),
+    GraphUndirected<T, UnweightedEdge<T>> {
     fun addEdge(vertex1: Vertex<T>, vertex2: Vertex<T>) {
         require(adjList.containsKey(vertex1))
         require(adjList.containsKey(vertex2))
@@ -27,6 +23,10 @@ open class UndirectedGraph<T> : AbstractGraph<T>(), GraphUndirected<T> {
         }
     }
 
+    override fun addEdge(edge: UnweightedEdge<T>) {
+        addEdge(edge.from, edge.to)
+    }
+
     // добавляет одно конкретное ребро, пока надо только алг поиска
     // сообществ
     fun addSingleEdge(edge: UnweightedEdge<T>) {
@@ -37,26 +37,12 @@ open class UndirectedGraph<T> : AbstractGraph<T>(), GraphUndirected<T> {
         adjList.getOrPut(edge.from) { HashSet() }.add(edge)
     }
 
-//    open fun addEdge(key1: T, key2: T) {
-//        addEdge(Vertex(key1), Vertex(key2))
-//    }
-
-//    open fun addEdge(edge: UnweightedEdge<T>) {
-//        addEdge(edge.from, edge.to)
-//    }
-
-//    open fun addEdges(vararg edges: UnweightedEdge<T>) {
-//        for (edge in edges) {
-//            addEdge(edge)
-//        }
-//    }
-
     override fun findMinSpanTree(): Set<Edge<T>>? {
-        TODO()
+        return MinSpanTreeFinder(this).mstSearch()
     }
 
-    override fun runLeidenMethod(): HashSet<HashSet<Vertex<T>>> {
-        return CommunityDetector(this, RESOLUTION, RANDOMNESS).leiden()
+    override fun runLeidenMethod(randomness: Double, resolution: Double): HashSet<HashSet<Vertex<T>>> {
+        return CommunityDetector(this, resolution, randomness).leiden()
     }
 
 }

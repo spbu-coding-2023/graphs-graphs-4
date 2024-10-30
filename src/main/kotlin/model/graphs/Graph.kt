@@ -1,6 +1,6 @@
 package model.graphs
 
-interface Graph<T> : Iterable<Vertex<T>> {
+interface Graph<T, E: Edge<T>> : Iterable<Vertex<T>> {
     val size: Int
 
     fun addVertex(key: T): Vertex<T>
@@ -11,15 +11,22 @@ interface Graph<T> : Iterable<Vertex<T>> {
 
     fun addVertices(vararg vertices: Vertex<T>)
 
+    fun addEdge(edge: E)
+
+    fun addEdges(vararg edges: E)
+
+    //Нужно было свойствами, а не методами делать :(
     fun vertices(): Set<Vertex<T>>
 
-    fun edges(): Set<Edge<T>>
+    fun edges(): Set<E>
+
+    fun areConnected(u: Vertex<T>, v: Vertex<T>): Boolean
 
     override fun iterator(): Iterator<Vertex<T>> {
         return this.vertices().iterator()
     }
 
-    fun getNeighbors(vertex: Vertex<T>): HashSet<Edge<T>>
+    fun getNeighbors(vertex: Vertex<T>): HashSet<E>
 
 //    fun cyclesForVertex(vertex: Vertex<T>): HashSet<List<Vertex<T>>> {
 //        return JohnsonAlg(this).findCycles(vertex)

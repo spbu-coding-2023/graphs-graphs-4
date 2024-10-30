@@ -1,10 +1,15 @@
 package model.graphs
 
 import kotlinx.serialization.Serializable
+import model.functionality.DistanceRank
 import model.functionality.JohnsonAlg
+import model.functionality.StrConCompFinder
+import model.functionality.TarjanSCC
 
 @Serializable
-class DirectedGraph<T> : AbstractGraph<T>(), GraphDirected<T> {
+class DirectedGraph<T> :
+    AbstractGraph<T, UnweightedEdge<T>>(),
+    GraphDirected<T, UnweightedEdge<T>> {
     fun addEdge(vertex1: Vertex<T>, vertex2: Vertex<T>) {
         require(adjList.containsKey(vertex1))
         require(adjList.containsKey(vertex2))
@@ -12,27 +17,18 @@ class DirectedGraph<T> : AbstractGraph<T>(), GraphDirected<T> {
         adjList.getOrPut(vertex1) { HashSet() }.add(UnweightedEdge(vertex1, vertex2))
     }
 
+
     override fun findCycles(startNode: Vertex<T>): HashSet<List<Vertex<T>>> {
-        return JohnsonAlg<T>(this).findCycles(startNode)
+        return JohnsonAlg(this).findCycles(startNode)
     }
 
-//    fun addEdge(key1: T, key2: T) {
-//        addEdge(Vertex(key1), Vertex(key2))
-//    }
 
-//    fun addEdge(edge: UnweightedEdge<T>) {
-//        addEdge(edge.from, edge.to)
-//    }
-
-//    override fun addEdges(vararg edges: UnweightedEdge<T>) {
-//        for (edge in edges) {
-//            addEdge(edge)
-//        }
-//    }
+    override fun addEdge(edge: UnweightedEdge<T>) {
+        addEdge(edge.from, edge.to)
+    }
 
     override fun findSCC(): Set<Set<Vertex<T>>> {
-        TODO("Not yet implemented")
-//        return StrConCompFinder(this).sccSearch()
+        return StrConCompFinder(this).sccSearch()
     }
 
 //    fun distanceRank(): Map<Vertex<T>, Double> {

@@ -5,15 +5,18 @@ import model.functionality.iograph.VertexSerializer
 
 @Serializable(with = VertexSerializer::class)
 data class Vertex<T>(val key: T) {
-    override fun hashCode(): Int {
-        return key.hashCode()
-    }
-
     override fun equals(other: Any?): Boolean {
-        return other is Vertex<*> && other.key == key
+        return when(other) {
+            is Vertex<*> -> key == other.key
+            else -> false
+        }
     }
 
     override fun toString(): String {
         return "Vertex($key)"
+    }
+
+    override fun hashCode(): Int {
+        return key?.hashCode() ?: 0
     }
 }

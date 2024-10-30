@@ -1,57 +1,51 @@
-//package model.functionality
-//
-//import model.graphs.UndirectedWeightedGraph
-//import model.graphs.Vertex
-//import model.graphs.WeightedEdge
-//
-//class MinSpanTreeFinder<K, W : Number>(private val graph: UndirectedWeightedGraph<K, W>) {
-//    private val spanningTree = mutableSetOf<WeightedEdge<K, W>>()
-//
-//
-//    fun mstSearch(): Set<WeightedEdge<K, W>>? {
-//        val firstVertex = graph.first()
-//        val linkedVertices = mutableSetOf<Vertex<K>>()
-//        linkedVertices.add(firstVertex)
-//
-//        while (linkedVertices.size != graph.size) {
-//            val minEdge = findEdgeWithMinWeight(linkedVertices, linkedVertices)
-//
-//            if (minEdge != null) {
-//                spanningTree.add(minEdge)
-//                val newTreeVertex = minEdge.to
-//                linkedVertices.add(newTreeVertex)
-//            } else {
-//                return null
-//            }
-//        }
-//
-//        return spanningTree
-//    }
-//
-//    private fun findEdgeWithMinWeight(vertices: Set<Vertex<K>>, banList: Set<Vertex<K>>): WeightedEdge<K, W>? {
-//        var minEdge: WeightedEdge<K, W>? = null
-//        for (vertex in vertices) {
-//            val edge = findAdjEdgeWithMinWeight(vertex, banList)
-//            if (edge != null && (minEdge == null || edge < minEdge)) {
-//                minEdge = edge
-//            }
-//        }
-//
-//        return minEdge
-//    }
-//
-//    private fun findAdjEdgeWithMinWeight(vertex: Vertex<K>, banList: Set<Vertex<K>>): WeightedEdge<K, W>? {
-//        val neighbors = graph.getNeighbors(vertex)
-//        neighbors.removeIf { banList.contains(it.first) }
-//
-//        val vertexWithMinWeight = neighbors.minByOrNull {
-//            WeightedEdge(vertex, it.first, it.second)
-//        } ?: return null
-//
-//        val neighbor = vertexWithMinWeight.first
-//        val weight = vertexWithMinWeight.second
-//        val edge = WeightedEdge(vertex, neighbor, weight)
-//
-//        return edge
-//    }
-//}
+package model.functionality
+
+import model.graphs.Edge
+import model.graphs.GraphUndirected
+import model.graphs.Vertex
+
+class MinSpanTreeFinder<T, E: Edge<T>>(private val graph: GraphUndirected<T, E>) {
+    fun mstSearch(): Set<E> {
+        val spanningTreeEdges = mutableSetOf<E>()
+        val spanningTreeVertices = mutableSetOf<Vertex<T>>()
+
+        //step 1: add first vertex in spanning tree
+        val firstVertex = graph.firstOrNull() ?: return spanningTreeEdges
+        spanningTreeVertices.add(firstVertex)
+
+        while (spanningTreeVertices.size != graph.size) {
+            //step 2: search edge that connects different connection components
+            val minEdge = findMinEdge(graph.edges(), spanningTreeVertices)
+
+            //step 3: add this edge and adjacent vertex in spanning tree
+            if (minEdge != null) {
+                spanningTreeVertices.add(minEdge.from)
+                spanningTreeVertices.add(minEdge.to)
+                spanningTreeEdges.add(minEdge)
+            } else { //graph isn't connected
+                return emptySet()
+            }
+        }
+
+        return spanningTreeEdges
+    }
+
+    private fun findMinEdge(edges: Set<E>, spanningTreeVertices: MutableSet<Vertex<T>>): E? {
+        var minEdge: E? = null
+
+        for (vertex in spanningTreeVertices) {
+            for (edge in edges) {
+                val u = edge.from
+                val v = edge.to
+
+                if (//we want edge that connects vertex presented in spanning tree and vertex that isn't in tree
+                    ((vertex == u && !spanningTreeVertices.contains(v))
+                        || (vertex == v && !spanningTreeVertices.contains(u)))
+                    && (minEdge == null || minEdge > edge)
+                ) minEdge = edge
+            }
+        }
+
+        return minEdge
+    }
+}

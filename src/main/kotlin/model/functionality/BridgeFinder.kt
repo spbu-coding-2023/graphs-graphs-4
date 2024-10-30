@@ -5,14 +5,14 @@ import model.graphs.GraphUndirected
 import model.graphs.Vertex
 import kotlin.math.min
 
-class BridgeFinder<T> {
+class BridgeFinder<T, E: Edge<T>> {
     private var discoveryTime = hashMapOf<Vertex<T>, Int>()
-    private var bridges: Set<Edge<T>> = emptySet()
+    private var bridges: Set<E> = emptySet()
     private var parent = hashMapOf<Vertex<T>, Vertex<T>?>()
     private var low = hashMapOf<Vertex<T>, Int>()
     private var timer: Int = 0
 
-    fun findBridges(graph: GraphUndirected<T>): Set<Edge<T>> {
+    fun findBridges(graph: GraphUndirected<T, E>): Set<E> {
         for (element in graph.vertices()) {
             discoveryTime[element] = -1
             low[element] = -1
@@ -29,7 +29,7 @@ class BridgeFinder<T> {
         return bridges
     }
 
-    private fun dfsRecursive(graph: GraphUndirected<T>, vertex: Vertex<T>) {
+    private fun dfsRecursive(graph: GraphUndirected<T, E>, vertex: Vertex<T>) {
         discoveryTime[vertex] = timer
         low[vertex] = timer
         timer += 1
