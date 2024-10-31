@@ -53,6 +53,8 @@ class VertexViewModel<V>(
 
     var distanceLabel: String = ""
 
+    var importance: Double = 0.0
+
     val isDistLabelVisible
         get() = distanceLabelVisibility.value
 

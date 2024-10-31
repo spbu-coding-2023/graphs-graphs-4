@@ -64,6 +64,23 @@ class CircularPlacementStrategy : RepresentationStrategy {
         }
     }
 
+    override fun <T> distanceRank(vertices: Collection<VertexViewModel<T>>, max: Double, min: Double) {
+        for(vertex in vertices){
+            val vImp = vertex.importance
+            if(vImp <= ( min + ( (max - min) / 4) ) ) vertex.color = Color(0xFFFF0000) // КРАСНЫЙ / ROT
+            else if(vImp <= ( min + 2 * ( (max - min) / 4) ) ) vertex.color = Color(0xFF0000FF) // СИНИЙ / BLAU
+            else if(vImp <= ( min + 3 * ( (max - min) / 4) ) ) vertex.color = Color(0xFF800080) //ФИОЛЕТОВЫЙ
+            else vertex.color = Color(0xFF00FF00) // ЗЕЛЁНЫЙ / GRÜN
+        }
+    }
+
+    override fun <T> findCycles(vertices: Collection<VertexViewModel<T>>, cycle: List<Vertex<Int>>, color: Color) {
+        for(vertex in cycle) {
+            val ver = vertices.find { it.value == vertex }
+            ver?.color = color
+        }
+    }
+
     override fun <T> highlightSCC(scc: Set<Set<Vertex<T>>>, vararg vertices: VertexViewModel<T>) {
         for (component in scc) {
             println(component)
@@ -95,7 +112,9 @@ class CircularPlacementStrategy : RepresentationStrategy {
     }
 
     override fun <T> colorVertices(vararg vertices: VertexViewModel<T>, color: Color) {
-        TODO("Not yet implemented")
+        for(vertex in vertices){
+            vertex.color = color
+        }
     }
 
     private fun Pair<Double, Double>.rotate(pivot: Pair<Double, Double>, angle: Double): Pair<Double, Double> {

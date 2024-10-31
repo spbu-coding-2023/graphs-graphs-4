@@ -2,13 +2,11 @@ package viewmodel.screens
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.graphics.Color
+import kotlinx.coroutines.delay
 import model.functionality.iograph.GraphType
 import model.functionality.iograph.ReadWriteIntGraph
-import model.graphs.Edge
-import model.graphs.Graph
-import model.graphs.GraphDirected
-import model.graphs.GraphUndirected
-import model.graphs.GraphWeighted
+import model.graphs.*
 import viewmodel.graphs.GraphViewModel
 import viewmodel.graphs.RepresentationStrategy
 import viewmodel.placement.ForceAtlas2Placement
@@ -145,6 +143,65 @@ class MainScreenViewModel<E: Edge<Int>>(
                 it.distanceLabel = (labels?.get(it.value)).toString()
             }
         }
+    }
+
+
+    fun findDistanceDijkstra() {
+        if (graph is GraphWeighted) {
+            graphViewModel.edges.forEach{
+                require(true) //Here must be checking weights for being >= 0, but there's a problem
+            }
+
+            val labels =
+                graphViewModel.currentVertex?.let { (graph as GraphWeighted<Int>).findDistancesDijkstra(it.value)}
+
+            graphViewModel.vertices.forEach {
+                it.distanceLabel = (labels?.get(it.value)).toString()
+            }
+        }
+    }
+
+    fun distanceRank() {
+        if(graph is DirectedGraph) {
+            val importances = (graphViewModel.graph as DirectedGraph<Int>).distanceRank()
+
+            graphViewModel.vertices.forEach {
+                it.importance = (importances.get(it.value)) ?: 0.0
+            }
+
+            var min: Double = Double.POSITIVE_INFINITY
+            var max: Double = Double.NEGATIVE_INFINITY
+
+            for((vertex, imp) in importances) {
+                if(imp > max) max = imp
+                else if(imp < min) min = imp
+            }
+
+            representationStrategy.distanceRank(graphViewModel.vertices, max = max, min = min)
+        }
+    }
+
+    suspend fun findCycles() {
+        if (graph is GraphWeighted) {
+            val Cycles =
+                graphViewModel.currentVertex?.let { (graph as GraphDirected<Int, E>).findCycles(it.value) }
+
+            Cycles?.forEach { cycle ->
+                /*for(vertex in cycle) {
+                    val ver = graphViewModel.vertices.find { it.value == vertex }
+                    ver?.color = Color(0xFFFF0000)
+                }*/
+                representationStrategy.findCycles(graphViewModel.vertices, cycle, Color(0xFFFF0000))
+                delay(2000)
+                representationStrategy.findCycles(graphViewModel.vertices, cycle, Color(0xFF0000FF))
+                /*for(vertex in cycle) {
+                    val ver = graphViewModel.vertices.find { it.value == vertex }
+                    ver?.color = Color(0xFF0000FF) //Change to defolt
+                }*/
+
+            }
+        }
+
     }
 
     fun toStartingScreen() {
