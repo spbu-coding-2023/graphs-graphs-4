@@ -16,7 +16,6 @@ import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Checkbox
 import androidx.compose.material.CheckboxDefaults
-import androidx.compose.material.Divider
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
@@ -48,6 +47,7 @@ fun <E : Edge<Int>> mainScreen(viewModel: MainScreenViewModel<E>) {
     val showMenu by remember { viewModel.showDropdownMenu }
     val showOpenDialog by remember { viewModel.showOpenExistingGraphDialog }
     val showChooseDialog by remember { viewModel.showChooseGraphTypeDialog }
+    val toStartingScreen by remember { viewModel.toStartingScreen }
 
     Scaffold(
         topBar = {
@@ -63,7 +63,7 @@ fun <E : Edge<Int>> mainScreen(viewModel: MainScreenViewModel<E>) {
                         DropdownMenuItem(onClick = viewModel::openOpenDialog) { Text("Open Graph") }
                         DropdownMenuItem(onClick = viewModel::saveGraph) { Text("Save Graph") }
                         DropdownMenuItem(onClick = viewModel::changeTheme) { Text("Toggle Theme") }
-                        Divider()
+                        DropdownMenuItem(onClick = viewModel::openToStartingScreenDialog) { Text("Main Menu") }
                         DropdownMenuItem(onClick = viewModel::closeApp) { Text("Exit") }
                     }
                 }
@@ -76,7 +76,23 @@ fun <E : Edge<Int>> mainScreen(viewModel: MainScreenViewModel<E>) {
     when {
         showOpenDialog -> OpenExistingGraphDialog(viewModel)
         showChooseDialog -> OpenChooseGraphTypeDialog(viewModel)
+        toStartingScreen -> ToStartingScreenAlertDialog(viewModel)
     }
+}
+
+@Composable
+fun <E : Edge<Int>> ToStartingScreenAlertDialog(viewModel: MainScreenViewModel<E>) {
+    AlertDialog(
+        onDismissRequest = viewModel::closeToStartingScreenDialog,
+        title = { Text("Are you sure?") },
+        text = { Text("Graphs won't save automatically") },
+        confirmButton = {
+            Button(onClick = viewModel::toStartingScreen) { Text("Yep") }
+        },
+        dismissButton = {
+            Button(onClick = viewModel::closeToStartingScreenDialog) { Text("Nope") }
+        }
+    )
 }
 
 @Composable

@@ -27,6 +27,7 @@ class MainScreenViewModel<E: Edge<Int>>(
     var showDropdownMenu = mutableStateOf(false)
     val showChooseGraphTypeDialog = mutableStateOf(false)
     val showOpenExistingGraphDialog = mutableStateOf(false)
+    val toStartingScreen = mutableStateOf(false)
     var graphViewModel = GraphViewModel(graph, showVerticesLabels, showVerticesDistanceLabels)
     var resolutionInput = mutableStateOf("")
     var randomnessInput = mutableStateOf("")
@@ -74,6 +75,14 @@ class MainScreenViewModel<E: Edge<Int>>(
 
     fun changeTheme() {
         darkTheme.value = !darkTheme.value
+    }
+
+    fun openToStartingScreenDialog() {
+        toStartingScreen.value = true
+    }
+
+    fun closeToStartingScreenDialog() {
+        toStartingScreen.value = false
     }
 
     fun openGraph(type: GraphType) {
@@ -136,6 +145,7 @@ class MainScreenViewModel<E: Edge<Int>>(
         }
     }
 
+
     fun findDistanceDijkstra() {
         if (graph is GraphWeighted) {
             graphViewModel.edges.forEach{
@@ -176,7 +186,7 @@ class MainScreenViewModel<E: Edge<Int>>(
             val Cycles =
                 graphViewModel.currentVertex?.let { (graph as GraphDirected<Int, E>).findCycles(it.value) }
 
-            Cycles?.forEach{ cycle ->
+            Cycles?.forEach { cycle ->
                 /*for(vertex in cycle) {
                     val ver = graphViewModel.vertices.find { it.value == vertex }
                     ver?.color = Color(0xFFFF0000)
@@ -191,5 +201,10 @@ class MainScreenViewModel<E: Edge<Int>>(
 
             }
         }
+
+    }
+
+    fun toStartingScreen() {
+        currentGraph.value = null
     }
 }

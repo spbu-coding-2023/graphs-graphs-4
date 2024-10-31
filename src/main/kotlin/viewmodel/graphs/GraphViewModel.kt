@@ -2,16 +2,19 @@ package viewmodel.graphs
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.AwaitPointerEventScope
 import androidx.compose.ui.input.pointer.PointerEvent
 import androidx.compose.ui.unit.IntSize
-import androidx.compose.ui.unit.center
 import androidx.compose.ui.unit.dp
 import model.graphs.Edge
 import model.graphs.Graph
 import model.graphs.Vertex
 
+const val MAX_SCALE = 4f
+const val MIN_SCALE = 1f / 8
+const val DLT_SCALE = 1f / 16
 
 class GraphViewModel<T, E: Edge<T>>(
     val graph: Graph<T, E>,
@@ -19,15 +22,24 @@ class GraphViewModel<T, E: Edge<T>>(
     showVerticesDistanceLabels: State<Boolean>,
 ) {
     val graphSize = mutableStateOf(IntSize.Zero)
+    private var scale = 1f
 
     val onScroll: AwaitPointerEventScope.(event: PointerEvent) -> Unit = {
-        val center = graphSize.value.center
+        val position = it.changes.first().position
+        val scaleSign = it.changes.first().scrollDelta.y
+        val scaleDlt = scaleSign * DLT_SCALE
 
-        //print("${it} ")
+        val scaleResult = scale - scaleDlt
+        if (scaleResult in MIN_SCALE..MAX_SCALE) {
+            scale = scaleResult
 
-        val yDlt = it.changes.first().scrollDelta.y
-        vertices.forEach { v -> v.onScroll(yDlt, center) }
-        edges.forEach { e -> e.onScroll(yDlt) }
+            vertices.forEach { v -> v.onScroll(scaleDlt, position, scale) }
+            edges.forEach { e -> e.onScroll(scale) }
+        }
+    }
+
+    fun onDrag(offset: Offset) {
+        vertices.forEach { v -> v.onDrag(offset) }
     }
 
     var currentVertex: VertexViewModel<T>? = null
