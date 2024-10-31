@@ -13,4 +13,5 @@ interface RepresentationStrategy {
     fun <T> colorVertices(vararg vertices: VertexViewModel<T>, color: Color)
     fun <T> colorEdges(vararg edges: EdgeViewModel<T>, color: Color)
     fun <T> distanceRank(vertices: Collection<VertexViewModel<T>>, max: Double, min: Double)
+    fun <T> findCycles(vertices: Collection<VertexViewModel<T>>, cycle: List<Vertex<Int>>, color: Color)
 }

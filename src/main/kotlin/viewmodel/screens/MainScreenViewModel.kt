@@ -2,6 +2,8 @@ package viewmodel.screens
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.graphics.Color
+import kotlinx.coroutines.delay
 import model.functionality.iograph.GraphType
 import model.functionality.iograph.ReadWriteIntGraph
 import model.graphs.*
@@ -166,6 +168,28 @@ class MainScreenViewModel<E: Edge<Int>>(
             }
 
             representationStrategy.distanceRank(graphViewModel.vertices, max = max, min = min)
+        }
+    }
+
+    suspend fun findCycles() {
+        if (graph is GraphWeighted) {
+            val Cycles =
+                graphViewModel.currentVertex?.let { (graph as GraphDirected<Int, E>).findCycles(it.value) }
+
+            Cycles?.forEach{ cycle ->
+                /*for(vertex in cycle) {
+                    val ver = graphViewModel.vertices.find { it.value == vertex }
+                    ver?.color = Color(0xFFFF0000)
+                }*/
+                representationStrategy.findCycles(graphViewModel.vertices, cycle, Color(0xFFFF0000))
+                delay(2000)
+                representationStrategy.findCycles(graphViewModel.vertices, cycle, Color(0xFF0000FF))
+                /*for(vertex in cycle) {
+                    val ver = graphViewModel.vertices.find { it.value == vertex }
+                    ver?.color = Color(0xFF0000FF) //Change to defolt
+                }*/
+
+            }
         }
     }
 }

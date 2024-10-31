@@ -161,6 +161,10 @@ fun <E : Edge<Int>> toolPanel(modifier: Modifier, viewModel: MainScreenViewModel
             toolButton(GraphAlgorithms.DIJKSTRA, viewModel::findDistanceDijkstra)
         }
 
+        if (viewModel.graph is GraphDirected<Int, *>) {
+            toolButton(GraphAlgorithms.JOHN_ALGORITHM, viewModel::findDistanceDijkstra)
+        }
+
         if (viewModel.graph is DirectedGraph<*>) {
             toolButton(GraphAlgorithms.DISTANCE_RANK, viewModel::distanceRank)
         }

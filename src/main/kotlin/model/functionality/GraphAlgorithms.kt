@@ -8,5 +8,6 @@ enum class GraphAlgorithms(val string: String) {
     MINIMAL_SPANNING_TREE("Find Minimal Spanning Tree"),
     SHORTEST_DISTANCE("Find Shortest Distance"),
     DIJKSTRA("Find Shortest Positive Distance"),
-    DISTANCE_RANK("Importance of vertices")
+    DISTANCE_RANK("Importance of vertices"),
+    JOHN_ALGORITHM("Find Cycles for vertex")
 }

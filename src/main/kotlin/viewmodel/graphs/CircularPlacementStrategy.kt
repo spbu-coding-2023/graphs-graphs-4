@@ -74,6 +74,13 @@ class CircularPlacementStrategy : RepresentationStrategy {
         }
     }
 
+    override fun <T> findCycles(vertices: Collection<VertexViewModel<T>>, cycle: List<Vertex<Int>>, color: Color) {
+        for(vertex in cycle) {
+            val ver = vertices.find { it.value == vertex }
+            ver?.color = color
+        }
+    }
+
     override fun <T> highlightSCC(scc: Set<Set<Vertex<T>>>, vararg vertices: VertexViewModel<T>) {
         for (component in scc) {
             println(component)
