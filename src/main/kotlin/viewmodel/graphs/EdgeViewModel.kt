@@ -2,26 +2,20 @@ package viewmodel.graphs
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
 
-enum class EdgeSize(val size: Float) {
-    MIN(VertexSize.MIN.size / 4.dp),        //0.25
-    START(VertexSize.START.size / 4.dp),    //6
-    MAX(VertexSize.MAX.size / 4.dp),        //24
-    WIDTH_SCALE(VertexSize.SIZE_SCALE.size.value)
-}
+private const val DEFAULT_WIDTH = 6f
 
 class EdgeViewModel<T>(
     val u: VertexViewModel<T>,
     val v: VertexViewModel<T>,
     color: Color,
-    width: Float = EdgeSize.START.size,
+    width: Float = DEFAULT_WIDTH,
 ) {
     private var _width = mutableStateOf(width)
     var width: Float
         get() = _width.value
         set(value) {
-            if (value in EdgeSize.MIN.size..EdgeSize.MAX.size) _width.value = value
+            _width.value = value
         }
 
     private var _color = mutableStateOf(color)
@@ -31,11 +25,7 @@ class EdgeViewModel<T>(
             _color.value = value
         }
 
-    fun onScroll(yDlt: Float) {
-        if (yDlt > 0) {
-            width ///= EdgeSize.WIDTH_SCALE.size
-        } else {
-            width //*= EdgeSize.WIDTH_SCALE.size
-        }
+    fun onScroll(scale: Float = 1f) {
+        width = DEFAULT_WIDTH * scale
     }
 }

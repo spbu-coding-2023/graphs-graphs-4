@@ -9,6 +9,7 @@ import model.graphs.UndirectedWeightedGraph
 import model.graphs.Vertex
 import model.graphs.WeightedEdge
 import kotlin.random.Random
+import kotlin.system.exitProcess
 
 class StartingScreenViewModel(
     private val currentGraph: MutableState<Graph<Int, *>?>
@@ -67,5 +68,9 @@ class StartingScreenViewModel(
         val graph = ReadWriteIntGraph().openGraph(type)
 
         currentGraph.value = graph
+    }
+
+    fun closeApp() {
+        exitProcess(0)
     }
 }
