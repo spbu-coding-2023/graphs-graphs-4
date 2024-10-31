@@ -67,18 +67,15 @@ class VertexViewModel<V>(
         _y.value += offset.y.dp
     }
 
-    fun onScroll(yScaleDlt: Float, center: Offset) {
-        val xDlt = (center.x.dp - x) * VertexSize.POS_SCALE.size.value
-        val yDlt = (center.y.dp - y) * VertexSize.POS_SCALE.size.value
-
-        if (yScaleDlt > 0) {
-            //radius /= VertexSize.SIZE_SCALE.size.value
-            x += xDlt
-            y += yDlt
-        } else {
-            //radius *= VertexSize.SIZE_SCALE.size.value
-            x -= xDlt
-            y -= yDlt
-        }
+    //есть некоторая проблема с тем, что Dlt расстояния
+    //обладает степенной зависимостью от дистанции
+    //между вершиной и центром,
+    //в то время как radius вершин
+    //растёт пропорционально относительно scale.
+    //короче говоря, это выглядит не эстетично :(
+    fun onScroll(scaleDlt: Float, center: Offset, scale: Float = 1f) {
+        radius = VertexSize.START.size * scale
+        x += (center.x.dp - x) * scaleDlt
+        y += (center.y.dp - y) * scaleDlt
     }
 }

@@ -12,6 +12,9 @@ import model.graphs.Edge
 import model.graphs.Graph
 import model.graphs.Vertex
 
+const val MAX_SCALE = 4f
+const val MIN_SCALE = 1f / 8
+const val DLT_SCALE = 1f / 16
 
 class GraphViewModel<T, E: Edge<T>>(
     val graph: Graph<T, E>,
@@ -19,13 +22,20 @@ class GraphViewModel<T, E: Edge<T>>(
     showVerticesDistanceLabels: State<Boolean>,
 ) {
     val graphSize = mutableStateOf(IntSize.Zero)
+    private var scale = 1f
 
     val onScroll: AwaitPointerEventScope.(event: PointerEvent) -> Unit = {
-        val position = it.changes.last().position
+        val position = it.changes.first().position
+        val scaleSign = it.changes.first().scrollDelta.y
+        val scaleDlt = scaleSign * DLT_SCALE
 
-        val yDlt = it.changes.first().scrollDelta.y
-        vertices.forEach { v -> v.onScroll(yDlt, position) }
-        edges.forEach { e -> e.onScroll(yDlt) }
+        val scaleResult = scale - scaleDlt
+        if (scaleResult in MIN_SCALE..MAX_SCALE) {
+            scale = scaleResult
+
+            vertices.forEach { v -> v.onScroll(scaleDlt, position, scale) }
+            edges.forEach { e -> e.onScroll(scale) }
+        }
     }
 
     fun onDrag(offset: Offset) {

@@ -31,11 +31,7 @@ class EdgeViewModel<T>(
             _color.value = value
         }
 
-    fun onScroll(yDlt: Float) {
-        if (yDlt > 0) {
-            width ///= EdgeSize.WIDTH_SCALE.size
-        } else {
-            width //*= EdgeSize.WIDTH_SCALE.size
-        }
+    fun onScroll(scale: Float = 1f) {
+        width = EdgeSize.START.size * scale
     }
 }
