@@ -10,13 +10,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import model.graphs.Vertex
 
-enum class VertexSize(val size: Dp) {
-    MIN(1.dp),
-    START(24.dp),
-    MAX(96.dp),
-    SIZE_SCALE((17f / 16).dp),
-    POS_SCALE((1f / 16).dp)
-}
+private const val DEFAULT_RADIUS = 24f
 
 @Suppress("LongParameterList")
 class VertexViewModel<V>(
@@ -25,7 +19,7 @@ class VertexViewModel<V>(
     internal val value: Vertex<V>,
     private val keyLabelVisibility: State<Boolean>,
     private val distanceLabelVisibility: State<Boolean>,
-    radius: Dp = VertexSize.START.size
+    radius: Dp = DEFAULT_RADIUS.dp
 ) {
     var isSelected by mutableStateOf(false)
     var color by mutableStateOf(Color.Unspecified)
@@ -34,7 +28,7 @@ class VertexViewModel<V>(
     var radius: Dp
         get() = _radius.value
         set(value) {
-            if (value in VertexSize.MIN.size..VertexSize.MAX.size) _radius.value = value
+            _radius.value = value
         }
 
     private var _x = mutableStateOf(x)
@@ -74,7 +68,7 @@ class VertexViewModel<V>(
     //растёт пропорционально относительно scale.
     //короче говоря, это выглядит не эстетично :(
     fun onScroll(scaleDlt: Float, center: Offset, scale: Float = 1f) {
-        radius = VertexSize.START.size * scale
+        radius = DEFAULT_RADIUS.dp * scale
         x += (center.x.dp - x) * scaleDlt
         y += (center.y.dp - y) * scaleDlt
     }
