@@ -39,10 +39,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import model.functionality.GraphAlgorithms
 import model.functionality.iograph.GraphType
-import model.graphs.Edge
-import model.graphs.GraphDirected
-import model.graphs.GraphUndirected
-import model.graphs.GraphWeighted
+import model.graphs.*
 import view.graphs.GraphView
 import viewmodel.screens.MainScreenViewModel
 
@@ -158,6 +155,14 @@ fun <E : Edge<Int>> toolPanel(modifier: Modifier, viewModel: MainScreenViewModel
 
         if (viewModel.graph is GraphDirected<Int, *>) {
             toolButton(GraphAlgorithms.STRONG_CONNECTION_COMPONENTS, viewModel::highlightSCC)
+        }
+
+        if (viewModel.graph is GraphWeighted<*>) {
+            toolButton(GraphAlgorithms.DIJKSTRA, viewModel::findDistanceDijkstra)
+        }
+
+        if (viewModel.graph is DirectedGraph<*>) {
+            toolButton(GraphAlgorithms.DISTANCE_RANK, viewModel::distanceRank)
         }
 
         //toolButton(GraphAlgorithms.SHORTEST_DISTANCE, viewModel::findDistanceBellman)

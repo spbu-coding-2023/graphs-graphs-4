@@ -12,4 +12,5 @@ interface RepresentationStrategy {
     fun <T> highlightMinSpanTree(minSpanTree: Set<Edge<T>>, vararg edges: EdgeViewModel<T>)
     fun <T> colorVertices(vararg vertices: VertexViewModel<T>, color: Color)
     fun <T> colorEdges(vararg edges: EdgeViewModel<T>, color: Color)
+    fun <T> distanceRank(vertices: Collection<VertexViewModel<T>>, max: Double, min: Double)
 }

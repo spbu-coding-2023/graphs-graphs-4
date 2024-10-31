@@ -4,11 +4,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import model.functionality.iograph.GraphType
 import model.functionality.iograph.ReadWriteIntGraph
-import model.graphs.Edge
-import model.graphs.Graph
-import model.graphs.GraphDirected
-import model.graphs.GraphUndirected
-import model.graphs.GraphWeighted
+import model.graphs.*
 import viewmodel.graphs.GraphViewModel
 import viewmodel.graphs.RepresentationStrategy
 import viewmodel.placement.ForceAtlas2Placement
@@ -135,6 +131,41 @@ class MainScreenViewModel<E: Edge<Int>>(
             graphViewModel.vertices.forEach {
                 it.distanceLabel = (labels?.get(it.value)).toString()
             }
+        }
+    }
+
+    fun findDistanceDijkstra() {
+        if (graph is GraphWeighted) {
+            graphViewModel.edges.forEach{
+                require(true) //Here must be checking weights for being >= 0, but there's a problem
+            }
+
+            val labels =
+                graphViewModel.currentVertex?.let { (graph as GraphWeighted<Int>).findDistancesDijkstra(it.value)}
+
+            graphViewModel.vertices.forEach {
+                it.distanceLabel = (labels?.get(it.value)).toString()
+            }
+        }
+    }
+
+    fun distanceRank() {
+        if(graph is DirectedGraph) {
+            val importances = (graphViewModel.graph as DirectedGraph<Int>).distanceRank()
+
+            graphViewModel.vertices.forEach {
+                it.importance = (importances.get(it.value)) ?: 0.0
+            }
+
+            var min: Double = Double.POSITIVE_INFINITY
+            var max: Double = Double.NEGATIVE_INFINITY
+
+            for((vertex, imp) in importances) {
+                if(imp > max) max = imp
+                else if(imp < min) min = imp
+            }
+
+            representationStrategy.distanceRank(graphViewModel.vertices, max = max, min = min)
         }
     }
 }

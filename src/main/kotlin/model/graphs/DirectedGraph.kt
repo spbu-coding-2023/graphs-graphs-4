@@ -31,7 +31,7 @@ class DirectedGraph<T> :
         return StrConCompFinder(this).sccSearch()
     }
 
-//    fun distanceRank(): Map<Vertex<T>, Double> {
-//        return DistanceRank<T>(this).rank()
-//    }
+    fun distanceRank(): Map<Vertex<T>, Double> {
+        return DistanceRank(this).rank()
+    }
 }
